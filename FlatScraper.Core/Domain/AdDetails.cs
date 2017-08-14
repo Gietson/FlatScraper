@@ -7,24 +7,6 @@ namespace FlatScraper.Core.Domain
     {
         private ISet<string> _photos = new HashSet<string>();
 
-        public decimal PriceM2 { get; protected set; }
-        public string District { get; protected set; }
-        public string City { get; protected set; }
-        public bool Agency { get; protected set; }
-        public string PropertyType { get; protected set; }
-        public int NumberOfRooms { get; protected set; }
-        public int NumberOfBathrooms { get; protected set; }
-        public float Size { get; protected set; }
-        public string UserName { get; protected set; }
-
-        public DateTime UpdatedAt { get; protected set; }
-
-        public IEnumerable<string> Photos
-        {
-            get { return _photos; }
-            set { _photos = new HashSet<string>(value); }
-        }
-
         protected AdDetails()
         {
         }
@@ -42,6 +24,24 @@ namespace FlatScraper.Core.Domain
             SetSize(size);
             SetUserName(userName);
             SetPhotos(photos);
+        }
+
+        public decimal PriceM2 { get; protected set; }
+        public string District { get; protected set; }
+        public string City { get; protected set; }
+        public bool Agency { get; protected set; }
+        public string PropertyType { get; protected set; }
+        public int NumberOfRooms { get; protected set; }
+        public int NumberOfBathrooms { get; protected set; }
+        public float Size { get; protected set; }
+        public string UserName { get; protected set; }
+
+        public DateTime UpdatedAt { get; protected set; }
+
+        public IEnumerable<string> Photos
+        {
+            get { return _photos; }
+            set { _photos = new HashSet<string>(value); }
         }
 
         private void SetPhotos(IEnumerable<string> photos)

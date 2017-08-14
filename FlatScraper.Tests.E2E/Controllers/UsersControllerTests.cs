@@ -1,8 +1,10 @@
-﻿using FluentAssertions;
-using Newtonsoft.Json;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using FlatScraper.Infrastructure.DTO;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace FlatScraper.Tests.E2E.Controllers
@@ -13,20 +15,46 @@ namespace FlatScraper.Tests.E2E.Controllers
         public async Task given_invalid_email_user_should_not_exist()
         {
             var email = "user1000@email.com";
-            var response = await Client.GetAsync($"users/{email}");
+            var response = await Client.GetAsync($"api/users/{email}");
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.NotFound);
         }
 
-        [Theory]
-        [InlineData("user1@email.com")]
-        [InlineData("user10@email.com")]
-        public async Task<UserDto> GetUserAsync(string email)
+        [Fact]
+        public async Task register_user_and_get_user()
         {
-            var response = await Client.GetAsync($"users/{email}");
+            var newUser = new CreateUserDto
+            {
+                Email = "test@email.com",
+                Username = "test",
+                Password = "secret",
+                Role = "user"
+            };
+            var payload = GetPayload(newUser);
+            var response = await Client.PostAsync("api/users", payload);
+            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.Created);
+            response.Headers.Location.ToString().ShouldBeEquivalentTo($"api/users/{newUser.Email}");
+
+            var user = await GetUserAsync(newUser.Email);
+            user.Email.ShouldBeEquivalentTo(newUser.Email);
+        }
+
+        [Fact]
+        public async Task get_all_users()
+        {
+            var response = await Client.GetAsync("api/users");
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            var users = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(responseString);
+
+            Assert.NotEmpty(users);
+        }
+
+        private async Task<UserDto> GetUserAsync(string email)
+        {
+            var response = await Client.GetAsync($"api/users/{email}");
             var responseString = await response.Content.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<UserDto>(responseString);
         }
     }
-
 }

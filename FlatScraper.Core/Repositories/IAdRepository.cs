@@ -5,12 +5,12 @@ using FlatScraper.Core.Domain;
 
 namespace FlatScraper.Core.Repositories
 {
-    public interface IAdRepository
+    public interface IAdRepository : IRepository
     {
         Task<Ad> GetAsync(Guid id);
         Task<IEnumerable<Ad>> GetAllAsync();
         Task AddAsync(Ad ad);
-        Task UpdateASync(Ad ad);
-        Task RemoveAsync(int id);
+        Task UpdateASyncAsync(Ad ad);
+        Task RemoveAsync(Guid id);
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using FlatScraper.Infrastructure.DTO;
 using FlatScraper.Infrastructure.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FlatScraper.API.Controllers
 {
@@ -42,7 +42,7 @@ namespace FlatScraper.API.Controllers
             const string role = "user";
             await _userService.RegisterAsync(Guid.NewGuid(), user.Email, user.Username, user.Password, role);
 
-            return Ok();
+            return Created($"api/users/{user.Email}", null);
         }
     }
 }

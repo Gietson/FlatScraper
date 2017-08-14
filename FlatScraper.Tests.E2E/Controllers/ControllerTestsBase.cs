@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using FlatScraper.API;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
@@ -13,8 +9,8 @@ namespace FlatScraper.Tests.E2E.Controllers
 {
     public class ControllerTestsBase
     {
-        protected readonly TestServer Server;
         protected readonly HttpClient Client;
+        protected readonly TestServer Server;
 
         protected ControllerTestsBase()
         {

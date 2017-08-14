@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using Autofac;
 using FlatScraper.Infrastructure.Services;
-using FlatScraper.Infrastructure.Services.Scrapers;
 
 namespace FlatScraper.Infrastructure.IoC.Modules
 {
@@ -22,7 +21,7 @@ namespace FlatScraper.Infrastructure.IoC.Modules
                 .As<IEncrypter>()
                 .SingleInstance();
 
-            builder.RegisterType<GumtreeScraper>().As<IScraper>().SingleInstance();
+            //builder.RegisterType<GumtreeScraper>().As<IScraper>().SingleInstance();
         }
     }
 }

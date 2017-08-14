@@ -13,6 +13,7 @@ namespace FlatScraper.API.Controllers
         {
             _userService = userService;
         }
+
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
