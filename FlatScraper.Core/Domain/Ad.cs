@@ -102,7 +102,7 @@ namespace FlatScraper.Core.Domain
             UpdatedAt = DateTime.UtcNow;
         }
 
-        public static Ad Create(Guid id, string idAds, string title,  string url, decimal price, string page)
+        public static Ad Create(Guid id, string idAds, string title, string url, decimal price, string page)
             => new Ad(id, idAds, title, url, price, page);
     }
 }

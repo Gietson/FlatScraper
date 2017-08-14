@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FlatScraper.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlatScraper.API.Controllers
@@ -6,6 +7,12 @@ namespace FlatScraper.API.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        private IUserService _userService;
+
+        public ValuesController(IUserService userService)
+        {
+            _userService = userService;
+        }
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()

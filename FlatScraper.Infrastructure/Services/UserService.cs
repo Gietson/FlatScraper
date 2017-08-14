@@ -28,9 +28,9 @@ namespace FlatScraper.Infrastructure.Services
             return _mapper.Map<IEnumerable<UserDto>>(user);
         }
 
-        public async Task<UserDto> GetAsync(Guid id)
+        public async Task<UserDto> GetAsync(string email)
         {
-            var user = await _userRepository.GetAsync(id);
+            var user = await _userRepository.GetAsync(email);
             return _mapper.Map<UserDto>(user);
         }
 
