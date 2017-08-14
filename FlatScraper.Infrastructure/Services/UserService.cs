@@ -1,19 +1,19 @@
-﻿using AutoMapper;
-using FlatScraper.Core.Repositories;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using FlatScraper.Infrastructure.DTO;
 using System.Security.Authentication;
+using System.Threading.Tasks;
+using AutoMapper;
 using FlatScraper.Core.Domain;
+using FlatScraper.Core.Repositories;
+using FlatScraper.Infrastructure.DTO;
 
 namespace FlatScraper.Infrastructure.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
         private readonly IEncrypter _encrypter;
         private readonly IMapper _mapper;
+        private readonly IUserRepository _userRepository;
 
         public UserService(IUserRepository userRepository, IEncrypter encrypter, IMapper mapper)
         {
@@ -37,7 +37,7 @@ namespace FlatScraper.Infrastructure.Services
         public async Task LoginAsync(string email, string password)
         {
             var user = await _userRepository.GetAsync(email);
-            if(user == null)
+            if (user == null)
             {
                 throw new AuthenticationException("Invalid credentials");
             }
@@ -54,7 +54,7 @@ namespace FlatScraper.Infrastructure.Services
         public async Task RegisterAsync(Guid id, string email, string username, string password, string role)
         {
             var user = await _userRepository.GetAsync(email);
-            if(user != null)
+            if (user != null)
             {
                 throw new Exception($"User with email: '{email}' already exists.");
             }

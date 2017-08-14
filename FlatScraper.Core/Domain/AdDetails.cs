@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlatScraper.Core.Domain
 {
     public class AdDetails
     {
+        private ISet<string> _photos = new HashSet<string>();
+
         public decimal PriceM2 { get; protected set; }
         public string District { get; protected set; }
         public string City { get; protected set; }
@@ -20,16 +19,18 @@ namespace FlatScraper.Core.Domain
 
         public DateTime UpdatedAt { get; protected set; }
 
-        private ISet<string> _photos = new HashSet<string>();
         public IEnumerable<string> Photos
         {
             get { return _photos; }
             set { _photos = new HashSet<string>(value); }
         }
 
-        protected AdDetails() { }
+        protected AdDetails()
+        {
+        }
 
-        protected AdDetails(decimal priceM2, string district, string city, bool agency, string propertyType, int numberOfRooms, int numberOfBathrooms, float size, string userName, List<string> photos)
+        protected AdDetails(decimal priceM2, string district, string city, bool agency, string propertyType,
+            int numberOfRooms, int numberOfBathrooms, float size, string userName, List<string> photos)
         {
             SetPriceM2(priceM2);
             SetDistrict(district);
@@ -69,10 +70,6 @@ namespace FlatScraper.Core.Domain
             if (float.IsNaN(size))
             {
                 throw new Exception("Size must be a number");
-            }
-            if (Size == size)
-            {
-                return;
             }
 
             Size = size;
@@ -175,8 +172,9 @@ namespace FlatScraper.Core.Domain
             UpdatedAt = DateTime.UtcNow;
         }
 
-        public static AdDetails Create(decimal priceM2, string district, string city, bool agency, string propertyType, int numberOfRooms, int numberOfBathrooms, float size, string userName, List<string> photos)
-            => new AdDetails(priceM2, district, city, agency, propertyType, numberOfRooms, numberOfBathrooms, size, userName, photos);
-
+        public static AdDetails Create(decimal priceM2, string district, string city, bool agency, string propertyType,
+            int numberOfRooms, int numberOfBathrooms, float size, string userName, List<string> photos)
+            => new AdDetails(priceM2, district, city, agency, propertyType, numberOfRooms, numberOfBathrooms, size,
+                userName, photos);
     }
 }

@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlatScraper.Core.Domain
 {
     public class User
     {
-
         public Guid Id { get; protected set; }
         public string Email { get; protected set; }
         public string Password { get; protected set; }
@@ -19,7 +14,9 @@ namespace FlatScraper.Core.Domain
         public DateTime CreatedAt { get; protected set; }
         public DateTime UpdatedAt { get; protected set; }
 
-        public User(){}
+        public User()
+        {
+        }
 
         public User(Guid userId, string email, string username, string role, string password, string salt)
         {
@@ -97,6 +94,5 @@ namespace FlatScraper.Core.Domain
             Salt = salt;
             UpdatedAt = DateTime.UtcNow;
         }
-
     }
 }

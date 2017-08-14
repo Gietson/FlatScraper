@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using FlatScraper.Infrastructure.DTO;
 using AutoMapper;
-using FlatScraper.Core.Repositories;
-using FlatScraper.Infrastructure.Services.Scrapers;
-using FlatScraper.Infrastructure.Extensions;
-using HtmlAgilityPack;
 using FlatScraper.Core.Domain;
+using FlatScraper.Core.Repositories;
+using FlatScraper.Infrastructure.DTO;
+using FlatScraper.Infrastructure.Extensions;
+using FlatScraper.Infrastructure.Services.Scrapers;
+using HtmlAgilityPack;
 
 namespace FlatScraper.Infrastructure.Services
 {
     public class AdService : IAdService
     {
         private readonly IAdRepository _adRepository;
-        private readonly IScraper _scraper;
         private readonly IMapper _mapper;
+        private readonly IScraper _scraper;
 
         public AdService(IAdRepository adRepository, IScraper scraper, IMapper mapper)
         {
@@ -51,7 +49,6 @@ namespace FlatScraper.Infrastructure.Services
                 HtmlDocument scrapedSubPage = await ScrapExtensions.ScrapUrl(ad.Url);
                 ad.AdDetails = _scraper.ParseDetailsPage(scrapedSubPage);
             }
-            
         }
     }
 }
