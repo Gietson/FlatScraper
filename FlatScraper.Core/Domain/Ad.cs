@@ -11,12 +11,14 @@ namespace FlatScraper.Core.Domain
         public Decimal Price { get; protected set; }
         public string Page { get; protected set; }
 
+        public AdDetails AdDetails { get; set; }
+
         public DateTime CreateAt { get; private set; }
         public DateTime UpdatedAt { get; private set; }
 
-        public Ad() { }
+        protected Ad() { }
 
-        public Ad(Guid id, string title, string url, decimal price, string page)
+        protected Ad(Guid id, string title, string url, decimal price, string page)
         {
             Id = id;
             SetTitle(title);
@@ -45,7 +47,7 @@ namespace FlatScraper.Core.Domain
         {
             if (price < 0 && price > 100000000)
             { 
-                throw new ArgumentOutOfRangeException("Price should be bettwen 0 - 100 000 000");
+                throw new ArgumentOutOfRangeException("Price should be between 0 - 100 000 000");
             }
 
             Price = price;
@@ -81,5 +83,8 @@ namespace FlatScraper.Core.Domain
             Title = title;
             UpdatedAt = DateTime.UtcNow;
         }
+
+        public static Ad Create(Guid id, string title, string url, decimal price, string page)
+            => new Ad(id, title, url, price, page);
     }
 }

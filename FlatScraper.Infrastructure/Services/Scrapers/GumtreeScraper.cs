@@ -6,36 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using FlatScraper.Core.Domain;
 
 namespace FlatScraper.Infrastructure.Services.Scrapers
 {
-    public class GumtreeScraper
+    public class GumtreeScraper : IScraper
     {
-        public List<AdDto> ParseHomePage(HtmlDocument doc, string host)
-        {
-            List<AdDto> _adsList = new List<AdDto>();
-            HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("//div[@class='container']");
-            AdDto ads;
-
-            foreach (HtmlNode ad in docs)
-            {
-                ads = new AdDto();
-
-                var nod = ad.SelectSingleNode("div[@class='title']/a");
-                
-                ads.Title = nod.InnerText.Trim();
-                ads.Url = host + nod.Attributes["href"].Value;
-                ads.IdAds = ads.Url.Split('/').Last();
-
-                var price = ad.SelectSingleNode("div[@class='info']/div[@class='price']/span[@class='value']/span[@class='amount']");
-                ads.Price = PreparePrice(price?.InnerText);
-
-                _adsList.Add(ads);
-            }
-
-            return _adsList;
-        }
-
         private static decimal PreparePrice(string price)
         {
             Regex digitsOnly = new Regex(@"[^\d]");
@@ -46,5 +22,35 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
             return 0;
         }
+
+        public List<Ad> ParseHomePage(HtmlDocument doc)
+        {
+            List<Ad> _adsList = new List<Ad>();
+            HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("//div[@class='container']");
+            string host = "https://www.gumtree.pl";
+            foreach (HtmlNode ad in docs)
+            {
+                var nod = ad.SelectSingleNode("div[@class='title']/a");
+                
+                string title = nod.InnerText.Trim();
+                string url = host + nod.Attributes["href"].Value;
+                string idAds = url.Split('/').Last();
+
+                var priceTemp = ad.SelectSingleNode("div[@class='info']/div[@class='price']/span[@class='value']/span[@class='amount']");
+                decimal price = PreparePrice(priceTemp?.InnerText);
+
+                Ad ads = Ad.Create(Guid.NewGuid(), title, url, price, host);
+
+                _adsList.Add(ads);
+            }
+
+            return _adsList;
+        }
+
+        public AdDetails ParseDetailsPage(HtmlDocument doc)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
