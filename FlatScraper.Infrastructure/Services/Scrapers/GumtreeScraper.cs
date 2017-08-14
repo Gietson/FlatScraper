@@ -1,12 +1,9 @@
-﻿using FlatScraper.Infrastructure.DTO;
+﻿using FlatScraper.Core.Domain;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using FlatScraper.Core.Domain;
 
 namespace FlatScraper.Infrastructure.Services.Scrapers
 {
@@ -25,7 +22,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
         public List<Ad> ParseHomePage(HtmlDocument doc)
         {
-            List<Ad> _adsList = new List<Ad>();
+            List<Ad> adsList = new List<Ad>();
             HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("//div[@class='container']");
             string host = "https://www.gumtree.pl";
             foreach (HtmlNode ad in docs)
@@ -41,10 +38,10 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
                 Ad ads = Ad.Create(Guid.NewGuid(), title, url, price, host);
 
-                _adsList.Add(ads);
+                adsList.Add(ads);
             }
 
-            return _adsList;
+            return adsList;
         }
 
         public AdDetails ParseDetailsPage(HtmlDocument doc)
