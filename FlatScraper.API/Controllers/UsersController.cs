@@ -39,10 +39,17 @@ namespace FlatScraper.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateUserDto user)
         {
-            const string role = "user";
+            string role = "user";
             await _userService.RegisterAsync(Guid.NewGuid(), user.Email, user.Username, user.Password, role);
 
             return Created($"api/users/{user.Email}", null);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            await _userService.RemoveAsync(id);
+            return Ok();
         }
     }
 }

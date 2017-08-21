@@ -28,6 +28,12 @@ namespace FlatScraper.Infrastructure.Services
             return _mapper.Map<IEnumerable<UserDto>>(user);
         }
 
+        public async Task<UserDto> GetAsync(Guid id)
+        {
+            var user = await _userRepository.GetAsync(id);
+            return _mapper.Map<UserDto>(user);
+        }
+
         public async Task<UserDto> GetAsync(string email)
         {
             var user = await _userRepository.GetAsync(email);
@@ -49,6 +55,17 @@ namespace FlatScraper.Infrastructure.Services
             }
 
             throw new AuthenticationException("Invalid credentials");
+        }
+
+        public async Task RemoveAsync(Guid id)
+        {
+            var user = await _userRepository.GetAsync(id);
+            if (user == null)
+            {
+                throw new Exception("Invalid parameter");
+            }
+
+            await _userRepository.RemoveAsync(id);
         }
 
         public async Task RegisterAsync(Guid id, string email, string username, string password, string role)

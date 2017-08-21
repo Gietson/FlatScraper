@@ -32,7 +32,7 @@ namespace FlatScraper.Tests.E2E.Controllers
         [Fact]
         public async Task given_invalid_email_user_should_not_exist()
         {
-            var email = "user1000@email.com";
+            string email = "user1000@email.com";
             var response = await Client.GetAsync($"api/users/{email}");
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.NotFound);
         }
@@ -54,6 +54,12 @@ namespace FlatScraper.Tests.E2E.Controllers
 
             var user = await GetUserAsync(newUser.Email);
             user.Email.ShouldBeEquivalentTo(newUser.Email);
+
+            var responseDelete = await Client.DeleteAsync($"api/users/{user.Id}");
+            responseDelete.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
+
+            var userAfterDelete = await GetUserAsync(newUser.Email);
+            userAfterDelete.ShouldBeEquivalentTo(null);
         }
     }
 }
