@@ -4,6 +4,18 @@ namespace FlatScraper.Core.Domain
 {
     public class Ad
     {
+        public Guid Id { get; protected set; }
+        public string IdAds { get; set; }
+        public string Title { get; protected set; }
+        public string Url { get; protected set; }
+        public decimal Price { get; protected set; }
+        public string Page { get; protected set; }
+
+        public AdDetails AdDetails { get; set; }
+
+        public DateTime CreateAt { get; protected set; }
+        public DateTime UpdatedAt { get; protected set; }
+
         protected Ad()
         {
         }
@@ -18,18 +30,6 @@ namespace FlatScraper.Core.Domain
             SetPage(page);
             CreateAt = DateTime.UtcNow;
         }
-
-        public Guid Id { get; protected set; }
-        public string IdAds { get; set; }
-        public string Title { get; protected set; }
-        public string Url { get; protected set; }
-        public decimal Price { get; protected set; }
-        public string Page { get; protected set; }
-
-        public AdDetails AdDetails { get; set; }
-
-        public DateTime CreateAt { get; protected set; }
-        public DateTime UpdatedAt { get; protected set; }
 
         private void SetIdAds(string idAds)
         {

@@ -3,7 +3,6 @@ using System.Net;
 using System.Threading.Tasks;
 using FlatScraper.Infrastructure.DTO;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -11,6 +10,25 @@ namespace FlatScraper.Tests.E2E.Controllers
 {
     public class UsersControllerTests : ControllerTestsBase
     {
+        private async Task<UserDto> GetUserAsync(string email)
+        {
+            var response = await Client.GetAsync($"api/users/{email}");
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<UserDto>(responseString);
+        }
+
+        [Fact]
+        public async Task get_all_users()
+        {
+            var response = await Client.GetAsync("api/users");
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            var users = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(responseString);
+
+            Assert.NotEmpty(users);
+        }
+
         [Fact]
         public async Task given_invalid_email_user_should_not_exist()
         {
@@ -36,25 +54,6 @@ namespace FlatScraper.Tests.E2E.Controllers
 
             var user = await GetUserAsync(newUser.Email);
             user.Email.ShouldBeEquivalentTo(newUser.Email);
-        }
-
-        [Fact]
-        public async Task get_all_users()
-        {
-            var response = await Client.GetAsync("api/users");
-            var responseString = await response.Content.ReadAsStringAsync();
-
-            var users = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(responseString);
-
-            Assert.NotEmpty(users);
-        }
-
-        private async Task<UserDto> GetUserAsync(string email)
-        {
-            var response = await Client.GetAsync($"api/users/{email}");
-            var responseString = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<UserDto>(responseString);
         }
     }
 }
