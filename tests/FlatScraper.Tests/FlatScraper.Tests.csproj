@@ -9,20 +9,19 @@
   <ItemGroup>
     <Content Include="nlog.config">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="4.19.3" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+    <PackageReference Include="Moq" Version="4.7.99" />
     <PackageReference Include="xunit" Version="2.2.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FlatScraper.API\FlatScraper.API.csproj" />
+    <ProjectReference Include="..\..\src\FlatScraper.Core\FlatScraper.Core.csproj" />
+    <ProjectReference Include="..\..\src\FlatScraper.Infrastructure\FlatScraper.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
