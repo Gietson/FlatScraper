@@ -44,10 +44,12 @@ namespace FlatScraper.Infrastructure.Services
 
             List<Ad> ads = _scraper.ParseHomePage(scrapedDoc);
 
-            foreach (var ad in ads)
+            foreach (Ad ad in ads)
             {
                 HtmlDocument scrapedSubPage = await ScrapExtensions.ScrapUrl(ad.Url);
                 ad.AdDetails = _scraper.ParseDetailsPage(scrapedSubPage);
+
+                await _adRepository.AddAsync(ad);
             }
         }
     }

@@ -44,11 +44,10 @@ namespace FlatScraper.Infrastructure.Services
                 await _userService.RegisterAsync(userId, $"admin{i}@test.com", username, "secret", "admin");
             });
 
-            /*Parallel.For(0, 2, async i =>
-            {
-                await _adService.AddAsync(
-                    "https://www.gumtree.pl/s-mieszkania-i-domy-sprzedam-i-kupie/warszawa/v1c9073l3200008p1");
-            });*/
+            string url = "https://www.gumtree.pl/s-mieszkania-i-domy-sprzedam-i-kupie/warszawa/v1c9073l3200008p1";
+            Logger.Trace($"Initializing ads, url = {url}");
+            await _adService.AddAsync(url);
+
 
             Logger.Trace("Data was initialized.");
         }
