@@ -27,7 +27,7 @@ namespace FlatScraper.Infrastructure.Services
             }
             Logger.Trace("Initializing data..");
 
-            Parallel.For(0, 10, async i =>
+            Parallel.For(0, 5, async i =>
             {
                 Guid userId = Guid.NewGuid();
                 string username = $"user{i}";
@@ -36,7 +36,7 @@ namespace FlatScraper.Infrastructure.Services
                 await _userService.RegisterAsync(userId, $"user{i}@email.com",
                     username, "password", "user");
             });
-            Parallel.For(0, 5, async i =>
+            Parallel.For(0, 2, async i =>
             {
                 var userId = Guid.NewGuid();
                 string username = $"admin{i}";
