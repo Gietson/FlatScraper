@@ -27,7 +27,7 @@ namespace FlatScraper.Infrastructure.Services
             }
             Logger.Trace("Initializing data..");
 
-            Parallel.For(0, 5, async i =>
+            for (int i = 0; i <= 10; i++)
             {
                 Guid userId = Guid.NewGuid();
                 string username = $"user{i}";
@@ -35,14 +35,14 @@ namespace FlatScraper.Infrastructure.Services
                 Logger.Trace($"Adding user: '{username}'.");
                 await _userService.RegisterAsync(userId, $"user{i}@email.com",
                     username, "password", "user");
-            });
-            Parallel.For(0, 2, async i =>
+            }
+            for (int i = 0; i <= 3; i++)
             {
                 var userId = Guid.NewGuid();
                 string username = $"admin{i}";
                 Logger.Trace($"Adding admin: '{username}'.");
                 await _userService.RegisterAsync(userId, $"admin{i}@test.com", username, "secret", "admin");
-            });
+            }
 
             string url = "https://www.gumtree.pl/s-mieszkania-i-domy-sprzedam-i-kupie/warszawa/v1c9073l3200008p1";
             Logger.Trace($"Initializing ads, url = {url}");

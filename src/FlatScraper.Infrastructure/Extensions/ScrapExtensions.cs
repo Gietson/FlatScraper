@@ -9,27 +9,11 @@ namespace FlatScraper.Infrastructure.Extensions
 {
     public static class ScrapExtensions
     {
-        public static async Task<HtmlDocument> ScrapUrl(string url)
+        public static HtmlDocument ScrapUrl(string url)
         {
-            try
-            {
-                HtmlWeb web = new HtmlWeb();
-
-                var htmlDoc = web.Load(url);
-
-                /*HttpClient hc = new HttpClient();
-                HttpResponseMessage result = await hc.GetAsync(url);
-
-                Stream stream = await result.Content.ReadAsStreamAsync();
-
-                HtmlDocument doc = new HtmlDocument();
-                doc.Load(stream);*/
-                return htmlDoc;
-            }
-            catch (System.Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            HtmlWeb web = new HtmlWeb();
+            HtmlDocument htmlDoc = web.Load(url);
+            return htmlDoc;
         }
 
         public static decimal PreparePrice(string price)

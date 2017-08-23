@@ -40,13 +40,13 @@ namespace FlatScraper.Infrastructure.Services
 
         public async Task AddAsync(string url)
         {
-            HtmlDocument scrapedDoc = await ScrapExtensions.ScrapUrl(url);
+            HtmlDocument scrapedDoc = ScrapExtensions.ScrapUrl(url);
 
             List<Ad> ads = _scraper.ParseHomePage(scrapedDoc);
 
             foreach (Ad ad in ads)
             {
-                HtmlDocument scrapedSubPage = await ScrapExtensions.ScrapUrl(ad.Url);
+                HtmlDocument scrapedSubPage = ScrapExtensions.ScrapUrl(ad.Url);
                 ad.AdDetails = _scraper.ParseDetailsPage(scrapedSubPage);
 
                 await _adRepository.AddAsync(ad);
