@@ -1,6 +1,6 @@
-FROM microsoft/dotnet:runtime
+FROM microsoft/aspnetcore:2.0
 WORKDIR /dotnetapp
-COPY ./bin/Docker .
+COPY out .
 ENV ASPNETCORE_URLS http://*:5000
 ENV ASPNETCORE_ENVIRONMENT docker
-ENTRYPOINT dotnet FlatScraper.Api.dll
+ENTRYPOINT ["dotnet", "FlatScraper.API.dll"]
