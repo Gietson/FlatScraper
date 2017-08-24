@@ -39,16 +39,9 @@ namespace FlatScraper.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] InsertAdDto ad)
         {
-            try
-            {
-                await _adService.AddAsync(ad.Url);
+            await _adService.AddAsync(ad.Url);
 
-                return Ok();
-            }
-            catch (Exception ex) 
-            {
-                return BadRequest();
-            }
+            return Ok();
         }
     }
 }
