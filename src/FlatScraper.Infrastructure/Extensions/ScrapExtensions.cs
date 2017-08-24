@@ -18,6 +18,9 @@ namespace FlatScraper.Infrastructure.Extensions
 
         public static decimal PreparePrice(string price)
         {
+            if (string.IsNullOrEmpty(price))
+                return 0;
+
             Regex digitsOnly = new Regex(@"[^\d]");
             string p = digitsOnly.Replace(price, "");
 
