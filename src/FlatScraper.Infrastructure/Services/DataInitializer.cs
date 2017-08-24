@@ -33,7 +33,7 @@ namespace FlatScraper.Infrastructure.Services
                 string username = $"user{i}";
 
                 Logger.Trace($"Adding user: '{username}'.");
-                await _userService.RegisterAsync(userId, $"user{i}@email.com",
+                await _userService.RegisterAsync(userId, $"user{i}@test.com",
                     username, "password", "user");
             }
             for (int i = 0; i <= 3; i++)
