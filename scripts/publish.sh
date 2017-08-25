@@ -1,2 +1,2 @@
 #!/bin/bash
-dotnet publish ./src/FlatScraper.API -c Release -o out
+dotnet publish ./src/FlatScraper.API -c Release -o ./bin/Docker
