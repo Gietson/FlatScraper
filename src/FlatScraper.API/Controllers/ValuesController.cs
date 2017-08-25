@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FlatScraper.API.Controllers
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class ValController : Controller
     {
         [HttpGet("")]
         public IActionResult Get()
