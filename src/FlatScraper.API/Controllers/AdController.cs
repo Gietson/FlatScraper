@@ -6,7 +6,7 @@ using FlatScraper.Infrastructure.DTO;
 
 namespace FlatScraper.API.Controllers
 {
-    [Route("api/ad")]
+    [Route("api/[controller]")]
     public class AdController : Controller
     {
         private readonly IAdService _adService;
