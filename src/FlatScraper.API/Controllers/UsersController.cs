@@ -19,30 +19,54 @@ namespace FlatScraper.API.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Get()
         {
-            var users = await _userService.GetAllAsync();
+            try
+            {
+                var users = await _userService.GetAllAsync();
 
-            return Json(users);
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError($"Failed to get All Trips: {ex}");
+
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{email}")]
         public async Task<IActionResult> Get(string email)
         {
-            var user = await _userService.GetAsync(email);
-            if (user == null)
+            try
             {
-                return NotFound();
-            }
+                var user = await _userService.GetAsync(email);
+                if (user == null)
+                {
+                    return NotFound();
+                }
 
-            return Json(user);
+                return Json(user);
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError($"Failed to get All Trips: {ex}");
+
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateUserDto user)
         {
-            string role = "user";
-            await _userService.RegisterAsync(Guid.NewGuid(), user.Email, user.Username, user.Password, role);
+            try
+            {
+                await _userService.RegisterAsync(Guid.NewGuid(), user.Email, user.Username, user.Password, user.Role);
 
-            return Created($"api/users/{user.Email}", null);
+                return Created($"api/users/{user.Email}", null);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]

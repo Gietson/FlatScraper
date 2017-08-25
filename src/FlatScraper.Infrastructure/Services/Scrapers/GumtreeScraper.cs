@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using FlatScraper.Core.Domain;
 using FlatScraper.Infrastructure.Extensions;
 using HtmlAgilityPack;
@@ -40,6 +39,5 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
         {
             return null;
         }
-
     }
 }

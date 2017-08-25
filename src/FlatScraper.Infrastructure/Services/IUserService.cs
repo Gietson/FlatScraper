@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FlatScraper.Core.Domain;
 using FlatScraper.Infrastructure.DTO;
 
 namespace FlatScraper.Infrastructure.Services

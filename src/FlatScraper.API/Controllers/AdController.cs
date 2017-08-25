@@ -1,8 +1,8 @@
-﻿using FlatScraper.Infrastructure.Services;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using FlatScraper.Infrastructure.DTO;
+using FlatScraper.Infrastructure.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FlatScraper.API.Controllers
 {
@@ -19,29 +19,50 @@ namespace FlatScraper.API.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Get()
         {
-            var ads = await _adService.GetAllAsync();
+            try
+            {
+                var ads = await _adService.GetAllAsync();
 
-            return Json(ads);
+                return Json(ads);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var ads = await _adService.GetAsync(id);
-            if (ads == null)
+            try
             {
-                return NotFound();
-            }
+                var ads = await _adService.GetAsync(id);
+                if (ads == null)
+                {
+                    return NotFound();
+                }
 
-            return Json(ads);
+                return Json(ads);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] InsertAdDto ad)
         {
-            await _adService.AddAsync(ad.Url);
+            try
+            {
+                await _adService.AddAsync(ad.Url);
 
-            return Ok();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

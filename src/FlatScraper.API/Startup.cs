@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using NLog.Extensions.Logging;
 using NLog.Web;
 
@@ -16,9 +17,6 @@ namespace FlatScraper.API
 {
     public class Startup
     {
-        public IConfigurationRoot Configuration { get; set; }
-        public IContainer ApplicationContainer { get; private set; }
-
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -28,10 +26,14 @@ namespace FlatScraper.API
             Configuration = builder.Build();
         }
 
+        public IConfigurationRoot Configuration { get; set; }
+        public IContainer ApplicationContainer { get; private set; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(opts => { opts.SerializerSettings.Formatting = Formatting.Indented; });
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
