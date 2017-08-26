@@ -17,6 +17,9 @@ namespace FlatScraper.API
 {
     public class Startup
     {
+        public IConfigurationRoot Configuration { get; set; }
+        public IContainer ApplicationContainer { get; private set; }
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -25,9 +28,6 @@ namespace FlatScraper.API
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
-
-        public IConfigurationRoot Configuration { get; set; }
-        public IContainer ApplicationContainer { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)

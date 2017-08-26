@@ -39,7 +39,7 @@ namespace FlatScraper.Tests.E2E.Controllers
         }*/
 
         [Fact]
-        public async Task add_new_ads()
+        public async Task add_new_ads_gumtree()
         {
             var ad = new InsertAdDto()
             {
@@ -51,15 +51,22 @@ namespace FlatScraper.Tests.E2E.Controllers
 
             var ads = await GetAllAsync();
             Assert.NotEmpty(ads);
-            /*
-            var user = await GetUserAsync(newUser.Email);
-            user.Email.ShouldBeEquivalentTo(newUser.Email);
-
-            var responseDelete = await Client.DeleteAsync($"api/users/{user.Id}");
-            responseDelete.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
-
-            var userAfterDelete = await GetUserAsync(newUser.Email);
-            userAfterDelete.ShouldBeEquivalentTo(null);*/
         }
+
+        //[Fact]
+        //public async Task add_new_ads_olx()
+        //{
+        //    var ad = new InsertAdDto()
+        //    {
+        //        Url = "https://www.olx.pl/nieruchomosci/mieszkania/sprzedaz/warszawa/"
+        //    };
+        //    var payload = GetPayload(ad);
+        //    var response = await Client.PostAsync("api/ad", payload);
+        //    response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
+
+        //    var ads = await GetAllAsync();
+        //    Assert.NotEmpty(ads);
+
+        //}
     }
 }

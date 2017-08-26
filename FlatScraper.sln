@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.3
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlatScraper.API", "src\FlatScraper.API\FlatScraper.API.csproj", "{E81A96FA-5A3A-4357-8401-DEBE21B17756}"
 EndProject
@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlatScraper.Core", "src\Fla
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlatScraper.Infrastructure", "src\FlatScraper.Infrastructure\FlatScraper.Infrastructure.csproj", "{09424694-C2D2-4184-8065-66D7D5586E9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlatScraper.Tests", "tests\FlatScraper.Tests\FlatScraper.Tests.csproj", "{84473EF0-5CFC-4278-8B4E-EA76394BB2A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlatScraper.Tests", "tests\FlatScraper.Tests\FlatScraper.Tests.csproj", "{84473EF0-5CFC-4278-8B4E-EA76394BB2A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlatScraper.Tests.E2E", "tests\FlatScraper.Tests.E2E\FlatScraper.Tests.E2E.csproj", "{2982CF6E-0F0C-4A13-B56D-80203B4C1C86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlatScraper.Tests.E2E", "tests\FlatScraper.Tests.E2E\FlatScraper.Tests.E2E.csproj", "{2982CF6E-0F0C-4A13-B56D-80203B4C1C86}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

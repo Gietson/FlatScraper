@@ -10,7 +10,7 @@ namespace FlatScraper.Core.Repositories
         Task<Ad> GetAsync(Guid id);
         Task<IEnumerable<Ad>> GetAllAsync();
         Task AddAsync(Ad ad);
-        Task UpdateASyncAsync(Ad ad);
+        Task UpdateAsync(Ad ad);
         Task RemoveAsync(Guid id);
     }
 }

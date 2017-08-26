@@ -30,7 +30,7 @@ namespace FlatScraper.Infrastructure.Repositories
             await Task.CompletedTask;
         }
 
-        public async Task UpdateASyncAsync(Ad ad)
+        public async Task UpdateAsync(Ad ad)
         {
             await Task.CompletedTask;
         }

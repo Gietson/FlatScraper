@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using FlatScraper.Infrastructure.DTO;
 using NLog;
 
 namespace FlatScraper.Infrastructure.Services
 {
     public class DataInitializer : IDataInitializer
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IAdService _adService;
+        private readonly IScanPageService _scanPageService;
         private readonly IUserService _userService;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public DataInitializer(IUserService userService, IAdService adService)
+        public DataInitializer(IUserService userService, IAdService adService, IScanPageService scanPageService)
         {
             _userService = userService;
             _adService = adService;
+            _scanPageService = scanPageService;
         }
 
         public async Task SeedAsync()
@@ -44,9 +47,16 @@ namespace FlatScraper.Infrastructure.Services
                 await _userService.RegisterAsync(userId, $"admin{i}@test.com", username, "secret", "admin");
             }
 
-            string url = "https://www.gumtree.pl/s-mieszkania-i-domy-sprzedam-i-kupie/warszawa/v1c9073l3200008p1";
-            Logger.Trace($"Initializing ads, url = {url}");
-            await _adService.AddAsync(url);
+            ScanPageDto page = new ScanPageDto()
+            {
+                Active = true,
+                Page = "Gumtree",
+                UrlAddress = "https://www.gumtree.pl/s-mieszkania-i-domy-sprzedam-i-kupie/warszawa/v1c9073l3200008p1"
+            };
+            await _scanPageService.AddAsync(page);
+
+            Logger.Debug($"Initializing ads, url = {page.UrlAddress}");
+            await _adService.AddAsync(page.UrlAddress);
 
 
             Logger.Trace("Data was initialized.");
