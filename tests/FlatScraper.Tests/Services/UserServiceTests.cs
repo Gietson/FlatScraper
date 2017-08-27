@@ -11,16 +11,16 @@ namespace FlatScraper.Tests.Services
 {
     public class UserServiceTests
     {
+        private readonly Mock<IEncrypter> _encrypterMock;
+        private readonly Mock<IMapper> _mapperMock;
+        private readonly Mock<IUserRepository> _userRepositoryMock;
+
         public UserServiceTests()
         {
             _userRepositoryMock = new Mock<IUserRepository>();
             _encrypterMock = new Mock<IEncrypter>();
             _mapperMock = new Mock<IMapper>();
         }
-
-        private readonly Mock<IUserRepository> _userRepositoryMock;
-        private readonly Mock<IEncrypter> _encrypterMock;
-        private readonly Mock<IMapper> _mapperMock;
 
         [Fact]
         public async Task register_async_should_invoke_add_async_on_repository()

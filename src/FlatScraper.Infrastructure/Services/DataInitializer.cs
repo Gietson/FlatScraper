@@ -8,10 +8,10 @@ namespace FlatScraper.Infrastructure.Services
 {
     public class DataInitializer : IDataInitializer
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IAdService _adService;
         private readonly IScanPageService _scanPageService;
         private readonly IUserService _userService;
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public DataInitializer(IUserService userService, IAdService adService, IScanPageService scanPageService)
         {
@@ -54,6 +54,14 @@ namespace FlatScraper.Infrastructure.Services
                 UrlAddress = "https://www.gumtree.pl/s-mieszkania-i-domy-sprzedam-i-kupie/warszawa/v1c9073l3200008p1"
             };
             await _scanPageService.AddAsync(page);
+
+            ScanPageDto pageOlx = new ScanPageDto()
+            {
+                Active = true,
+                Page = "Olx",
+                UrlAddress = "https://www.olx.pl/nieruchomosci/mieszkania/sprzedaz/warszawa/"
+            };
+            await _scanPageService.AddAsync(pageOlx);
 
             Logger.Debug($"Initializing ads, url = {page.UrlAddress}");
             await _adService.AddAsync(page.UrlAddress);

@@ -45,6 +45,20 @@ namespace FlatScraper.API.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            try
+            {
+                var page = await _scanPageService.GetAsync(id);
+                return Json(page);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] ScanPageDto page)
         {

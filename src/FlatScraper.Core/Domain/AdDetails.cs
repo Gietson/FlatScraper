@@ -6,6 +6,7 @@ namespace FlatScraper.Core.Domain
     public class AdDetails
     {
         private ISet<string> _photos = new HashSet<string>();
+
         public decimal PriceM2 { get; protected set; }
         public string District { get; protected set; }
         public string City { get; protected set; }
