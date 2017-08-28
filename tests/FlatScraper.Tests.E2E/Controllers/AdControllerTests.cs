@@ -37,7 +37,7 @@ namespace FlatScraper.Tests.E2E.Controllers
             var response = await Client.GetAsync($"api/users/{email}");
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.NotFound);
         }*/
-
+        /*
         [Fact]
         public async Task add_new_ads_gumtree()
         {
@@ -51,7 +51,7 @@ namespace FlatScraper.Tests.E2E.Controllers
 
             var ads = await GetAllAsync();
             Assert.NotEmpty(ads);
-        }
+        }*/
 
         //[Fact]
         //public async Task add_new_ads_olx()

@@ -38,19 +38,11 @@ namespace FlatScraper.Infrastructure.Services
             return _mapper.Map<AdDto>(ad);
         }
 
-        public async Task AddAsync(string url)
+        public async Task AddAsync(AdDto adDto)
         {
-            HtmlDocument scrapedDoc = ScrapExtensions.ScrapUrl(url);
+            var ad = _mapper.Map<Ad>(adDto);
 
-            List<Ad> ads = _scraper.ParseHomePage(scrapedDoc);
-
-            foreach (Ad ad in ads)
-            {
-                HtmlDocument scrapedSubPage = ScrapExtensions.ScrapUrl(ad.Url);
-                ad.AdDetails = _scraper.ParseDetailsPage(scrapedSubPage);
-
-                await _adRepository.AddAsync(ad);
-            }
+            await _adRepository.AddAsync(ad);
         }
     }
 }

@@ -9,6 +9,6 @@ namespace FlatScraper.Infrastructure.Services
     {
         Task<AdDto> GetAsync(Guid id);
         Task<IEnumerable<AdDto>> GetAllAsync();
-        Task AddAsync(string url);
+        Task AddAsync(AdDto adDto);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using FlatScraper.Infrastructure.DTO;
 using FlatScraper.Infrastructure.Services;
@@ -51,18 +52,18 @@ namespace FlatScraper.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] InsertAdDto ad)
+        public async Task<IActionResult> Post([FromBody] AdDto ad)
         {
             try
-            {
-                await _adService.AddAsync(ad.Url);
+             {
+                 await _adService.AddAsync(ad);
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+                 return Ok();
+             }
+             catch (Exception ex)
+             {
+                 return BadRequest(ex.Message);
+             }
         }
     }
 }

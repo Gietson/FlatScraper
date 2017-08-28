@@ -7,7 +7,7 @@ using HtmlAgilityPack;
 
 namespace FlatScraper.Infrastructure.Services.Scrapers
 {
-    public class OlxScraper //: IScraper
+    public class OlxScraper : IScraper
     {
         public List<Ad> ParseHomePage(HtmlDocument doc)
         {

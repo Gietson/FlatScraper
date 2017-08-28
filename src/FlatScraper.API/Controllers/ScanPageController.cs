@@ -1,7 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using Autofac.Core.Activators;
 using FlatScraper.Infrastructure.DTO;
 using FlatScraper.Infrastructure.Services;
+using FlatScraper.Infrastructure.Services.Scrapers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlatScraper.API.Controllers

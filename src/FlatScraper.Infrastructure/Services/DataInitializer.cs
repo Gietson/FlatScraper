@@ -9,14 +9,13 @@ namespace FlatScraper.Infrastructure.Services
     public class DataInitializer : IDataInitializer
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly IAdService _adService;
+        //private readonly IAdService _adService;
         private readonly IScanPageService _scanPageService;
         private readonly IUserService _userService;
 
-        public DataInitializer(IUserService userService, IAdService adService, IScanPageService scanPageService)
+        public DataInitializer(IUserService userService, IScanPageService scanPageService)
         {
             _userService = userService;
-            _adService = adService;
             _scanPageService = scanPageService;
         }
 
@@ -64,7 +63,7 @@ namespace FlatScraper.Infrastructure.Services
             await _scanPageService.AddAsync(pageOlx);
 
             Logger.Debug($"Initializing ads, url = {page.UrlAddress}");
-            await _adService.AddAsync(page.UrlAddress);
+            //await _adService.AddAsync(page.UrlAddress);
 
 
             Logger.Trace("Data was initialized.");
