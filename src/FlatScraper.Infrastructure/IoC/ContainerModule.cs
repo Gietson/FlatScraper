@@ -16,8 +16,9 @@ namespace FlatScraper.Infrastructure.IoC
 
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterInstance(AutoMapperConfig.Initialize());
+            builder.RegisterInstance(AutoMapperConfig.Initialize()).SingleInstance();
             builder.RegisterModule<RepositoryModule>();
+            builder.RegisterModule<MongoModule>();
             builder.RegisterModule<ServiceModule>();
 
             builder.RegisterModule(new SettingsModule(_configuration));

@@ -2,6 +2,7 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using FlatScraper.Infrastructure.IoC;
+using FlatScraper.Infrastructure.Mongo;
 using FlatScraper.Infrastructure.Services;
 using FlatScraper.Infrastructure.Settings;
 using Microsoft.AspNetCore.Builder;
@@ -53,6 +54,17 @@ namespace FlatScraper.API
             loggerFactory.AddNLog();
             app.AddNLogWeb();
             env.ConfigureNLog("nlog.config");
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/error");
+            }
+
+            MongoConfigurator.Initialize();
 
             var generalSettings = app.ApplicationServices.GetService<GeneralSettings>();
             if (generalSettings.SeedData)

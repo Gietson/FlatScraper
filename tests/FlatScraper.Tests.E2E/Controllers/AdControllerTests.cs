@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using FlatScraper.Infrastructure.DTO;
-using FluentAssertions;
 using Newtonsoft.Json;
-using Xunit;
 
 namespace FlatScraper.Tests.E2E.Controllers
 {

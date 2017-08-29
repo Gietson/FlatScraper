@@ -5,9 +5,6 @@ using AutoMapper;
 using FlatScraper.Core.Domain;
 using FlatScraper.Core.Repositories;
 using FlatScraper.Infrastructure.DTO;
-using FlatScraper.Infrastructure.Extensions;
-using FlatScraper.Infrastructure.Services.Scrapers;
-using HtmlAgilityPack;
 
 namespace FlatScraper.Infrastructure.Services
 {
@@ -15,12 +12,10 @@ namespace FlatScraper.Infrastructure.Services
     {
         private readonly IAdRepository _adRepository;
         private readonly IMapper _mapper;
-        private readonly IScraper _scraper;
 
-        public AdService(IAdRepository adRepository, IScraper scraper, IMapper mapper)
+        public AdService(IAdRepository adRepository, IMapper mapper)
         {
             _adRepository = adRepository;
-            _scraper = scraper;
             _mapper = mapper;
         }
 

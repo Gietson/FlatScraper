@@ -39,7 +39,7 @@ namespace FlatScraper.Tests.Services
         public async Task get_all_async_should_invoke_get_all_async_on_repository()
         {
             // Arrange
-            var adService = new AdService(_adRepositoryMock.Object, _scraperMock.Object, _mapperMock.Object);
+            var adService = new AdService(_adRepositoryMock.Object, _mapperMock.Object);
 
             // Act
             await adService.GetAllAsync();

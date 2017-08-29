@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using FlatScraper.Core.Domain;
 using FlatScraper.Infrastructure.Extensions;
 using HtmlAgilityPack;
@@ -14,7 +13,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
             List<Ad> adsList = new List<Ad>();
             HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("// tbody / tr[@class='wrap'] / td");
             string host = "https://www.olx.pl";
-            
+
             foreach (HtmlNode ad in docs)
             {
                 HtmlNode nod = ad.SelectSingleNode("table / tbody / tr[1]");

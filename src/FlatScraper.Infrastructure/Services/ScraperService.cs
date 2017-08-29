@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using FlatScraper.Core.Domain;
 using FlatScraper.Core.Repositories;
@@ -15,26 +13,29 @@ namespace FlatScraper.Infrastructure.Services
 {
     public class ScraperService : IScraperService
     {
+        private readonly IAdRepository _adRepository;
         private readonly IScanPageService _scanPageService;
         private IScraper _scraper;
-        private readonly IAdRepository _adRepository;
 
         public ScraperService(IScanPageService scanPageService, IAdRepository adRepository)
         {
             _scanPageService = scanPageService;
             _adRepository = adRepository;
         }
+
         public async Task ScrapAsync()
         {
             IEnumerable<Type> scraperTypes = ScrapExtensions.GetScraperTypes();
 
             var scanPages = await _scanPageService.GetAllAsync();
+            var adsDb = await _adRepository.GetAllAsync();
+
             foreach (ScanPageDto scanPage in scanPages)
             {
                 Type scrapClass = scraperTypes
-                                        .FirstOrDefault(x => x.Name.ToLower()
-                                            .Replace("Scraper", "")
-                                            .Contains(scanPage.Page.ToLower()));
+                    .FirstOrDefault(x => x.Name.ToLower()
+                        .Replace("Scraper", "")
+                        .Contains(scanPage.Page.ToLower()));
                 if (scrapClass == null)
                 {
                     throw new Exception($"Invalid scan page, url='{scanPage}'.");
@@ -47,13 +48,16 @@ namespace FlatScraper.Infrastructure.Services
 
                 foreach (Ad ad in ads)
                 {
-                    HtmlDocument scrapedSubPage = ScrapExtensions.ScrapUrl(ad.Url);
-                    ad.AdDetails = _scraper.ParseDetailsPage(scrapedSubPage);
+                    bool isInDb = adsDb.Any(x => x.IdAds == ad.IdAds);
+                    if (!isInDb)
+                    {
+                        HtmlDocument scrapedSubPage = ScrapExtensions.ScrapUrl(ad.Url);
+                        ad.AdDetails = _scraper.ParseDetailsPage(scrapedSubPage);
 
-                    await _adRepository.AddAsync(ad);
+                        await _adRepository.AddAsync(ad);
+                    }
                 }
             }
-            
         }
     }
 }

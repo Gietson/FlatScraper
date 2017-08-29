@@ -1,10 +1,7 @@
-﻿using AutoMapper;
-using FlatScraper.Core.Domain;
+﻿using System.Threading.Tasks;
 using FlatScraper.Core.Repositories;
-using FlatScraper.Infrastructure.DTO;
 using FlatScraper.Infrastructure.Services;
 using Moq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace FlatScraper.Tests.Services
@@ -30,7 +27,7 @@ namespace FlatScraper.Tests.Services
             await scrapService.ScrapAsync();
 
             // Assert
-            _scanPageServiceMock.Verify(x=>x.GetAllAsync(), Times.Once);
+            _scanPageServiceMock.Verify(x => x.GetAllAsync(), Times.Once);
         }
     }
 }

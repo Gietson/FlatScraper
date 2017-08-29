@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using FlatScraper.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -33,5 +30,4 @@ namespace FlatScraper.API.Controllers
             }
         }
     }
-   
 }
