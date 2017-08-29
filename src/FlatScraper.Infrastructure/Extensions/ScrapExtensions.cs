@@ -1,4 +1,9 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using FlatScraper.Infrastructure.Services.Scrapers;
 using HtmlAgilityPack;
 
 namespace FlatScraper.Infrastructure.Extensions
@@ -21,6 +26,17 @@ namespace FlatScraper.Infrastructure.Extensions
             string p = digitsOnly.Replace(price, "");
 
             return decimal.TryParse(p, out decimal tempPrice) ? tempPrice : 0;
+        }
+
+        public static IEnumerable<Type> GetScraperTypes()
+        {
+            Type type = typeof(IScraper);
+            Type[] assembly = Assembly.GetAssembly(type).GetTypes();
+
+            IEnumerable<Type> scraperTypes = assembly.Where(x =>
+                x.GetInterfaces().Contains(typeof(IScraper)) && x.GetConstructor(Type.EmptyTypes) != null);
+
+            return scraperTypes;
         }
     }
 }

@@ -12,19 +12,21 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
         public List<Ad> ParseHomePage(HtmlDocument doc)
         {
             List<Ad> adsList = new List<Ad>();
-            HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("//div[@class='container']");
-            string host = "https://www.gumtree.pl";
+            HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("// tbody / tr[@class='wrap'] / td");
+            string host = "https://www.olx.pl";
+            
             foreach (HtmlNode ad in docs)
             {
-                HtmlNode nod = ad.SelectSingleNode("div[@class='title']/a");
+                HtmlNode nod = ad.SelectSingleNode("table / tbody / tr[1]");
 
-                string title = nod.InnerText.Trim();
-                string url = host + nod.Attributes["href"].Value;
-                string idAds = url.Split('/').Last();
+                string url = nod.SelectSingleNode("td[1] / a").Attributes["href"].Value;
 
-                HtmlNode priceTemp =
-                    ad.SelectSingleNode(
-                        "div[@class='info']/div[@class='price']/span[@class='value']/span[@class='amount']");
+                string title = nod.SelectSingleNode("td[2] / div / h3 / a / strong").InnerText.Trim();
+
+                string idAds = ad.SelectSingleNode("table").Attributes["data-id"].Value;
+
+                HtmlNode priceTemp = nod.SelectSingleNode("td[3] / div / p / strong");
+
                 decimal price = ScrapExtensions.PreparePrice(priceTemp?.InnerText);
 
                 Ad ads = Ad.Create(Guid.NewGuid(), idAds, title, url, price, host);
@@ -37,7 +39,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
         public AdDetails ParseDetailsPage(HtmlDocument doc)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

@@ -26,17 +26,15 @@ namespace FlatScraper.Infrastructure.Services
         }
         public async Task ScrapAsync()
         {
-            Type type = typeof(IScraper);
-            Type[] assembly = Assembly.GetAssembly(type).GetTypes();
-
-            IEnumerable<Type> scraperTypes = assembly.Where(x =>
-                x.GetInterfaces().Contains(typeof(IScraper)) && x.GetConstructor(Type.EmptyTypes) != null);
-
+            IEnumerable<Type> scraperTypes = ScrapExtensions.GetScraperTypes();
 
             var scanPages = await _scanPageService.GetAllAsync();
             foreach (ScanPageDto scanPage in scanPages)
             {
-                Type scrapClass = scraperTypes.FirstOrDefault(x => x.Name.ToLower().Replace("Scraper", "").Contains(scanPage.UrlAddress.ToLower()));
+                Type scrapClass = scraperTypes
+                                        .FirstOrDefault(x => x.Name.ToLower()
+                                            .Replace("Scraper", "")
+                                            .Contains(scanPage.Page.ToLower()));
                 if (scrapClass == null)
                 {
                     throw new Exception($"Invalid scan page, url='{scanPage}'.");
@@ -55,7 +53,6 @@ namespace FlatScraper.Infrastructure.Services
                     await _adRepository.AddAsync(ad);
                 }
             }
-
             
         }
     }

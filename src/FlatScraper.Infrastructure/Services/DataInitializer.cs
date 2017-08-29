@@ -11,12 +11,15 @@ namespace FlatScraper.Infrastructure.Services
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         //private readonly IAdService _adService;
         private readonly IScanPageService _scanPageService;
+
+        private readonly IScraperService _scraperService;
         private readonly IUserService _userService;
 
-        public DataInitializer(IUserService userService, IScanPageService scanPageService)
+        public DataInitializer(IUserService userService, IScanPageService scanPageService, IScraperService scraperService)
         {
             _userService = userService;
             _scanPageService = scanPageService;
+            _scraperService = scraperService;
         }
 
         public async Task SeedAsync()
@@ -62,9 +65,8 @@ namespace FlatScraper.Infrastructure.Services
             };
             await _scanPageService.AddAsync(pageOlx);
 
-            Logger.Debug($"Initializing ads, url = {page.UrlAddress}");
-            //await _adService.AddAsync(page.UrlAddress);
-
+            Logger.Debug($"Scraping...");
+            await _scraperService.ScrapAsync();
 
             Logger.Trace("Data was initialized.");
         }
