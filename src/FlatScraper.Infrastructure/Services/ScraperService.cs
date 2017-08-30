@@ -38,7 +38,7 @@ namespace FlatScraper.Infrastructure.Services
                         .Contains(scanPage.Page.ToLower()));
                 if (scrapClass == null)
                 {
-                    throw new Exception($"Invalid scan page, url='{scanPage}'.");
+                    throw new Exception($"Invalid scan page, UrlAddress='{scanPage.UrlAddress}', Page='{scanPage.Page}'.");
                 }
 
                 _scraper = Activator.CreateInstance(scrapClass) as IScraper;
