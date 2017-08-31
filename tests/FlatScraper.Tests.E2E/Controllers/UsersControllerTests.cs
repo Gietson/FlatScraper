@@ -18,8 +18,6 @@ namespace FlatScraper.Tests.E2E.Controllers
             return JsonConvert.DeserializeObject<UserDto>(responseString);
         }
 
-        [Trait("Category", "Users")]
-        [Trait("Priority", "3")]
         [Fact]
         public async Task get_all_users()
         {
@@ -31,8 +29,6 @@ namespace FlatScraper.Tests.E2E.Controllers
             Assert.NotEmpty(users);
         }
 
-        [Trait("Category", "Users")]
-        [Trait("Priority", "2")]
         [Fact]
         public async Task given_invalid_email_user_should_not_exist()
         {
@@ -41,8 +37,6 @@ namespace FlatScraper.Tests.E2E.Controllers
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.NotFound);
         }
 
-        [Trait("Category", "Users")]
-        [Trait("Priority", "1")]
         [Fact]
         public async Task register_user_and_get_user()
         {

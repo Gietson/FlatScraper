@@ -10,6 +10,7 @@ using Xunit;
 
 namespace FlatScraper.Tests.E2E.Controllers
 {
+    [TestCaseOrderer("FullNameOfOrderStrategyHere", "OrderStrategyAssemblyName")]
     public class ScanPageControllerTests : ControllerTestsBase
     {
         private async Task<ScanPageDto> Get(Guid id)
@@ -30,9 +31,7 @@ namespace FlatScraper.Tests.E2E.Controllers
             return pages;
         }
 
-        [Trait("Category", "ScanPage")]
-        [Trait("Priority", "1")]
-        [Fact]
+        [Fact, TestPriority(1)]
         public async Task add_new_scanpage()
         {
             var page = new ScanPageDto()
@@ -49,9 +48,7 @@ namespace FlatScraper.Tests.E2E.Controllers
             Assert.NotEmpty(pages);
         }
 
-        [Trait("Category", "ScanPage")]
-        [Trait("Priority", "2")]
-        [Fact]
+        [Fact, TestPriority(2)]
         public async Task change_scanpage_and_get_by_id()
         {
             var pages = await GetAllAsync();
@@ -70,9 +67,7 @@ namespace FlatScraper.Tests.E2E.Controllers
             page.UrlAddress.ShouldBeEquivalentTo("test");*/
         }
 
-        [Trait("Category", "ScanPage")]
-        [Trait("Priority", "3")]
-        [Fact]
+        [Fact, TestPriority(3)]
         public async Task delete_new_scanpage()
         {
             var pages = await GetAllAsync();
