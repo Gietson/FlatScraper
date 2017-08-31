@@ -19,9 +19,6 @@ namespace FlatScraper.Infrastructure.Repositories
         public async Task<ScanPage> GetAsync(Guid id)
             => await ScanPage.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
 
-        public async Task<ScanPage> GetAsync(string urlAddress)
-            => await ScanPage.AsQueryable().FirstOrDefaultAsync(x => x.UrlAddress == urlAddress);
-
         public async Task<IEnumerable<ScanPage>> GetAllAsync()
             => await ScanPage.AsQueryable().ToListAsync();
 

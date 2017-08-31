@@ -30,17 +30,6 @@ namespace FlatScraper.Infrastructure.Services
             return _mapper.Map<ScanPageDto>(page);
         }
 
-        public async Task<ScanPageDto> GetAsync(string urlAddress)
-        {
-            var page = await _scanPageRepository.GetAsync(urlAddress);
-            if (page == null)
-            {
-                throw new Exception($"ScanPage with urlAddress='{urlAddress}' was not found.");
-            }
-
-            return _mapper.Map<ScanPageDto>(page);
-        }
-
         public async Task<IEnumerable<ScanPageDto>> GetAllAsync()
         {
             var pages = await _scanPageRepository.GetAllAsync();
@@ -71,7 +60,8 @@ namespace FlatScraper.Infrastructure.Services
             {
                 throw new Exception($"ScanPage with id='{page.Id}' was not found.");
             }
-            await _scanPageRepository.UpdateAsync(scanPage);
+
+            await _scanPageRepository.UpdateAsync(_mapper.Map<ScanPage>(page));
         }
     }
 }

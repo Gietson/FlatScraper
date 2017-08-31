@@ -14,9 +14,6 @@ namespace FlatScraper.Infrastructure.Repositories
         public async Task AddAsync(ScanPage page)
             => await Task.FromResult(_scanPages.Add(page));
 
-        public async Task<ScanPage> GetAsync(string urlAddress)
-            => await Task.FromResult(_scanPages.SingleOrDefault(x => x.UrlAddress == urlAddress));
-
         public async Task<IEnumerable<ScanPage>> GetAllAsync()
             => await Task.FromResult(_scanPages);
 

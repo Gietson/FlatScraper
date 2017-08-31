@@ -11,7 +11,7 @@ namespace FlatScraper.Infrastructure.Mappers
                 {
                     cfg.CreateMap<User, UserDto>().ReverseMap();
                     cfg.CreateMap<Ad, AdDto>().ReverseMap();
-                    cfg.CreateMap<ScanPage, ScanPageDto>();
+                    cfg.CreateMap<ScanPage, ScanPageDto>().ReverseMap();
                 })
                 .CreateMapper();
     }

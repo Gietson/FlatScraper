@@ -8,7 +8,6 @@ namespace FlatScraper.Infrastructure.Services
     public interface IScanPageService : IService
     {
         Task<ScanPageDto> GetAsync(Guid id);
-        Task<ScanPageDto> GetAsync(string urlAddress);
         Task<IEnumerable<ScanPageDto>> GetAllAsync();
         Task AddAsync(ScanPageDto url);
         Task RemoveAsync(Guid id);

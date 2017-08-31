@@ -16,36 +16,13 @@ namespace FlatScraper.Tests.E2E.Controllers
     {
         private string urlAddress;
         private string newUrl;
-
+        private string uri;
         public ScanPageControllerTests()
         {
+            
             urlAddress = "https://www.gumtree.pl/s-mieszkania-i-domy-sprzedam-i-kupie/warszawa/v1c9073l3200008p2";
             newUrl = "www.test.com";
-        }
-
-        private async Task<ScanPageDto> Get(Guid id)
-        {
-            var response = await Client.GetAsync($"api/scanpage/{id}");
-            var responseString = await response.Content.ReadAsStringAsync();
-
-            var page = JsonConvert.DeserializeObject<ScanPageDto>(responseString);
-            return page;
-        }
-        private async Task<ScanPageDto> Get(string urlAddress)
-        {
-            var response = await Client.GetAsync($"api/scanpage/{urlAddress}");
-            var responseString = await response.Content.ReadAsStringAsync();
-
-            var page = JsonConvert.DeserializeObject<ScanPageDto>(responseString);
-            return page;
-        }
-        private async Task<IEnumerable<ScanPageDto>> GetAllAsync()
-        {
-            var response = await Client.GetAsync("api/scanpage");
-            var responseString = await response.Content.ReadAsStringAsync();
-
-            var pages = JsonConvert.DeserializeObject<IEnumerable<ScanPageDto>>(responseString);
-            return pages;
+            uri = "api/scanpage";
         }
 
         [Fact, TestPriority(1)]
@@ -57,10 +34,10 @@ namespace FlatScraper.Tests.E2E.Controllers
                 Page = "Gumtree"
             };
             var payload = GetPayload(page);
-            var response = await Client.PostAsync("api/scanpage", payload);
+            var response = await Client.PostAsync(uri, payload);
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
 
-            var pages = await GetAllAsync();
+            var pages = await GetAllAsync<ScanPageDto>(uri);
 
             Assert.NotEmpty(pages);
         }
@@ -68,16 +45,18 @@ namespace FlatScraper.Tests.E2E.Controllers
         [Fact, TestPriority(2)]
         public async Task change_scanpage_and_get_by_id()
         {
-            ScanPageDto page = await Get(urlAddress);
+            var pages = await GetAllAsync<ScanPageDto>(uri);
+            var page = pages.First();
             page.Active = false;
             page.UrlAddress = newUrl;
 
             var payload = GetPayload(page);
-            var response = await Client.PutAsync($"api/scanpage", payload);
+            var response = await Client.PutAsync(uri, payload);
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
 
-            ScanPageDto newPage = await Get(newUrl);
-            newPage.UrlAddress.ShouldBeEquivalentTo(newUrl);
+            var result = await GetAllAsync<ScanPageDto>(uri);
+            ScanPageDto newScanPage = result.FirstOrDefault(x => x.UrlAddress == newUrl);
+            newScanPage.ShouldBeEquivalentTo(page);
         }
 
         [Fact, TestPriority(3)]
@@ -93,7 +72,7 @@ namespace FlatScraper.Tests.E2E.Controllers
             response = await Client.PostAsync("api/scanpage", payload);
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
 
-            var pages = await GetAllAsync();
+            var pages = await GetAllAsync<ScanPageDto>(uri);
             Assert.NotEmpty(pages);
 
             Guid id = pages.FirstOrDefault().Id;
