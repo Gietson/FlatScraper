@@ -29,7 +29,7 @@ namespace FlatScraper.Tests.E2E.Controllers
             return pages;
         }
 
-        [Fact]
+        /*[Fact]
         public async Task scrap_all_pages()
         {
             var response = await Client.GetAsync("api/scrap");
@@ -38,6 +38,6 @@ namespace FlatScraper.Tests.E2E.Controllers
             var pages = await GetAllAsync();
 
             Assert.NotEmpty(pages);
-        }
+        }*/
     }
 }
