@@ -59,7 +59,7 @@ namespace FlatScraper.API.Controllers
             }
         }
 
-        [HttpGet("{urlAddress")]
+        [HttpGet("{urlAddress}")]
         public async Task<IActionResult> Get(string urlAddress)
         {
             try
