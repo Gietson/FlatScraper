@@ -59,6 +59,20 @@ namespace FlatScraper.API.Controllers
             }
         }
 
+        [HttpGet("{urlAddress")]
+        public async Task<IActionResult> Get(string urlAddress)
+        {
+            try
+            {
+                var page = await _scanPageService.GetAsync(urlAddress);
+                return Json(page);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] ScanPageDto page)
         {

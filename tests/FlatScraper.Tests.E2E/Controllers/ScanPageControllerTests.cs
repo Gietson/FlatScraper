@@ -14,6 +14,15 @@ namespace FlatScraper.Tests.E2E.Controllers
     [TestCaseOrderer("FullNameOfOrderStrategyHere", "OrderStrategyAssemblyName")]
     public class ScanPageControllerTests : ControllerTestsBase
     {
+        private string urlAddress;
+        private string newUrl;
+
+        public ScanPageControllerTests()
+        {
+            urlAddress = "https://www.gumtree.pl/s-mieszkania-i-domy-sprzedam-i-kupie/warszawa/v1c9073l3200008p2";
+            newUrl = "www.test.com";
+        }
+
         private async Task<ScanPageDto> Get(Guid id)
         {
             var response = await Client.GetAsync($"api/scanpage/{id}");
@@ -22,7 +31,14 @@ namespace FlatScraper.Tests.E2E.Controllers
             var page = JsonConvert.DeserializeObject<ScanPageDto>(responseString);
             return page;
         }
+        private async Task<ScanPageDto> Get(string urlAddress)
+        {
+            var response = await Client.GetAsync($"api/scanpage/{urlAddress}");
+            var responseString = await response.Content.ReadAsStringAsync();
 
+            var page = JsonConvert.DeserializeObject<ScanPageDto>(responseString);
+            return page;
+        }
         private async Task<IEnumerable<ScanPageDto>> GetAllAsync()
         {
             var response = await Client.GetAsync("api/scanpage");
@@ -37,7 +53,7 @@ namespace FlatScraper.Tests.E2E.Controllers
         {
             var page = new ScanPageDto()
             {
-                UrlAddress = "https://www.gumtree.pl/s-mieszkania-i-domy-sprzedam-i-kupie/warszawa/v1c9073l3200008p2",
+                UrlAddress = urlAddress,
                 Page = "Gumtree"
             };
             var payload = GetPayload(page);
@@ -52,20 +68,16 @@ namespace FlatScraper.Tests.E2E.Controllers
         [Fact, TestPriority(2)]
         public async Task change_scanpage_and_get_by_id()
         {
-            var pages = await GetAllAsync();
-            Assert.NotEmpty(pages);
+            ScanPageDto page = await Get(urlAddress);
+            page.Active = false;
+            page.UrlAddress = newUrl;
 
-            var changePage = pages.First();
-            changePage.Active = false;
-            changePage.UrlAddress = "test";
-
-            var payload = GetPayload(changePage);
-
+            var payload = GetPayload(page);
             var response = await Client.PutAsync($"api/scanpage", payload);
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
 
-            /*var page = await Get(changePage.Id);
-            page.UrlAddress.ShouldBeEquivalentTo("test");*/
+            ScanPageDto newPage = await Get(newUrl);
+            newPage.UrlAddress.ShouldBeEquivalentTo(newUrl);
         }
 
         [Fact, TestPriority(3)]
