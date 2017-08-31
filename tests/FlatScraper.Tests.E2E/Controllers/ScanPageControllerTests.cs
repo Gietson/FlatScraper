@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using FlatScraper.Infrastructure.DTO;
 using FluentAssertions;
@@ -70,11 +71,21 @@ namespace FlatScraper.Tests.E2E.Controllers
         [Fact, TestPriority(3)]
         public async Task delete_new_scanpage()
         {
+            HttpResponseMessage response;
+            var page = new ScanPageDto()
+            {
+                UrlAddress = "https://www.olx.pl/nieruchomosci/mieszkania/sprzedaz/warszawa/?page=2",
+                Page = "Olx"
+            };
+            var payload = GetPayload(page);
+            response = await Client.PostAsync("api/scanpage", payload);
+            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
+
             var pages = await GetAllAsync();
+            Assert.NotEmpty(pages);
 
             Guid id = pages.FirstOrDefault().Id;
-            //var payload = GetPayload(id);
-            var response = await Client.DeleteAsync($"api/scanpage/{id}");
+            response = await Client.DeleteAsync($"api/scanpage/{id}");
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
         }
     }
