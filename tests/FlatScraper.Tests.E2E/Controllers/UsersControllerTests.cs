@@ -18,7 +18,7 @@ namespace FlatScraper.Tests.E2E.Controllers
             return JsonConvert.DeserializeObject<UserDto>(responseString);
         }
 
-        [Fact]
+        [Fact, TestPriority(2)]
         public async Task get_all_users()
         {
             var response = await Client.GetAsync("api/users");
@@ -29,7 +29,7 @@ namespace FlatScraper.Tests.E2E.Controllers
             Assert.NotEmpty(users);
         }
 
-        [Fact]
+        [Fact, TestPriority(3)]
         public async Task given_invalid_email_user_should_not_exist()
         {
             string email = "user1000@email.com";
@@ -37,7 +37,7 @@ namespace FlatScraper.Tests.E2E.Controllers
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.NotFound);
         }
 
-        [Fact]
+        [Fact, TestPriority(1)]
         public async Task register_user_and_get_user()
         {
             var newUser = new CreateUserDto
