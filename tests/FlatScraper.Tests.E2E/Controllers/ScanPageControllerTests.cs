@@ -71,7 +71,6 @@ namespace FlatScraper.Tests.E2E.Controllers
         public async Task delete_new_scanpage()
         {
             var pages = await GetAllAsync();
-            Assert.NotEmpty(pages);
 
             Guid id = pages.FirstOrDefault().Id;
             //var payload = GetPayload(id);

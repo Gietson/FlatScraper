@@ -4,7 +4,7 @@ using System.Linq;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace FlatScraper.Tests.E2E.Controllers
+namespace FlatScraper.Tests.E2E
 {
     public class PriorityOrderer : ITestCaseOrderer
     {
