@@ -69,14 +69,14 @@ namespace FlatScraper.Tests.E2E.Controllers
                 Page = "Olx"
             };
             var payload = GetPayload(page);
-            response = await Client.PostAsync("api/scanpage", payload);
+            response = await Client.PostAsync(uri, payload);
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
 
             var pages = await GetAllAsync<ScanPageDto>(uri);
             Assert.NotEmpty(pages);
 
             Guid id = pages.FirstOrDefault().Id;
-            response = await Client.DeleteAsync($"api/scanpage/{id}");
+            response = await Client.DeleteAsync($"{uri}/{id}");
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
         }
     }
