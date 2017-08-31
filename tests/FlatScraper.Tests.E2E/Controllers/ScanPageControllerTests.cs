@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FlatScraper.Infrastructure.DTO;
+using FluentAssertions;
+using Newtonsoft.Json;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FlatScraper.Infrastructure.DTO;
-using FluentAssertions;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace FlatScraper.Tests.E2E.Controllers
@@ -25,6 +24,9 @@ namespace FlatScraper.Tests.E2E.Controllers
             uri = "api/scanpage";
         }
 
+
+
+
         [Fact, TestPriority(1)]
         public async Task add_new_scanpage()
         {
@@ -38,10 +40,37 @@ namespace FlatScraper.Tests.E2E.Controllers
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
 
             var pages = await GetAllAsync<ScanPageDto>(uri);
-
             Assert.NotEmpty(pages);
+
+            ScanPageDto myPage = pages.FirstOrDefault(x => x.UrlAddress == urlAddress);
+            Assert.NotEqual(myPage, null);
+
+            //update
+            myPage.Active = false;
+            myPage.UrlAddress = newUrl;
+
+            payload = GetPayload(myPage);
+            response = await Client.PutAsync(uri, payload);
+            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
+
+            // get by id
+            response = await Client.GetAsync($"{uri}/{myPage.Id}");
+            var responseString = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ScanPageDto>(responseString);
+            result.UrlAddress.ShouldBeEquivalentTo(newUrl);
+
+            // delete
+            response = await Client.DeleteAsync($"{uri}/{result.Id}");
+            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
+
+            // get not found
+            var responseNotFound = await Client.GetAsync($"{uri}/{myPage.Id}");
+            var responseStringNotFound = await response.Content.ReadAsStringAsync();
+            var resultNotFound = JsonConvert.DeserializeObject<ScanPageDto>(responseStringNotFound);
+            resultNotFound.ShouldBeEquivalentTo(null);
         }
 
+        /*
         [Fact, TestPriority(2)]
         public async Task change_scanpage_and_get_by_id()
         {
@@ -58,7 +87,7 @@ namespace FlatScraper.Tests.E2E.Controllers
             ScanPageDto newScanPage = result.FirstOrDefault(x => x.UrlAddress == newUrl);
             newScanPage.ShouldBeEquivalentTo(page);
         }
-
+        */
         [Fact, TestPriority(3)]
         public async Task delete_new_scanpage()
         {
