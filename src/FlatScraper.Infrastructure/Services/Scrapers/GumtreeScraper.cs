@@ -37,12 +37,17 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
         public AdDetails ParseDetailsPage(HtmlDocument doc, Ad ad)
         {
-            HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("//ul[@class='selMenu'] / li / div");
-
             DateTime createAt = DateTime.MinValue;
-            string district = null, city = null, typeOfProperty = null, parking = null;
+            string district = null;
+            string city = null;
+            string typeOfProperty = null;
+            string parking = null;
             bool agency = false;
-            int numberOfRooms = 0, numberOfBathrooms = 0, size = 0;
+            int numberOfRooms = 0;
+            int numberOfBathrooms = 0;
+            int size = 0;
+
+            HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("//ul[@class='selMenu'] / li / div");
 
             foreach (HtmlNode docParameter in docs)
             {
@@ -103,6 +108,10 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
             decimal tempPriceM2 = (ad.Price / size);
             decimal priceM2 = decimal.Round(tempPriceM2, 2, MidpointRounding.AwayFromZero);
 
+            var tempUsername = doc.DocumentNode.SelectSingleNode("//span[@class='username'] / a /text()");
+            string username = tempUsername.InnerText.Trim();
+            
+
             AdDetails adDetails = AdDetails.Create(
                 priceM2,
                 district,
@@ -112,7 +121,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
                 numberOfRooms,
                 numberOfBathrooms,
                 size,
-                "username",
+                username,
                 new List<string>(),
                 createAt);
 

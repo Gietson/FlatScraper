@@ -5,8 +5,6 @@ namespace FlatScraper.Core.Domain
 {
     public class AdDetails
     {
-        private ISet<string> _photos = new HashSet<string>();
-
         public decimal PriceM2 { get; protected set; }
         public string District { get; protected set; }
         public string City { get; protected set; }
@@ -20,11 +18,7 @@ namespace FlatScraper.Core.Domain
         public DateTime UpdatedAt { get; protected set; }
         public DateTime CreateAt { get; protected set; }
 
-        public IEnumerable<string> Photos
-        {
-            get { return _photos; }
-            set { _photos = new HashSet<string>(value); }
-        }
+        public IEnumerable<string> Photos { get; protected set; }
 
         protected AdDetails()
         {
