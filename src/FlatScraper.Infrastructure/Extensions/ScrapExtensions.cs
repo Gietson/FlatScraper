@@ -38,5 +38,16 @@ namespace FlatScraper.Infrastructure.Extensions
 
             return scraperTypes;
         }
+
+        public static int PrepareNumber(string number)
+        {
+            if (number.Empty())
+                return 0;
+
+            Regex digitsOnly = new Regex(@"[^\d]");
+            string p = digitsOnly.Replace(number, "");
+
+            return Int32.TryParse(p, out int tempNumber) ? tempNumber : 0;
+        }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using FlatScraper.Infrastructure.DTO;
 using FluentAssertions;
@@ -16,6 +15,26 @@ namespace FlatScraper.Tests.E2E.Controllers
             var responseString = await response.Content.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<UserDto>(responseString);
+        }
+
+        /*
+        [Fact, TestPriority(2)]
+        public async Task get_all_users()
+        {
+            var response = await Client.GetAsync("api/users");
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            var users = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(responseString);
+
+            Assert.NotEmpty(users);
+        }
+        */
+        [Fact, TestPriority(2)]
+        public async Task given_invalid_email_user_should_not_exist()
+        {
+            string email = "user1000@email.com";
+            var response = await Client.GetAsync($"api/users/{email}");
+            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.NotFound);
         }
 
         [Fact, TestPriority(1)]
@@ -42,25 +61,5 @@ namespace FlatScraper.Tests.E2E.Controllers
             var userAfterDelete = await GetUserAsync(newUser.Email);
             userAfterDelete.ShouldBeEquivalentTo(null);
         }
-        /*
-        [Fact, TestPriority(2)]
-        public async Task get_all_users()
-        {
-            var response = await Client.GetAsync("api/users");
-            var responseString = await response.Content.ReadAsStringAsync();
-
-            var users = JsonConvert.DeserializeObject<IEnumerable<UserDto>>(responseString);
-
-            Assert.NotEmpty(users);
-        }
-        */
-        [Fact, TestPriority(2)]
-        public async Task given_invalid_email_user_should_not_exist()
-        {
-            string email = "user1000@email.com";
-            var response = await Client.GetAsync($"api/users/{email}");
-            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.NotFound);
-        }
-
     }
 }

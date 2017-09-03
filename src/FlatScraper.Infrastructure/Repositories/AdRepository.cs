@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using FlatScraper.Core.Domain;
 using FlatScraper.Core.Repositories;
@@ -14,10 +12,13 @@ namespace FlatScraper.Infrastructure.Repositories
     {
         private readonly IMongoDatabase _database;
 
+        private IMongoCollection<Ad> Ad => _database.GetCollection<Ad>("Ad");
+
         public AdRepository(IMongoDatabase database)
         {
             _database = database;
         }
+
         public async Task<Ad> GetAsync(Guid id)
             => await Ad.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
 
@@ -32,8 +33,5 @@ namespace FlatScraper.Infrastructure.Repositories
 
         public async Task RemoveAsync(Guid id)
             => await Ad.DeleteOneAsync(x => x.Id == id);
-
-        private IMongoCollection<Ad> Ad => _database.GetCollection<Ad>("Ad");
-
     }
 }

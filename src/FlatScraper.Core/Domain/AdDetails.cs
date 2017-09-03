@@ -18,6 +18,7 @@ namespace FlatScraper.Core.Domain
         public string UserName { get; protected set; }
 
         public DateTime UpdatedAt { get; protected set; }
+        public DateTime CreateAt { get; protected set; }
 
         public IEnumerable<string> Photos
         {
@@ -30,7 +31,8 @@ namespace FlatScraper.Core.Domain
         }
 
         protected AdDetails(decimal priceM2, string district, string city, bool agency, string propertyType,
-            int numberOfRooms, int numberOfBathrooms, float size, string userName, IEnumerable<string> photos)
+            int numberOfRooms, int numberOfBathrooms, float size, string userName, IEnumerable<string> photos,
+            DateTime createAt)
         {
             SetPriceM2(priceM2);
             SetDistrict(district);
@@ -42,7 +44,14 @@ namespace FlatScraper.Core.Domain
             SetSize(size);
             SetUserName(userName);
             SetPhotos(photos);
+            SetCreateAt(createAt);
         }
+
+        private void SetCreateAt(DateTime createAt)
+        {
+            CreateAt = createAt;
+        }
+
 
         private void SetPhotos(IEnumerable<string> photos)
         {
@@ -173,8 +182,9 @@ namespace FlatScraper.Core.Domain
         }
 
         public static AdDetails Create(decimal priceM2, string district, string city, bool agency, string propertyType,
-            int numberOfRooms, int numberOfBathrooms, float size, string userName, List<string> photos)
+            int numberOfRooms, int numberOfBathrooms, float size, string userName, List<string> photos,
+            DateTime createAt)
             => new AdDetails(priceM2, district, city, agency, propertyType, numberOfRooms, numberOfBathrooms, size,
-                userName, photos);
+                userName, photos, createAt);
     }
 }

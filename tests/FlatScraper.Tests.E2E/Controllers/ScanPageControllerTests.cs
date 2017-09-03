@@ -1,11 +1,11 @@
-﻿using FlatScraper.Infrastructure.DTO;
-using FluentAssertions;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FlatScraper.Infrastructure.DTO;
+using FluentAssertions;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace FlatScraper.Tests.E2E.Controllers
@@ -13,18 +13,16 @@ namespace FlatScraper.Tests.E2E.Controllers
     [TestCaseOrderer("FullNameOfOrderStrategyHere", "OrderStrategyAssemblyName")]
     public class ScanPageControllerTests : ControllerTestsBase
     {
-        private string urlAddress;
-        private string newUrl;
-        private string uri;
+        private readonly string newUrl;
+        private readonly string uri;
+        private readonly string urlAddress;
+
         public ScanPageControllerTests()
         {
-            
             urlAddress = "https://www.gumtree.pl/s-mieszkania-i-domy-sprzedam-i-kupie/warszawa/v1c9073l3200008p2";
             newUrl = "www.test.com";
             uri = "api/scanpage";
         }
-
-
 
 
         [Fact, TestPriority(1)]

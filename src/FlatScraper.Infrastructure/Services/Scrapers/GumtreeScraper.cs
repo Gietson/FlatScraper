@@ -35,9 +35,88 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
             return adsList;
         }
 
-        public AdDetails ParseDetailsPage(HtmlDocument doc)
+        public AdDetails ParseDetailsPage(HtmlDocument doc, Ad ad)
         {
-            return null;
+            HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("//ul[@class='selMenu'] / li / div");
+
+            DateTime createAt = DateTime.MinValue;
+            string district = null, city = null, typeOfProperty = null, parking = null;
+            bool agency = false;
+            int numberOfRooms = 0, numberOfBathrooms = 0, size = 0;
+
+            foreach (HtmlNode docParameter in docs)
+            {
+                string nameParam = docParameter.SelectSingleNode("span[@class='name']")?.InnerText.Trim();
+                string valueParam = docParameter.SelectSingleNode("span[@class='value']")?.InnerText.Trim();
+                if (nameParam.Empty() || valueParam.Empty())
+                {
+                    break;
+                }
+
+                switch (nameParam)
+                {
+                    case "Data dodania":
+                    {
+                        createAt = DateTime.Parse(valueParam);
+                    }
+                        break;
+                    case "Lokalizacja":
+                        var location = valueParam.Split(",");
+                        district = location[0].Trim();
+                        city = location[1].Trim();
+                        break;
+                    case "Na sprzedaż przez":
+
+                        if (valueParam == "Właściciel")
+                        {
+                            agency = false;
+                        }
+                        else if (valueParam == "Agencja")
+                        {
+                            agency = true;
+                        }
+                        else
+                        {
+                            agency = true;
+                        }
+                        break;
+                    case "Rodzaj nieruchomości":
+                        typeOfProperty = valueParam?.Trim();
+                        break;
+                    case "Liczba pokoi":
+                        numberOfRooms = ScrapExtensions.PrepareNumber(valueParam);
+                        break;
+                    case "Liczba łazienek":
+                        numberOfBathrooms = ScrapExtensions.PrepareNumber(valueParam);
+                        break;
+                    case "Wielkość (m2)":
+                        size = ScrapExtensions.PrepareNumber(valueParam);
+                        break;
+                    case "Parking":
+                        parking = valueParam.Trim();
+                        break;
+                    default:
+                        var d = 0;
+                        break;
+                }
+            }
+            decimal tempPriceM2 = (ad.Price / size);
+            decimal priceM2 = decimal.Round(tempPriceM2, 2, MidpointRounding.AwayFromZero);
+
+            AdDetails adDetails = AdDetails.Create(
+                priceM2,
+                district,
+                city,
+                agency,
+                typeOfProperty,
+                numberOfRooms,
+                numberOfBathrooms,
+                size,
+                "username",
+                new List<string>(),
+                createAt);
+
+            return adDetails;
         }
     }
 }

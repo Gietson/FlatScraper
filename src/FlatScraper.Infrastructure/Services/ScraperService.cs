@@ -38,7 +38,8 @@ namespace FlatScraper.Infrastructure.Services
                         .Contains(scanPage.Page.ToLower()));
                 if (scrapClass == null)
                 {
-                    throw new Exception($"Invalid scan page, UrlAddress='{scanPage.UrlAddress}', Page='{scanPage.Page}'.");
+                    throw new Exception(
+                        $"Invalid scan page, UrlAddress='{scanPage.UrlAddress}', Page='{scanPage.Page}'.");
                 }
 
                 _scraper = Activator.CreateInstance(scrapClass) as IScraper;
@@ -52,7 +53,7 @@ namespace FlatScraper.Infrastructure.Services
                     if (!isInDb)
                     {
                         HtmlDocument scrapedSubPage = ScrapExtensions.ScrapUrl(ad.Url);
-                        ad.AdDetails = _scraper.ParseDetailsPage(scrapedSubPage);
+                        ad.AdDetails = _scraper.ParseDetailsPage(scrapedSubPage, ad);
 
                         await _adRepository.AddAsync(ad);
                     }

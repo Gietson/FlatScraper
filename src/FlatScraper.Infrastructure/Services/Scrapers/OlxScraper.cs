@@ -36,7 +36,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
             return adsList;
         }
 
-        public AdDetails ParseDetailsPage(HtmlDocument doc)
+        public AdDetails ParseDetailsPage(HtmlDocument doc, Ad ad)
         {
             return null;
         }

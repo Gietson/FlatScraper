@@ -10,5 +10,6 @@ namespace FlatScraper.Infrastructure.DTO
         public string Url { get; set; }
         public Decimal Price { get; set; }
         public string Page { get; set; }
+        public AdDetailsDto AdDetails { get; set; }
     }
 }

@@ -12,10 +12,13 @@ namespace FlatScraper.Infrastructure.Repositories
     {
         private readonly IMongoDatabase _database;
 
+        private IMongoCollection<ScanPage> ScanPage => _database.GetCollection<ScanPage>("ScanPage");
+
         public ScanPageRepository(IMongoDatabase database)
         {
             _database = database;
         }
+
         public async Task<ScanPage> GetAsync(Guid id)
             => await ScanPage.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
 
@@ -29,9 +32,6 @@ namespace FlatScraper.Infrastructure.Repositories
             => await ScanPage.ReplaceOneAsync(x => x.Id == scan.Id, scan);
 
         public async Task RemoveAsync(ScanPage page)
-            => await ScanPage.DeleteOneAsync(x=>x.Id == page.Id);
-
-        private IMongoCollection<ScanPage> ScanPage => _database.GetCollection<ScanPage>("ScanPage");
-
+            => await ScanPage.DeleteOneAsync(x => x.Id == page.Id);
     }
 }
