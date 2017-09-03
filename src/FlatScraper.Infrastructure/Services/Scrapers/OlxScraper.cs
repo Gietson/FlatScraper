@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using FlatScraper.Core.Domain;
 using FlatScraper.Infrastructure.Extensions;
 using HtmlAgilityPack;
@@ -38,6 +40,55 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
         public AdDetails ParseDetailsPage(HtmlDocument doc, Ad ad)
         {
+            DateTime createAt = DateTime.MinValue;
+            string district = null;
+            string city = null;
+            string typeOfProperty = null;
+            string parking = null;
+            bool agency = false;
+            int numberOfRooms = 0;
+            int numberOfBathrooms = 0;
+            int size = 0;
+
+
+            HtmlNode details = doc.DocumentNode.SelectSingleNode(
+                "//div[@class='offer-titlebox'] / div[@class='offer-titlebox__details']");
+
+            if (details == null)
+            {
+                //scrap otodom
+                return null;
+            }
+
+            var locationTemp = details.SelectSingleNode("a").InnerText;
+            var location = locationTemp.Split(",");
+            city = location[0];
+            district = location[2];
+
+
+            var createAtTemp = details.SelectSingleNode("em").InnerText.Trim();
+            var regexBeforeChar = Regex.Replace(createAtTemp, "^[^_]*o ", "");
+            var regexAfterChar = Regex.Replace(regexBeforeChar, ", ID.*$", "");
+            createAt =
+                DateTime.ParseExact(regexAfterChar, "hh:mm, d MMMM yyyy", CultureInfo.CreateSpecificCulture("pl-PL"));
+
+            decimal priceM2 = ad.Price / size;
+
+            string username = "";
+
+            AdDetails adDetails = AdDetails.Create(
+                priceM2,
+                district,
+                city,
+                agency,
+                typeOfProperty,
+                numberOfRooms,
+                numberOfBathrooms,
+                size,
+                username,
+                new List<string>(),
+                createAt);
+                
             return null;
         }
     }

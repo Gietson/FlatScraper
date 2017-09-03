@@ -57,7 +57,7 @@ namespace FlatScraper.Core.Domain
                 return;
             }
 
-            Url = url.ToLowerInvariant();
+            Url = url;
             UpdatedAt = DateTime.UtcNow;
         }
 
