@@ -72,7 +72,8 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
             createAt =
                 DateTime.ParseExact(regexAfterChar, "HH:mm, d MMMM yyyy", CultureInfo.CreateSpecificCulture("pl-PL"));
 
-            var offerDescriptions = doc.DocumentNode.SelectNodes("//div[@id='offerdescription'] / div[contains(@class, 'descriptioncontent')] / table / tr / td");
+            var offerDescriptions = doc.DocumentNode.SelectNodes(
+                "//div[@id='offerdescription'] / div[contains(@class, 'descriptioncontent')] / table / tr / td");
 
 
             foreach (var description in offerDescriptions)
@@ -112,7 +113,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
                         typeOfProperty = value;
                         break;
                     case "Powierzchnia":
-                        size = ScrapExtensions.PrepareNumber(value.Replace("m2",""));
+                        size = ScrapExtensions.PrepareNumber(value.Replace("m2", ""));
                         break;
                     case "Liczba pokoi":
                         numberOfRooms = ScrapExtensions.PrepareNumber(value);
@@ -120,7 +121,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
                     case "Finanse":
                         break;
                     default:
-                            break;
+                        break;
                 }
             }
 
@@ -139,7 +140,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
                 username,
                 new List<string>(),
                 createAt);
-                
+
             return adDetails;
         }
     }
