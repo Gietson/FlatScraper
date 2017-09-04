@@ -25,39 +25,46 @@ namespace FlatScraper.Infrastructure.Services
 
         public async Task ScrapAsync()
         {
-            IEnumerable<Type> scraperTypes = ScrapExtensions.GetScraperTypes();
-
-            var scanPages = await _scanPageService.GetAllAsync();
-            var adsDb = await _adRepository.GetAllAsync();
-
-            foreach (ScanPageDto scanPage in scanPages)
+            try
             {
-                Type scrapClass = scraperTypes
-                    .FirstOrDefault(x => x.Name.ToLower()
-                        .Replace("Scraper", "")
-                        .Contains(scanPage.Page.ToLower()));
-                if (scrapClass == null)
+                IEnumerable<Type> scraperTypes = ScrapExtensions.GetScraperTypes();
+
+                var scanPages = await _scanPageService.GetAllAsync();
+                var adsDb = await _adRepository.GetAllAsync();
+
+                foreach (ScanPageDto scanPage in scanPages)
                 {
-                    throw new Exception(
-                        $"Invalid scan page, UrlAddress='{scanPage.UrlAddress}', Page='{scanPage.Page}'.");
-                }
-
-                _scraper = Activator.CreateInstance(scrapClass) as IScraper;
-
-                HtmlDocument scrapedDoc = ScrapExtensions.ScrapUrl(scanPage.UrlAddress);
-                List<Ad> ads = _scraper.ParseHomePage(scrapedDoc);
-
-                foreach (Ad ad in ads)
-                {
-                    bool isInDb = adsDb.Any(x => x.IdAds == ad.IdAds);
-                    if (!isInDb)
+                    Type scrapClass = scraperTypes
+                        .FirstOrDefault(x => x.Name.ToLower()
+                            .Replace("Scraper", "")
+                            .Contains(scanPage.Page.ToLower()));
+                    if (scrapClass == null)
                     {
-                        HtmlDocument scrapedSubPage = ScrapExtensions.ScrapUrl(ad.Url);
-                        ad.AdDetails = _scraper.ParseDetailsPage(scrapedSubPage, ad);
+                        throw new Exception(
+                            $"Invalid scan page, UrlAddress='{scanPage.UrlAddress}', Page='{scanPage.Page}'.");
+                    }
 
-                        await _adRepository.AddAsync(ad);
+                    _scraper = Activator.CreateInstance(scrapClass) as IScraper;
+
+                    HtmlDocument scrapedDoc = ScrapExtensions.ScrapUrl(scanPage.UrlAddress);
+                    List<Ad> ads = _scraper.ParseHomePage(scrapedDoc);
+
+                    foreach (Ad ad in ads)
+                    {
+                        bool isInDb = adsDb.Any(x => x.IdAds == ad.IdAds);
+                        if (!isInDb)
+                        {
+                            HtmlDocument scrapedSubPage = ScrapExtensions.ScrapUrl(ad.Url);
+                            ad.AdDetails = _scraper.ParseDetailsPage(scrapedSubPage, ad);
+
+                            await _adRepository.AddAsync(ad);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }
