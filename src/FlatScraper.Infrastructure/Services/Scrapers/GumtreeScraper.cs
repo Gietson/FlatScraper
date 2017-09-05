@@ -62,7 +62,9 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
                 {
                     case "Data dodania":
                     {
-                        createAt = DateTime.Parse(valueParam);
+                        var now = DateTime.UtcNow;
+                        DateTime.TryParse(valueParam, out now);
+                        createAt = now;
                     }
                         break;
                     case "Lokalizacja":
