@@ -46,6 +46,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
             int numberOfRooms = 0;
             int numberOfBathrooms = 0;
             int size = 0;
+            decimal priceM2 = 0;
 
             HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("//ul[@class='selMenu'] / li / div");
 
@@ -110,11 +111,11 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
             if (size != 0)
             {
                 decimal tempPriceM2 = (ad.Price / size);
-                decimal priceM2 = decimal.Round(tempPriceM2, 2, MidpointRounding.AwayFromZero);
+                priceM2 = decimal.Round(tempPriceM2, 2, MidpointRounding.AwayFromZero);
             }
             else
             {
-                decimal priceM2 = 0;
+                priceM2 = 0;
             }
 
             var tempUsername = doc.DocumentNode.SelectSingleNode("//span[@class='username'] / a /text()");
