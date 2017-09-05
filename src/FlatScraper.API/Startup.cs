@@ -55,14 +55,16 @@ namespace FlatScraper.API
             app.AddNLogWeb();
             env.ConfigureNLog("nlog.config");
 
-            if (env.IsDevelopment())
+            app.UseDeveloperExceptionPage();
+
+            /*if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
                 app.UseExceptionHandler("/error");
-            }
+            }*/
 
             MongoConfigurator.Initialize();
 
