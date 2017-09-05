@@ -127,8 +127,15 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
             district = location[2].InnerText.Trim();
 
             // price m2
-            decimal tempPriceM2 = (ad.Price / size);
-            decimal priceM2 = decimal.Round(tempPriceM2, 2, MidpointRounding.AwayFromZero);
+            if (size != 0)
+            {
+                decimal tempPriceM2 = (ad.Price / size);
+                decimal priceM2 = decimal.Round(tempPriceM2, 2, MidpointRounding.AwayFromZero);
+            }
+            else
+            {
+                decimal priceM2 = 0;
+            }
 
             // user
             var tempUser = doc.DocumentNode.SelectSingleNode(
