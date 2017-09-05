@@ -37,7 +37,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
         public AdDetails ParseDetailsPage(HtmlDocument doc, Ad ad)
         {
-            DateTime createAt = DateTime.MinValue;
+            DateTime createAt = DateTime.UtcNow;
             string district = null;
             string city = null;
             string typeOfProperty = null;
