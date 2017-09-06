@@ -41,7 +41,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
             string district = null;
             string city = null;
             string typeOfProperty = null;
-            string parking = null;
+            //string parking = null;
             bool agency = false;
             int numberOfRooms = 0;
             int numberOfBathrooms = 0;
@@ -63,15 +63,17 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
                 {
                     case "Data dodania":
                     {
-                        var now = DateTime.UtcNow;
-                        DateTime.TryParse(valueParam, out now);
+                        DateTime.TryParse(valueParam, out DateTime now);
                         createAt = now;
                     }
                         break;
                     case "Lokalizacja":
-                        var location = valueParam.Split(",");
-                        district = location[0].Trim();
-                        city = location[1].Trim();
+                        var location = valueParam?.Split(",");
+                        if (location != null)
+                        {
+                            district = location[0].Trim();
+                            city = location[1].Trim();
+                        }
                         break;
                     case "Na sprzedaż przez":
 
@@ -101,10 +103,9 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
                         size = ScrapExtensions.PrepareNumber(valueParam);
                         break;
                     case "Parking":
-                        parking = valueParam.Trim();
+                        //parking = valueParam.Trim();
                         break;
                     default:
-                        var d = 0;
                         break;
                 }
             }

@@ -44,7 +44,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
             string district = null;
             string city = null;
             string typeOfProperty = null;
-            string parking = null;
+            //string parking = null;
             bool agency = false;
             int numberOfRooms = 0;
             int numberOfBathrooms = 0;
@@ -98,13 +98,13 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
                         int poziom = ScrapExtensions.PrepareNumber(value);
                         break;
                     case "Umeblowane":
-                        bool umeblowanie = false;
+                        /*bool umeblowanie = false;
                         if (value == "Tak")
                             umeblowanie = true;
                         else if (value == "Nie")
                             umeblowanie = false;
                         else
-                            umeblowanie = false;
+                            umeblowanie = false;*/
                         break;
                     case "Rynek":
                         string rynek = value;

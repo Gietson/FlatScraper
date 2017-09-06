@@ -44,7 +44,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
             string district = null;
             string city = null;
             string typeOfProperty = null;
-            string parking = null;
+            //string parking = null;
             bool agency = false;
             int numberOfRooms = 0;
             int numberOfBathrooms = 0;
@@ -75,7 +75,6 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
                         size = ScrapExtensions.PrepareNumber(sizeTemp);
                         break;
                     default:
-                        var d = 0;
                         break;
                 }
             }
@@ -117,7 +116,6 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
                         string formaWlasnosci = valueParam;
                         break;
                     default:
-                        var d = 0;
                         break;
                 }
             }
