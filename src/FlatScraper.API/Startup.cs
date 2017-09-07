@@ -11,8 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using NLog.Extensions.Logging;
-using NLog.Web;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
@@ -57,20 +55,20 @@ namespace FlatScraper.API
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,
             ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
-            //loggerFactory.AddSerilog();
+            loggerFactory.AddSerilog();
             var serilogOptions = app.ApplicationServices.GetService<SerilogOptions>();
-            var level = (LogEventLevel)Enum.Parse(typeof(LogEventLevel), serilogOptions.Level, true);
+            var level = (LogEventLevel) Enum.Parse(typeof(LogEventLevel), serilogOptions.Level, true);
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .MinimumLevel.Is(level)
-                .WriteTo.Elasticsearch().WriteTo.Elasticsearch(
+                .WriteTo.Elasticsearch(
                     new ElasticsearchSinkOptions(new Uri(serilogOptions.ApiUrl))
                     {
                         MinimumLogEventLevel = level,
                         AutoRegisterTemplate = true,
-                        IndexFormat = string.IsNullOrWhiteSpace(serilogOptions.IndexFormat) ?
-                            "logstash-{0:yyyy.MM.dd}" :
-                            serilogOptions.IndexFormat
+                        IndexFormat = string.IsNullOrWhiteSpace(serilogOptions.IndexFormat)
+                            ? "logstash-{0:yyyy.MM.dd}"
+                            : serilogOptions.IndexFormat
                         /*ModifyConnectionSettings = x =>
                             serilogOptions.UseBasicAuth ?
                                 x.BasicAuthentication(serilogOptions.Username, serilogOptions.Password) :
@@ -101,6 +99,25 @@ namespace FlatScraper.API
             app.UseExceptionHandler();
             app.UseMvc();
             appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
+        }
+
+        private void ConfigureSerilog(IHostingEnvironment env)
+        {
+            var configuration = new LoggerConfiguration();
+
+            if (env.IsProduction())
+            {
+                configuration = configuration.MinimumLevel.Warning();
+            }
+            else
+            {
+                configuration = configuration.MinimumLevel.Information();
+            }
+
+            Log.Logger = configuration
+                .Enrich.FromLogContext()
+                .WriteTo.File("../logs.txt")
+                .CreateLogger();
         }
     }
 }

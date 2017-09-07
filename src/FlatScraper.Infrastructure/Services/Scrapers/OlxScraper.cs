@@ -5,11 +5,23 @@ using System.Text.RegularExpressions;
 using FlatScraper.Core.Domain;
 using FlatScraper.Infrastructure.Extensions;
 using HtmlAgilityPack;
+using Microsoft.Extensions.Logging;
 
 namespace FlatScraper.Infrastructure.Services.Scrapers
 {
     public class OlxScraper : IScraper
     {
+        private readonly ILogger _logger;
+
+        protected OlxScraper()
+        {
+        }
+
+        public OlxScraper(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public List<Ad> ParseHomePage(HtmlDocument doc)
         {
             List<Ad> adsList = new List<Ad>();
@@ -56,7 +68,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
             if (details == null)
             {
-                //scrap otodom
+                _logger.LogError("Docs is null. Perhaps url is Otodom: {@ad}", ad);
                 return null;
             }
 
@@ -126,7 +138,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
             }
 
             var tempUsername = doc.DocumentNode.SelectSingleNode("//div[@class='offer-user__details'] / h4 / a");
-            string username = tempUsername.InnerText.Trim();
+            string username = tempUsername?.InnerText?.Trim();
 
             AdDetails adDetails = AdDetails.Create(
                 priceM2,

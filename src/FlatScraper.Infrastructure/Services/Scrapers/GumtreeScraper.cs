@@ -4,11 +4,19 @@ using System.Linq;
 using FlatScraper.Core.Domain;
 using FlatScraper.Infrastructure.Extensions;
 using HtmlAgilityPack;
+using Microsoft.Extensions.Logging;
 
 namespace FlatScraper.Infrastructure.Services.Scrapers
 {
     public class GumtreeScraper : IScraper
     {
+        private readonly ILogger _logger;
+
+        public GumtreeScraper(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public List<Ad> ParseHomePage(HtmlDocument doc)
         {
             List<Ad> adsList = new List<Ad>();
@@ -121,7 +129,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
             var tempUsername = doc.DocumentNode.SelectSingleNode("//span[@class='username'] / a /text()");
             string username = tempUsername.InnerText.Trim();
-            
+
 
             AdDetails adDetails = AdDetails.Create(
                 priceM2,

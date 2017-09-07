@@ -5,11 +5,19 @@ using System.Text.RegularExpressions;
 using FlatScraper.Core.Domain;
 using FlatScraper.Infrastructure.Extensions;
 using HtmlAgilityPack;
+using Microsoft.Extensions.Logging;
 
 namespace FlatScraper.Infrastructure.Services.Scrapers
 {
     public class OtodomScraper : IScraper
     {
+        private readonly ILogger _logger;
+
+        public OtodomScraper(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public List<Ad> ParseHomePage(HtmlDocument doc)
         {
             List<Ad> adsList = new List<Ad>();
@@ -40,136 +48,148 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
         public AdDetails ParseDetailsPage(HtmlDocument doc, Ad ad)
         {
-            DateTime createAt = DateTime.UtcNow;
-            string district = null;
-            string city = null;
-            string typeOfProperty = null;
-            //string parking = null;
-            bool agency = false;
-            int numberOfRooms = 0;
-            int numberOfBathrooms = 0;
-            int size = 0;
-            decimal priceM2 = 0;
-
-            HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("//ul[@class='main-list'] / li");
-
-            foreach (HtmlNode docParameter in docs)
+            try
             {
-                string nameParam = docParameter.SelectSingleNode("text()").InnerText.Trim();
-                string valueParam = docParameter.SelectSingleNode("span / strong")?.InnerText.Trim();
+                DateTime createAt = DateTime.UtcNow;
+                string district = null;
+                string city = null;
+                string typeOfProperty = null;
+                //string parking = null;
+                bool agency = false;
+                int numberOfRooms = 0;
+                int numberOfBathrooms = 0;
+                int size = 0;
+                decimal priceM2 = 0;
 
-                switch (nameParam)
+                HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("//ul[@class='main-list'] / li");
+                if (docs == null)
                 {
-                    case "Cena":
-                        decimal price = ScrapExtensions.PreparePrice(valueParam);
-                        break;
-                    case "Piętro":
-                        int pietro = ScrapExtensions.PrepareNumber(valueParam);
-                        break;
-                    case "Liczba pokoi":
-                        numberOfRooms = ScrapExtensions.PrepareNumber(valueParam);
-                        break;
-                    case "Powierzchnia":
-                        Match result = Regex.Match(valueParam, @"\b[,); +]+.*$");
-                        var sizeTemp = valueParam.Replace(result.Value, "");
-                        size = ScrapExtensions.PrepareNumber(sizeTemp);
-                        break;
-                    default:
-                        break;
+                    _logger.LogError("Docs is null. Perhaps problem with scrap url: {@ad}", ad);
+                    return null;
                 }
-            }
 
-            HtmlNodeCollection subDocs = doc.DocumentNode.SelectNodes("//ul[@class='sub-list'] / li");
-
-            foreach (HtmlNode subDoc in subDocs)
-            {
-                string nameParam = subDoc.SelectSingleNode("strong").InnerText.Trim().Replace(":", "");
-                string valueParam = subDoc.SelectSingleNode("text()")?.InnerText.Trim();
-
-                switch (nameParam)
+                foreach (HtmlNode docParameter in docs)
                 {
-                    case "Rynek":
-                        string rynek = valueParam;
-                        break;
-                    case "Rodzaj zabudowy":
-                        typeOfProperty = valueParam;
-                        break;
-                    case "Materiał budynku":
-                        string materialy = valueParam;
-                        break;
-                    case "Okna":
-                        string onka = valueParam;
-                        break;
-                    case "Ogrzewanie":
-                        string ogrzewanie = valueParam;
-                        break;
-                    case "Rok budowy":
-                        int rokBudowy = ScrapExtensions.PrepareNumber(valueParam);
-                        break;
-                    case "Stan wykończenia":
-                        string stanWykonczenia = valueParam;
-                        break;
-                    case "Czynsz":
-                        decimal czynsz = ScrapExtensions.PreparePrice(valueParam);
-                        break;
-                    case "Forma własności":
-                        string formaWlasnosci = valueParam;
-                        break;
-                    default:
-                        break;
+                    string nameParam = docParameter.SelectSingleNode("text()").InnerText.Trim();
+                    string valueParam = docParameter.SelectSingleNode("span / strong")?.InnerText.Trim();
+
+                    switch (nameParam)
+                    {
+                        case "Cena":
+                            decimal price = ScrapExtensions.PreparePrice(valueParam);
+                            break;
+                        case "Piętro":
+                            int pietro = ScrapExtensions.PrepareNumber(valueParam);
+                            break;
+                        case "Liczba pokoi":
+                            numberOfRooms = ScrapExtensions.PrepareNumber(valueParam);
+                            break;
+                        case "Powierzchnia":
+                            Match result = Regex.Match(valueParam, @"\b[,); +]+.*$");
+                            var sizeTemp = valueParam.Replace(result.Value, "");
+                            size = ScrapExtensions.PrepareNumber(sizeTemp);
+                            break;
+                        default:
+                            break;
+                    }
                 }
+
+                HtmlNodeCollection subDocs = doc.DocumentNode.SelectNodes("//ul[@class='sub-list'] / li");
+
+                foreach (HtmlNode subDoc in subDocs)
+                {
+                    string nameParam = subDoc.SelectSingleNode("strong").InnerText.Trim().Replace(":", "");
+                    string valueParam = subDoc.SelectSingleNode("text()")?.InnerText.Trim();
+
+                    switch (nameParam)
+                    {
+                        case "Rynek":
+                            string rynek = valueParam;
+                            break;
+                        case "Rodzaj zabudowy":
+                            typeOfProperty = valueParam;
+                            break;
+                        case "Materiał budynku":
+                            string materialy = valueParam;
+                            break;
+                        case "Okna":
+                            string onka = valueParam;
+                            break;
+                        case "Ogrzewanie":
+                            string ogrzewanie = valueParam;
+                            break;
+                        case "Rok budowy":
+                            int rokBudowy = ScrapExtensions.PrepareNumber(valueParam);
+                            break;
+                        case "Stan wykończenia":
+                            string stanWykonczenia = valueParam;
+                            break;
+                        case "Czynsz":
+                            decimal czynsz = ScrapExtensions.PreparePrice(valueParam);
+                            break;
+                        case "Forma własności":
+                            string formaWlasnosci = valueParam;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                // location
+                var location = doc.DocumentNode.SelectNodes("//address / p[@class='address-links'] / a");
+                city = location[1].InnerText.Trim();
+                district = location[2].InnerText.Trim();
+
+                // price m2
+                if (size != 0)
+                {
+                    decimal tempPriceM2 = (ad.Price / size);
+                    priceM2 = decimal.Round(tempPriceM2, 2, MidpointRounding.AwayFromZero);
+                }
+                else
+                {
+                    priceM2 = 0;
+                }
+
+                // user
+                var tempUser = doc.DocumentNode.SelectSingleNode(
+                    "//div[@class='box-person'] / span[@itemprop='name']");
+                if (tempUser == null)
+                {
+                    tempUser = doc.DocumentNode.SelectSingleNode(
+                        "//div[@class='box-person'] / a / span[@itemprop='name']");
+                }
+                string username = tempUser?.InnerText?.Trim();
+                username = username.Empty() ? "-" : username;
+
+                // agency
+                var agencyTemp = doc.DocumentNode.SelectNodes("//h5[@class='box-title']");
+                var agent = agencyTemp?.Any(x => x?.InnerText?.Trim() == "Biuro nieruchomości");
+
+                var agencyOfferTemp = doc.DocumentNode.SelectNodes("//h6[@class='box-contact-info-type']");
+                bool? priv = agencyOfferTemp?.Any(x => x?.InnerText?.Trim() == "Oferta prywatna");
+
+                agency = !priv.GetValueOrDefault(true) && agent.GetValueOrDefault(true);
+
+                AdDetails adDetails = AdDetails.Create(
+                    priceM2,
+                    district,
+                    city,
+                    agency,
+                    typeOfProperty ?? "blok",
+                    numberOfRooms,
+                    numberOfBathrooms,
+                    size,
+                    username,
+                    new List<string>(),
+                    DateTime.UtcNow);
+
+                return adDetails;
             }
-
-            // location
-            var location = doc.DocumentNode.SelectNodes("//address / p[@class='address-links'] / a");
-            city = location[1].InnerText.Trim();
-            district = location[2].InnerText.Trim();
-
-            // price m2
-            if (size != 0)
+            catch (Exception ex)
             {
-                decimal tempPriceM2 = (ad.Price / size);
-                priceM2 = decimal.Round(tempPriceM2, 2, MidpointRounding.AwayFromZero);
+                throw ex;
             }
-            else
-            {
-                priceM2 = 0;
-            }
-
-            // user
-            var tempUser = doc.DocumentNode.SelectSingleNode(
-                "//div[@class='box-person'] / span[@itemprop='name']");
-            if (tempUser == null)
-            {
-                tempUser = doc.DocumentNode.SelectSingleNode(
-                    "//div[@class='box-person'] / a / span[@itemprop='name']");
-            }
-            string username = tempUser?.InnerText?.Trim();
-            username = username.Empty() ? "-" : username;
-
-            // agency
-            var agencyTemp = doc.DocumentNode.SelectNodes("//h5[@class='box-title']");
-            var agent = agencyTemp?.Any(x => x?.InnerText?.Trim() == "Biuro nieruchomości");
-
-            var agencyOfferTemp = doc.DocumentNode.SelectNodes("//h6[@class='box-contact-info-type']");
-            bool? priv = agencyOfferTemp?.Any(x => x?.InnerText?.Trim() == "Oferta prywatna");
-
-            agency = !priv.GetValueOrDefault(true) && agent.GetValueOrDefault(true);
-
-            AdDetails adDetails = AdDetails.Create(
-                priceM2,
-                district,
-                city,
-                agency,
-                typeOfProperty ?? "blok",
-                numberOfRooms,
-                numberOfBathrooms,
-                size,
-                username,
-                new List<string>(),
-                DateTime.UtcNow);
-
-            return adDetails;
         }
     }
 }

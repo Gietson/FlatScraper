@@ -8,6 +8,7 @@ using FlatScraper.Infrastructure.DTO;
 using FlatScraper.Infrastructure.Extensions;
 using FlatScraper.Infrastructure.Services.Scrapers;
 using HtmlAgilityPack;
+using Microsoft.Extensions.Logging;
 
 namespace FlatScraper.Infrastructure.Services
 {
@@ -23,7 +24,7 @@ namespace FlatScraper.Infrastructure.Services
             _adRepository = adRepository;
         }
 
-        public async Task ScrapAsync()
+        public async Task ScrapAsync(ILogger logger)
         {
             IEnumerable<Type> scraperTypes = ScrapExtensions.GetScraperTypes();
 
@@ -42,7 +43,7 @@ namespace FlatScraper.Infrastructure.Services
                         $"Invalid scan page, UrlAddress='{scanPage.UrlAddress}', Page='{scanPage.Page}'.");
                 }
 
-                _scraper = Activator.CreateInstance(scrapClass) as IScraper;
+                _scraper = Activator.CreateInstance(scrapClass, logger) as IScraper;
 
                 HtmlDocument scrapedDoc = ScrapExtensions.ScrapUrl(scanPage.UrlAddress);
                 if (scrapedDoc == null)

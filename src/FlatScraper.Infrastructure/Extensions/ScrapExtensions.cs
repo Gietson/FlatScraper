@@ -34,7 +34,7 @@ namespace FlatScraper.Infrastructure.Extensions
             Type[] assembly = Assembly.GetAssembly(type).GetTypes();
 
             IEnumerable<Type> scraperTypes = assembly.Where(x =>
-                x.GetInterfaces().Contains(typeof(IScraper)) && x.GetConstructor(Type.EmptyTypes) != null);
+                x.GetInterfaces().Contains(typeof(IScraper)));
 
             return scraperTypes;
         }

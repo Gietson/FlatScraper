@@ -2,26 +2,26 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FlatScraper.Infrastructure.DTO;
-using NLog;
+using Microsoft.Extensions.Logging;
 
 namespace FlatScraper.Infrastructure.Services
 {
     public class DataInitializer : IDataInitializer
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         private readonly IAdService _adService;
+        private readonly ILogger<DataInitializer> _logger;
         private readonly IScanPageService _scanPageService;
         private readonly IScraperService _scraperService;
         private readonly IUserService _userService;
 
         public DataInitializer(IUserService userService, IScanPageService scanPageService,
-            IScraperService scraperService, IAdService adService)
+            IScraperService scraperService, IAdService adService, ILogger<DataInitializer> logger)
         {
             _userService = userService;
             _scanPageService = scanPageService;
             _scraperService = scraperService;
             _adService = adService;
+            _logger = logger;
         }
 
         public async Task SeedAsync()
@@ -29,13 +29,13 @@ namespace FlatScraper.Infrastructure.Services
             var users = await _userService.GetAllAsync();
             if (!users.Any())
             {
-                Logger.Trace("Initializing users..");
+                _logger.LogDebug("Initializing users..");
                 for (int i = 0; i <= 10; i++)
                 {
                     Guid userId = Guid.NewGuid();
                     string username = $"user{i}";
 
-                    Logger.Trace($"Adding user: '{username}'.");
+                    _logger.LogTrace($"Adding user: '{username}'.");
                     await _userService.RegisterAsync(userId, $"user{i}@test.com",
                         username, "password", "user");
                 }
@@ -43,17 +43,17 @@ namespace FlatScraper.Infrastructure.Services
                 {
                     var userId = Guid.NewGuid();
                     string username = $"admin{i}";
-                    Logger.Trace($"Adding admin: '{username}'.");
+                    _logger.LogTrace($"Adding admin: '{username}'.");
                     await _userService.RegisterAsync(userId, $"admin{i}@test.com", username, "secret", "admin");
                 }
             }
             else
-                Logger.Trace("Users was already initialized.");
+                _logger.LogTrace("Users was already initialized.");
 
             var pages = await _scanPageService.GetAllAsync();
             if (!pages.Any())
             {
-                Logger.Trace("Initializing scan pages..");
+                _logger.LogTrace("Initializing scan pages..");
                 ScanPageDto page = new ScanPageDto()
                 {
                     Active = true,
@@ -80,19 +80,19 @@ namespace FlatScraper.Infrastructure.Services
                 await _scanPageService.AddAsync(pageOtodom);
             }
             else
-                Logger.Trace("Scan pages was already initialized.");
+                _logger.LogTrace("Scan pages was already initialized.");
 
             var ads = await _adService.GetAllAsync();
             if (!ads.Any())
             {
-                Logger.Debug($"Scraping...");
-                await _scraperService.ScrapAsync();
+                _logger.LogTrace($"Scraping...");
+                await _scraperService.ScrapAsync(_logger);
             }
             else
-                Logger.Trace("Scraper was already initialized.");
+                _logger.LogDebug("Scraper was already initialized.");
 
 
-            Logger.Trace("Data was initialized.");
+            _logger.LogDebug("Data was initialized.");
         }
     }
 }

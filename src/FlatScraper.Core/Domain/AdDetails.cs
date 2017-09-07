@@ -55,10 +55,6 @@ namespace FlatScraper.Core.Domain
 
         private void SetUserName(string userName)
         {
-            if (string.IsNullOrWhiteSpace(userName))
-            {
-                throw new ArgumentNullException("Username can not be empty.");
-            }
             if (UserName == userName)
             {
                 return;
