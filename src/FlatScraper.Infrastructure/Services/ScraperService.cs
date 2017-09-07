@@ -45,6 +45,12 @@ namespace FlatScraper.Infrastructure.Services
                 _scraper = Activator.CreateInstance(scrapClass) as IScraper;
 
                 HtmlDocument scrapedDoc = ScrapExtensions.ScrapUrl(scanPage.UrlAddress);
+                if (scrapedDoc == null)
+                {
+                    throw new Exception(
+                        $"Problem with scrap page = '{scanPage.UrlAddress}', scrapClass='{scrapClass.Name}'.");
+                }
+
                 List<Ad> ads = _scraper.ParseHomePage(scrapedDoc);
 
                 foreach (Ad ad in ads)

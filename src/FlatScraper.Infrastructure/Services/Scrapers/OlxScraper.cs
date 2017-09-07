@@ -40,16 +40,16 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
         public AdDetails ParseDetailsPage(HtmlDocument doc, Ad ad)
         {
-            DateTime createAt = DateTime.MinValue;
+            DateTime createAt = DateTime.UtcNow;
             string district = null;
             string city = null;
             string typeOfProperty = null;
-            string parking = null;
+            //string parking = null;
             bool agency = false;
             int numberOfRooms = 0;
             int numberOfBathrooms = 0;
             int size = 0;
-
+            decimal priceM2 = 0;
 
             HtmlNode details = doc.DocumentNode.SelectSingleNode(
                 "//div[@class='offer-titlebox'] / div[@class='offer-titlebox__details']");
@@ -70,11 +70,63 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
             var regexBeforeChar = Regex.Replace(createAtTemp, "^[^_]*o ", "");
             var regexAfterChar = Regex.Replace(regexBeforeChar, ", ID.*$", "");
             createAt =
-                DateTime.ParseExact(regexAfterChar, "hh:mm, d MMMM yyyy", CultureInfo.CreateSpecificCulture("pl-PL"));
+                DateTime.ParseExact(regexAfterChar, "HH:mm, d MMMM yyyy", CultureInfo.CreateSpecificCulture("pl-PL"));
 
-            decimal priceM2 = ad.Price / size;
+            var offerDescriptions = doc.DocumentNode.SelectNodes(
+                "//div[@id='offerdescription'] / div[contains(@class, 'descriptioncontent')] / table / tr / td");
 
-            string username = "";
+
+            foreach (var description in offerDescriptions)
+            {
+                var name = description.SelectSingleNode("table / tr / th")?.InnerText.Trim();
+                var value = description.SelectSingleNode("table / tr / td / strong")?.InnerText?.Trim();
+
+                switch (name)
+                {
+                    case "Oferta od":
+                        if (value == "Osoby prywatnej")
+                            agency = false;
+                        else if (value == "Biuro / Deweloper")
+                            agency = true;
+                        else
+                            agency = true;
+                        break;
+                    case "Cena za m2":
+                        priceM2 = ScrapExtensions.PreparePrice(value);
+                        break;
+                    case "Poziom":
+                        int poziom = ScrapExtensions.PrepareNumber(value);
+                        break;
+                    case "Umeblowane":
+                        /*bool umeblowanie = false;
+                        if (value == "Tak")
+                            umeblowanie = true;
+                        else if (value == "Nie")
+                            umeblowanie = false;
+                        else
+                            umeblowanie = false;*/
+                        break;
+                    case "Rynek":
+                        string rynek = value;
+                        break;
+                    case "Rodzaj zabudowy":
+                        typeOfProperty = value;
+                        break;
+                    case "Powierzchnia":
+                        size = ScrapExtensions.PrepareNumber(value.Replace("m2", ""));
+                        break;
+                    case "Liczba pokoi":
+                        numberOfRooms = ScrapExtensions.PrepareNumber(value);
+                        break;
+                    case "Finanse":
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            var tempUsername = doc.DocumentNode.SelectSingleNode("//div[@class='offer-user__details'] / h4 / a");
+            string username = tempUsername.InnerText.Trim();
 
             AdDetails adDetails = AdDetails.Create(
                 priceM2,
@@ -88,8 +140,8 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
                 username,
                 new List<string>(),
                 createAt);
-                
-            return null;
+
+            return adDetails;
         }
     }
 }

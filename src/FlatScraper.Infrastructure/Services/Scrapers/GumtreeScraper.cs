@@ -37,15 +37,16 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
         public AdDetails ParseDetailsPage(HtmlDocument doc, Ad ad)
         {
-            DateTime createAt = DateTime.MinValue;
+            DateTime createAt = DateTime.UtcNow;
             string district = null;
             string city = null;
             string typeOfProperty = null;
-            string parking = null;
+            //string parking = null;
             bool agency = false;
             int numberOfRooms = 0;
             int numberOfBathrooms = 0;
             int size = 0;
+            decimal priceM2 = 0;
 
             HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("//ul[@class='selMenu'] / li / div");
 
@@ -62,13 +63,17 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
                 {
                     case "Data dodania":
                     {
-                        createAt = DateTime.Parse(valueParam);
+                        DateTime.TryParse(valueParam, out DateTime now);
+                        createAt = now;
                     }
                         break;
                     case "Lokalizacja":
-                        var location = valueParam.Split(",");
-                        district = location[0].Trim();
-                        city = location[1].Trim();
+                        var location = valueParam?.Split(",");
+                        if (location != null)
+                        {
+                            district = location[0].Trim();
+                            city = location[1].Trim();
+                        }
                         break;
                     case "Na sprzedaż przez":
 
@@ -98,15 +103,21 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
                         size = ScrapExtensions.PrepareNumber(valueParam);
                         break;
                     case "Parking":
-                        parking = valueParam.Trim();
+                        //parking = valueParam.Trim();
                         break;
                     default:
-                        var d = 0;
                         break;
                 }
             }
-            decimal tempPriceM2 = (ad.Price / size);
-            decimal priceM2 = decimal.Round(tempPriceM2, 2, MidpointRounding.AwayFromZero);
+            if (size != 0)
+            {
+                decimal tempPriceM2 = (ad.Price / size);
+                priceM2 = decimal.Round(tempPriceM2, 2, MidpointRounding.AwayFromZero);
+            }
+            else
+            {
+                priceM2 = 0;
+            }
 
             var tempUsername = doc.DocumentNode.SelectSingleNode("//span[@class='username'] / a /text()");
             string username = tempUsername.InnerText.Trim();

@@ -11,10 +11,7 @@ namespace FlatScraper.Infrastructure.Services
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly IAdService _adService;
-
-        //private readonly IAdService _adService;
         private readonly IScanPageService _scanPageService;
-
         private readonly IScraperService _scraperService;
         private readonly IUserService _userService;
 
@@ -57,7 +54,7 @@ namespace FlatScraper.Infrastructure.Services
             if (!pages.Any())
             {
                 Logger.Trace("Initializing scan pages..");
-                /*ScanPageDto page = new ScanPageDto()
+                ScanPageDto page = new ScanPageDto()
                 {
                     Active = true,
                     Page = "Gumtree",
@@ -65,7 +62,7 @@ namespace FlatScraper.Infrastructure.Services
                         "https://www.gumtree.pl/s-mieszkania-i-domy-sprzedam-i-kupie/warszawa/v1c9073l3200008p1"
                 };
                 await _scanPageService.AddAsync(page);
-                */
+
                 ScanPageDto pageOlx = new ScanPageDto()
                 {
                     Active = true,
@@ -73,18 +70,26 @@ namespace FlatScraper.Infrastructure.Services
                     UrlAddress = "https://www.olx.pl/nieruchomosci/mieszkania/sprzedaz/warszawa/"
                 };
                 await _scanPageService.AddAsync(pageOlx);
+
+                ScanPageDto pageOtodom = new ScanPageDto()
+                {
+                    Active = true,
+                    Page = "Otodom",
+                    UrlAddress = "https://www.otodom.pl/sprzedaz/mieszkanie/warszawa/"
+                };
+                await _scanPageService.AddAsync(pageOtodom);
             }
             else
                 Logger.Trace("Scan pages was already initialized.");
 
-            //var ads = await _adService.GetAllAsync();
-           // if (!ads.Any())
-           // {
+            var ads = await _adService.GetAllAsync();
+            if (!ads.Any())
+            {
                 Logger.Debug($"Scraping...");
                 await _scraperService.ScrapAsync();
-            //}
-           // else
-            //    Logger.Trace("Scraper was already initialized.");
+            }
+            else
+                Logger.Trace("Scraper was already initialized.");
 
 
             Logger.Trace("Data was initialized.");

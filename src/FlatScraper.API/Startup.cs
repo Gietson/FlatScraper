@@ -78,14 +78,16 @@ namespace FlatScraper.API
                     })
                 .CreateLogger();
 
-            if (env.IsDevelopment())
+            app.UseDeveloperExceptionPage();
+
+            /*if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
                 app.UseExceptionHandler("/error");
-            }
+            }*/
 
             MongoConfigurator.Initialize();
 
