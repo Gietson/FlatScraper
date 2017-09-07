@@ -3,8 +3,11 @@ dist: trusty
 sudo: required
 mono: none
 dotnet: 2.0.0
-services: mongodb
+services: 
+  - elasticsearch
+  - mongodb
 before_script:
+  - sleep 10
   - chmod -R a+x scripts
 script:
   - ./scripts/travis-build.sh
