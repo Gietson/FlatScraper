@@ -31,7 +31,7 @@ namespace FlatScraper.Infrastructure.Services
             var scanPages = await _scanPageService.GetAllAsync();
             var adsDb = await _adRepository.GetAllAsync();
 
-            foreach (ScanPageDto scanPage in scanPages)
+            foreach (ScanPageDto scanPage in scanPages.Where(x=>x.Active == true))
             {
                 Type scrapClass = scraperTypes
                     .FirstOrDefault(x => x.Name.ToLower()
