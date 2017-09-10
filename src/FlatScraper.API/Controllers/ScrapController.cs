@@ -2,36 +2,35 @@
 using System.Threading.Tasks;
 using FlatScraper.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace FlatScraper.API.Controllers
 {
-    [Route("api/[controller]")]
-    public class ScrapController : Controller
-    {
-        private readonly ILogger<ScrapController> _logger;
-        private readonly IScraperService _scraperService;
+	[Route("api/[controller]")]
+	public class ScrapController : Controller
+	{
+		private static readonly ILogger Logger = Log.Logger;
+		private readonly IScraperService _scraperService;
 
-        public ScrapController(IScraperService scraperService, ILogger<ScrapController> logger)
-        {
-            _scraperService = scraperService;
-            _logger = logger;
-        }
+		public ScrapController(IScraperService scraperService)
+		{
+			_scraperService = scraperService;
+		}
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            try
-            {
-                await _scraperService.ScrapAsync(_logger);
+		[HttpGet]
+		public async Task<IActionResult> Get()
+		{
+			try
+			{
+				await _scraperService.ScrapAsync();
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("ScrapController error: {@ex}", ex);
-                return BadRequest(ex);
-            }
-        }
-    }
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				Logger.Error("ScrapController error: {@ex}", ex);
+				return BadRequest(ex);
+			}
+		}
+	}
 }

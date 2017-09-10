@@ -2,14 +2,14 @@
 
 namespace FlatScraper.Tests.E2E
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class TestPriorityAttribute : Attribute
-    {
-        public int Priority { get; private set; }
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+	public class TestPriorityAttribute : Attribute
+	{
+		public int Priority { get; private set; }
 
-        public TestPriorityAttribute(int priority)
-        {
-            Priority = priority;
-        }
-    }
+		public TestPriorityAttribute(int priority)
+		{
+			Priority = priority;
+		}
+	}
 }

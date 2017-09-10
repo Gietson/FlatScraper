@@ -2,8 +2,8 @@
 
 namespace FlatScraper.Core.Repositories
 {
-    public interface IScaperRepository : IRepository
-    {
-        Task ScrapAsync();
-    }
+	public interface IScaperRepository : IRepository
+	{
+		Task ScrapAsync();
+	}
 }

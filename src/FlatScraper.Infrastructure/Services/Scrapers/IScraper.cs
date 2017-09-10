@@ -4,9 +4,9 @@ using HtmlAgilityPack;
 
 namespace FlatScraper.Infrastructure.Services.Scrapers
 {
-    public interface IScraper
-    {
-        List<Ad> ParseHomePage(HtmlDocument doc);
-        AdDetails ParseDetailsPage(HtmlDocument doc, Ad ad);
-    }
+	public interface IScraper
+	{
+		List<Ad> ParseHomePage(HtmlDocument doc);
+		AdDetails ParseDetailsPage(HtmlDocument doc, Ad ad);
+	}
 }

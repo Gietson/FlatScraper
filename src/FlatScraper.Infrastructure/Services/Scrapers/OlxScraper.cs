@@ -5,155 +5,146 @@ using System.Text.RegularExpressions;
 using FlatScraper.Core.Domain;
 using FlatScraper.Infrastructure.Extensions;
 using HtmlAgilityPack;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace FlatScraper.Infrastructure.Services.Scrapers
 {
-    public class OlxScraper : IScraper
-    {
-        private readonly ILogger _logger;
+	public class OlxScraper : IScraper
+	{
+		private static readonly ILogger Logger = Log.Logger;
 
-        protected OlxScraper()
-        {
-        }
+		public List<Ad> ParseHomePage(HtmlDocument doc)
+		{
+			List<Ad> adsList = new List<Ad>();
+			HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("// tbody / tr[@class='wrap'] / td");
+			string host = "https://www.olx.pl";
 
-        public OlxScraper(ILogger logger)
-        {
-            _logger = logger;
-        }
+			foreach (HtmlNode ad in docs)
+			{
+				HtmlNode nod = ad.SelectSingleNode("table / tbody / tr[1]");
 
-        public List<Ad> ParseHomePage(HtmlDocument doc)
-        {
-            List<Ad> adsList = new List<Ad>();
-            HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("// tbody / tr[@class='wrap'] / td");
-            string host = "https://www.olx.pl";
+				string url = nod.SelectSingleNode("td[1] / a").Attributes["href"].Value;
 
-            foreach (HtmlNode ad in docs)
-            {
-                HtmlNode nod = ad.SelectSingleNode("table / tbody / tr[1]");
+				string title = nod.SelectSingleNode("td[2] / div / h3 / a / strong").InnerText.Trim();
 
-                string url = nod.SelectSingleNode("td[1] / a").Attributes["href"].Value;
+				string idAds = ad.SelectSingleNode("table").Attributes["data-id"].Value;
 
-                string title = nod.SelectSingleNode("td[2] / div / h3 / a / strong").InnerText.Trim();
+				HtmlNode priceTemp = nod.SelectSingleNode("td[3] / div / p / strong");
 
-                string idAds = ad.SelectSingleNode("table").Attributes["data-id"].Value;
+				decimal price = ScrapExtensions.PreparePrice(priceTemp?.InnerText);
 
-                HtmlNode priceTemp = nod.SelectSingleNode("td[3] / div / p / strong");
+				Ad ads = Ad.Create(Guid.NewGuid(), idAds, title, url, price, host);
 
-                decimal price = ScrapExtensions.PreparePrice(priceTemp?.InnerText);
+				adsList.Add(ads);
+			}
 
-                Ad ads = Ad.Create(Guid.NewGuid(), idAds, title, url, price, host);
+			return adsList;
+		}
 
-                adsList.Add(ads);
-            }
+		public AdDetails ParseDetailsPage(HtmlDocument doc, Ad ad)
+		{
+			DateTime createAt = DateTime.UtcNow;
+			string district = null;
+			string city = null;
+			string typeOfProperty = null;
+			//string parking = null;
+			bool agency = false;
+			int numberOfRooms = 0;
+			int numberOfBathrooms = 0;
+			int size = 0;
+			decimal priceM2 = 0;
 
-            return adsList;
-        }
+			HtmlNode details = doc.DocumentNode.SelectSingleNode(
+				"//div[@class='offer-titlebox'] / div[@class='offer-titlebox__details']");
 
-        public AdDetails ParseDetailsPage(HtmlDocument doc, Ad ad)
-        {
-            DateTime createAt = DateTime.UtcNow;
-            string district = null;
-            string city = null;
-            string typeOfProperty = null;
-            //string parking = null;
-            bool agency = false;
-            int numberOfRooms = 0;
-            int numberOfBathrooms = 0;
-            int size = 0;
-            decimal priceM2 = 0;
+			if (details == null)
+			{
+				Logger.Error("Docs is null. Perhaps url is Otodom: {@ad}", ad);
+				return null;
+			}
 
-            HtmlNode details = doc.DocumentNode.SelectSingleNode(
-                "//div[@class='offer-titlebox'] / div[@class='offer-titlebox__details']");
-
-            if (details == null)
-            {
-                _logger.LogError("Docs is null. Perhaps url is Otodom: {@ad}", ad);
-                return null;
-            }
-
-            var locationTemp = details.SelectSingleNode("a").InnerText;
-            var location = locationTemp.Split(",");
-            city = location[0];
-            district = location[2];
+			var locationTemp = details.SelectSingleNode("a").InnerText;
+			var location = locationTemp.Split(",");
+			city = location[0];
+			district = location[2];
 
 
-            var createAtTemp = details.SelectSingleNode("em").InnerText.Trim();
-            var regexBeforeChar = Regex.Replace(createAtTemp, "^[^_]*o ", "");
-            var regexAfterChar = Regex.Replace(regexBeforeChar, ", ID.*$", "");
-            createAt =
-                DateTime.ParseExact(regexAfterChar, "HH:mm, d MMMM yyyy", CultureInfo.CreateSpecificCulture("pl-PL"));
+			var createAtTemp = details.SelectSingleNode("em").InnerText.Trim();
+			var regexBeforeChar = Regex.Replace(createAtTemp, "^[^_]*o ", "");
+			var regexAfterChar = Regex.Replace(regexBeforeChar, ", ID.*$", "");
+			createAt =
+				DateTime.ParseExact(regexAfterChar, "HH:mm, d MMMM yyyy", CultureInfo.CreateSpecificCulture("pl-PL"));
 
-            var offerDescriptions = doc.DocumentNode.SelectNodes(
-                "//div[@id='offerdescription'] / div[contains(@class, 'descriptioncontent')] / table / tr / td");
+			var offerDescriptions = doc.DocumentNode.SelectNodes(
+				"//div[@id='offerdescription'] / div[contains(@class, 'descriptioncontent')] / table / tr / td");
 
 
-            foreach (var description in offerDescriptions)
-            {
-                var name = description.SelectSingleNode("table / tr / th")?.InnerText.Trim();
-                var value = description.SelectSingleNode("table / tr / td / strong")?.InnerText?.Trim();
+			foreach (var description in offerDescriptions)
+			{
+				var name = description.SelectSingleNode("table / tr / th")?.InnerText.Trim();
+				var value = description.SelectSingleNode("table / tr / td / strong")?.InnerText?.Trim();
 
-                switch (name)
-                {
-                    case "Oferta od":
-                        if (value == "Osoby prywatnej")
-                            agency = false;
-                        else if (value == "Biuro / Deweloper")
-                            agency = true;
-                        else
-                            agency = true;
-                        break;
-                    case "Cena za m2":
-                        priceM2 = ScrapExtensions.PreparePrice(value);
-                        break;
-                    case "Poziom":
-                        int poziom = ScrapExtensions.PrepareNumber(value);
-                        break;
-                    case "Umeblowane":
-                        /*bool umeblowanie = false;
-                        if (value == "Tak")
-                            umeblowanie = true;
-                        else if (value == "Nie")
-                            umeblowanie = false;
-                        else
-                            umeblowanie = false;*/
-                        break;
-                    case "Rynek":
-                        string rynek = value;
-                        break;
-                    case "Rodzaj zabudowy":
-                        typeOfProperty = value;
-                        break;
-                    case "Powierzchnia":
-                        size = ScrapExtensions.PrepareNumber(value.Replace("m2", ""));
-                        break;
-                    case "Liczba pokoi":
-                        numberOfRooms = ScrapExtensions.PrepareNumber(value);
-                        break;
-                    case "Finanse":
-                        break;
-                    default:
-                        break;
-                }
-            }
+				switch (name)
+				{
+					case "Oferta od":
+						if (value == "Osoby prywatnej")
+							agency = false;
+						else if (value == "Biuro / Deweloper")
+							agency = true;
+						else
+							agency = true;
+						break;
+					case "Cena za m2":
+						priceM2 = ScrapExtensions.PreparePrice(value);
+						break;
+					case "Poziom":
+						int poziom = ScrapExtensions.PrepareNumber(value);
+						break;
+					case "Umeblowane":
+						/*bool umeblowanie = false;
+						if (value == "Tak")
+						    umeblowanie = true;
+						else if (value == "Nie")
+						    umeblowanie = false;
+						else
+						    umeblowanie = false;*/
+						break;
+					case "Rynek":
+						string rynek = value;
+						break;
+					case "Rodzaj zabudowy":
+						typeOfProperty = value;
+						break;
+					case "Powierzchnia":
+						size = ScrapExtensions.PrepareNumber(value.Replace("m2", ""));
+						break;
+					case "Liczba pokoi":
+						numberOfRooms = ScrapExtensions.PrepareNumber(value);
+						break;
+					case "Finanse":
+						break;
+					default:
+						break;
+				}
+			}
 
-            var tempUsername = doc.DocumentNode.SelectSingleNode("//div[@class='offer-user__details'] / h4 / a");
-            string username = tempUsername?.InnerText?.Trim();
+			var tempUsername = doc.DocumentNode.SelectSingleNode("//div[@class='offer-user__details'] / h4 / a");
+			string username = tempUsername?.InnerText?.Trim();
 
-            AdDetails adDetails = AdDetails.Create(
-                priceM2,
-                district,
-                city,
-                agency,
-                typeOfProperty,
-                numberOfRooms,
-                numberOfBathrooms,
-                size,
-                username,
-                new List<string>(),
-                createAt);
+			AdDetails adDetails = AdDetails.Create(
+				priceM2,
+				district,
+				city,
+				agency,
+				typeOfProperty,
+				numberOfRooms,
+				numberOfBathrooms,
+				size,
+				username,
+				new List<string>(),
+				createAt);
 
-            return adDetails;
-        }
-    }
+			return adDetails;
+		}
+	}
 }

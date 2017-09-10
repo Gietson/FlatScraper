@@ -1,8 +1,9 @@
-﻿namespace FlatScraper.Infrastructure.Settings
+﻿namespace FlatScraper.Common.Logging
 {
-	public class SerilogOptions
+	public class SerilogSettings
 	{
 		public string Level { get; set; }
+		public bool ElkEnabled { get; set; }
 		public string ApiUrl { get; set; }
 		public bool UseBasicAuth { get; set; }
 		public string Username { get; set; }

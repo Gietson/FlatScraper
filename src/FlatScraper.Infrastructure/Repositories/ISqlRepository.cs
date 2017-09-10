@@ -1,7 +1,7 @@
 ﻿namespace FlatScraper.Infrastructure.Repositories
 {
-    //Marker interface
-    public interface ISqlRepository
-    {
-    }
+	//Marker interface
+	public interface ISqlRepository
+	{
+	}
 }
