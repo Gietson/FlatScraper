@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FlatScraper.Core.Domain;
+﻿using FlatScraper.Core.Domain;
 using FlatScraper.Core.Repositories;
 using FlatScraper.Infrastructure.DTO;
 using FlatScraper.Infrastructure.Extensions;
 using FlatScraper.Infrastructure.Services.Scrapers;
 using HtmlAgilityPack;
 using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FlatScraper.Infrastructure.Services
 {
-	public class ScraperService : IScraperService
+    public class ScraperService : IScraperService
 	{
 		private static readonly ILogger Logger = Log.Logger;
 		private readonly IAdRepository _adRepository;

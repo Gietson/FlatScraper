@@ -72,7 +72,7 @@ namespace FlatScraper.Infrastructure.Services
 
 				ScanPageDto pageOtodom = new ScanPageDto()
 				{
-					Active = true,
+					Active = false,
 					Page = "Otodom",
 					UrlAddress = "https://www.otodom.pl/sprzedaz/mieszkanie/warszawa/"
 				};

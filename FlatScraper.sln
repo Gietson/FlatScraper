@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlatScraper.Tests", "tests\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlatScraper.Tests.E2E", "tests\FlatScraper.Tests.E2E\FlatScraper.Tests.E2E.csproj", "{2982CF6E-0F0C-4A13-B56D-80203B4C1C86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlatScraper.Common", "FlatScraper.Common\FlatScraper.Common.csproj", "{6F16FF02-6083-40F3-83AE-BE2DD334D8CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlatScraper.Common", "FlatScraper.Common\FlatScraper.Common.csproj", "{6F16FF02-6083-40F3-83AE-BE2DD334D8CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlatScraper.Cron", "FlatScraper.Cron\FlatScraper.Cron.csproj", "{22CFCBDB-0BD7-4ECE-B4FC-CEC43959A011}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{6F16FF02-6083-40F3-83AE-BE2DD334D8CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F16FF02-6083-40F3-83AE-BE2DD334D8CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F16FF02-6083-40F3-83AE-BE2DD334D8CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22CFCBDB-0BD7-4ECE-B4FC-CEC43959A011}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22CFCBDB-0BD7-4ECE-B4FC-CEC43959A011}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22CFCBDB-0BD7-4ECE-B4FC-CEC43959A011}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22CFCBDB-0BD7-4ECE-B4FC-CEC43959A011}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using FlatScraper.Common.Logging;
 using FlatScraper.Infrastructure.IoC;
@@ -12,10 +11,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 
 namespace FlatScraper.API
 {
-	public class Startup
+    public class Startup
 	{
 		public IConfigurationRoot Configuration { get; set; }
 		public IContainer ApplicationContainer { get; private set; }
