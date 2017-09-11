@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using FlatScraper.Common.Extensions;
 using FlatScraper.Infrastructure.Services.Scrapers;
+using FlatScraper.Common.Extensions;
 using HtmlAgilityPack;
 
 namespace FlatScraper.Infrastructure.Extensions

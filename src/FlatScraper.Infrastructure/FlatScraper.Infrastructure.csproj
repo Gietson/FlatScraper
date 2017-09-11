@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FlatScraper.Common\FlatScraper.Common.csproj" />
+    <ProjectReference Include="..\FlatScraper.Common\FlatScraper.Common.csproj" />
     <ProjectReference Include="..\FlatScraper.Core\FlatScraper.Core.csproj" />
   </ItemGroup>
 
