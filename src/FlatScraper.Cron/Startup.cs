@@ -35,11 +35,13 @@ namespace FlatScraper.Cron
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddSerilog(Configuration);
+            services.AddMvc();
+
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterModule(new ContainerModule(Configuration));
             ApplicationContainer = builder.Build();
-
+            
             return new AutofacServiceProvider(ApplicationContainer);
         }
 
@@ -47,7 +49,7 @@ namespace FlatScraper.Cron
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseSerilog(loggerFactory);
-
+            
             MongoConfigurator.Initialize();
 
             if (env.IsDevelopment())
@@ -55,13 +57,7 @@ namespace FlatScraper.Cron
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Run(async (context) =>
-            {
-                var scanPageService = app.ApplicationServices.GetService<IScanPageService>();
-                var adRepository = app.ApplicationServices.GetService<IAdRepository>();
-                JobManager.Initialize(new ScrapRegistry(scanPageService, adRepository));
-                await context.Response.WriteAsync("Hello World!");
-            });
+            app.UseMvc();
         }
     }
 }
