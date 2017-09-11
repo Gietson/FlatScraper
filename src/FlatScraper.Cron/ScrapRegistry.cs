@@ -11,7 +11,7 @@ namespace FlatScraper.Cron
 
         public ScrapRegistry(IScanPageService scanPageService, IAdRepository adRepository)
         {
-            Log.Debug("Start Scraper Task!");
+            Logger.Debug("Start Scraper Task!");
             Schedule(async () => await new ScraperService(scanPageService, adRepository).ScrapAsync()).ToRunNow().AndEvery(2).Minutes();
         }
     }
