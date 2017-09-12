@@ -107,15 +107,6 @@ namespace FlatScraper.Core.Domain
 
 		private void SetPropertyType(string propertyType)
 		{
-			if (string.IsNullOrWhiteSpace(propertyType))
-			{
-				throw new ArgumentNullException("PropertyType can not be empty.");
-			}
-			if (PropertyType == propertyType)
-			{
-				return;
-			}
-
 			PropertyType = propertyType;
 			UpdatedAt = DateTime.UtcNow;
 		}
