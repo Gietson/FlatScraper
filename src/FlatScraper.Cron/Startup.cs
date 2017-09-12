@@ -1,18 +1,16 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using FlatScraper.Common.Logging;
-using FlatScraper.Core.Repositories;
 using FlatScraper.Infrastructure.IoC;
 using FlatScraper.Infrastructure.Mongo;
-using FlatScraper.Infrastructure.Services;
 using FluentScheduler;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 
 namespace FlatScraper.Cron
 {
@@ -49,7 +47,7 @@ namespace FlatScraper.Cron
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseSerilog(loggerFactory);
-            
+
             MongoConfigurator.Initialize();
 
             if (env.IsDevelopment())
@@ -58,6 +56,12 @@ namespace FlatScraper.Cron
             }
 
             app.UseMvc();
+
+            int count = JobManager.AllSchedules.Count();
+            if (count == 0)
+            {
+                JobManager.Initialize(new ScrapRegistry());
+            }
         }
     }
 }
