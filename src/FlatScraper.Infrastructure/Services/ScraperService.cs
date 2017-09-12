@@ -4,11 +4,11 @@ using FlatScraper.Infrastructure.DTO;
 using FlatScraper.Infrastructure.Extensions;
 using FlatScraper.Infrastructure.Services.Scrapers;
 using HtmlAgilityPack;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace FlatScraper.Infrastructure.Services
 {
@@ -27,14 +27,17 @@ namespace FlatScraper.Infrastructure.Services
 
 		public async Task ScrapAsync()
 		{
-			IEnumerable<Type> scraperTypes = ScrapExtensions.GetScraperTypes();
+		    Logger.Information("Start ScrapAsync");
+            IEnumerable<Type> scraperTypes = ScrapExtensions.GetScraperTypes();
 
 			var scanPages = await _scanPageService.GetAllAsync();
 			var adsDb = await _adRepository.GetAllAsync();
 
 			foreach (ScanPageDto scanPage in scanPages.Where(x => x.Active == true))
 			{
-				Type scrapClass = scraperTypes
+			    Logger.Information($"Start scrap page, url = '{scanPage.UrlAddress}'");
+
+                Type scrapClass = scraperTypes
 					.FirstOrDefault(x => x.Name.ToLower()
 						.Replace("Scraper", "")
 						.Contains(scanPage.Page.ToLower()));
@@ -67,6 +70,7 @@ namespace FlatScraper.Infrastructure.Services
 					}
 				}
 			}
-		}
+		    Logger.Information("End ScrapAsync");
+        }
 	}
 }
