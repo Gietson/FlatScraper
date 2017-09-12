@@ -7,5 +7,5 @@ services:
       - '5000:5000'
   flatscraper-cron:
     build: ../src/FlatScraper.Cron
-	ports:
-	  - '5050:5050'
+    ports:
+      - '5050:5050'
