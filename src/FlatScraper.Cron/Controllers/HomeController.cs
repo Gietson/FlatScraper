@@ -32,7 +32,6 @@ namespace FlatScraper.Cron.Controllers
                 if (count == 0)
                 {
                     JobManager.Initialize(new ScrapRegistry());
-                    JobManager.JobException += (info) => Logger.Fatal("An error just happened with a scheduled job: " + info.Exception);
                     return Ok("Scrap started");
                 }
                 else
@@ -50,7 +49,15 @@ namespace FlatScraper.Cron.Controllers
         {
             try
             {
-                var allSchedules =  JobManager.AllSchedules;
+                var allSchedules = JobManager.AllSchedules;
+                JobExceptionInfo err = null;
+                JobManager.JobException += (info) => err = info;
+                if (err != null)
+                {
+                    Logger.Fatal("An error just happened with a scheduled job: {@err}", err);
+                    throw new Exception(err.Exception.Message);
+                }
+
                 if (allSchedules.Any())
                 {
                     return Json(allSchedules);

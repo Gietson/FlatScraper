@@ -3,14 +3,13 @@ using Autofac.Extensions.DependencyInjection;
 using FlatScraper.Common.Logging;
 using FlatScraper.Infrastructure.IoC;
 using FlatScraper.Infrastructure.Mongo;
-using FluentScheduler;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
+using FluentScheduler;
 
 namespace FlatScraper.Cron
 {
@@ -57,11 +56,7 @@ namespace FlatScraper.Cron
 
             app.UseMvc();
 
-            int count = JobManager.AllSchedules.Count();
-            if (count == 0)
-            {
-                JobManager.Initialize(new ScrapRegistry());
-            }
+            JobManager.Initialize(new ScrapRegistry());
         }
     }
 }
