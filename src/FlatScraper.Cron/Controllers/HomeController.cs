@@ -31,7 +31,7 @@ namespace FlatScraper.Cron.Controllers
 
                 if (count == 0)
                 {
-                    JobManager.Initialize(new ScrapRegistry());
+                    JobManager.Initialize(new ScrapRegistry(_scanPageService, _adRepository));
                     return Ok("Scrap started");
                 }
                 else

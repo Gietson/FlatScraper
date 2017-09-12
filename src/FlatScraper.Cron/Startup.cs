@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using FlatScraper.Core.Repositories;
+using FlatScraper.Infrastructure.Services;
 using FluentScheduler;
 
 namespace FlatScraper.Cron
@@ -56,7 +58,14 @@ namespace FlatScraper.Cron
 
             app.UseMvc();
 
-            JobManager.Initialize(new ScrapRegistry());
+            var scanPageService = app.ApplicationServices.GetService<IScanPageService>();
+            var adRepository = app.ApplicationServices.GetService<IAdRepository>();
+
+            var scrap = JobManager.GetSchedule("Scrap");
+            if (scrap == null)
+            {
+                JobManager.Initialize(new ScrapRegistry(scanPageService, adRepository));
+            }
         }
     }
 }
