@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlatScraper.API", "src\FlatScraper.API\FlatScraper.API.csproj", "{E81A96FA-5A3A-4357-8401-DEBE21B17756}"
 EndProject
@@ -15,7 +15,28 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlatScraper.Tests.E2E", "te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlatScraper.Common", "src\FlatScraper.Common\FlatScraper.Common.csproj", "{6F16FF02-6083-40F3-83AE-BE2DD334D8CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlatScraper.Cron", "src\FlatScraper.Cron\FlatScraper.Cron.csproj", "{22CFCBDB-0BD7-4ECE-B4FC-CEC43959A011}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlatScraper.Cron", "src\FlatScraper.Cron\FlatScraper.Cron.csproj", "{22CFCBDB-0BD7-4ECE-B4FC-CEC43959A011}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "FlatScraper.Web", "src\FlatScraper.Web\", "{45EFD620-D185-4993-B765-D882C08B0D0C}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_2323"
+		Debug.AspNetCompiler.PhysicalPath = "src\FlatScraper.Web\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_2323\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_2323"
+		Release.AspNetCompiler.PhysicalPath = "src\FlatScraper.Web\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_2323\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "2323"
+		SlnRelativePath = "src\FlatScraper.Web\"
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +72,10 @@ Global
 		{22CFCBDB-0BD7-4ECE-B4FC-CEC43959A011}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22CFCBDB-0BD7-4ECE-B4FC-CEC43959A011}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22CFCBDB-0BD7-4ECE-B4FC-CEC43959A011}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45EFD620-D185-4993-B765-D882C08B0D0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45EFD620-D185-4993-B765-D882C08B0D0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45EFD620-D185-4993-B765-D882C08B0D0C}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{45EFD620-D185-4993-B765-D882C08B0D0C}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
