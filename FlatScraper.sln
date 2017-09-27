@@ -17,27 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlatScraper.Common", "src\F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlatScraper.Cron", "src\FlatScraper.Cron\FlatScraper.Cron.csproj", "{22CFCBDB-0BD7-4ECE-B4FC-CEC43959A011}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "FlatScraper.Web", "src\FlatScraper.Web\", "{45EFD620-D185-4993-B765-D882C08B0D0C}"
-	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_2323"
-		Debug.AspNetCompiler.PhysicalPath = "src\FlatScraper.Web\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_2323\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_2323"
-		Release.AspNetCompiler.PhysicalPath = "src\FlatScraper.Web\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_2323\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "2323"
-		SlnRelativePath = "src\FlatScraper.Web\"
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
