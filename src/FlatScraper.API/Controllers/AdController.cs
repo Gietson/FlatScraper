@@ -21,7 +21,7 @@ namespace FlatScraper.API.Controllers
 		{
 			try
 			{
-				var ads = await _adService.GetAllAsync();
+				var ads = await _adService.BrowseAsync();
 
 				return Json(ads);
 			}

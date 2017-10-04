@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FlatScraper.Common.Mongo;
 using FlatScraper.Core.Domain;
 
 namespace FlatScraper.Core.Repositories
@@ -9,7 +10,8 @@ namespace FlatScraper.Core.Repositories
 	{
 		Task<Ad> GetAsync(Guid id);
 		Task<IEnumerable<Ad>> GetAllAsync();
-		Task AddAsync(Ad ad);
+	    Task<PagedResult<Ad>> BrowseAsync();
+        Task AddAsync(Ad ad);
 		Task UpdateAsync(Ad ad);
 		Task RemoveAsync(Guid id);
 	}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FlatScraper.Common.Mongo;
 using FlatScraper.Core.Domain;
 using FlatScraper.Core.Repositories;
 using MongoDB.Driver;
@@ -22,10 +23,15 @@ namespace FlatScraper.Infrastructure.Repositories
 		public async Task<Ad> GetAsync(Guid id)
 			=> await Ad.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
 
-		public async Task<IEnumerable<Ad>> GetAllAsync()
-			=> await Ad.AsQueryable().ToListAsync();
+	    public async Task<IEnumerable<Ad>> GetAllAsync()
+	        => await Ad.AsQueryable().ToListAsync();
 
-		public async Task AddAsync(Ad page)
+        public async Task<PagedResult<Ad>> BrowseAsync()
+            => await Ad.AsQueryable()
+                        .OrderByDescending(x=>x.CreateAt)
+                        .PaginateAsync();
+
+	    public async Task AddAsync(Ad page)
 			=> await Ad.InsertOneAsync(page);
 
 		public async Task UpdateAsync(Ad scan)

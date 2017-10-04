@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using FlatScraper.Common.Mongo;
 using FlatScraper.Core.Domain;
 using FlatScraper.Core.Repositories;
 using FlatScraper.Infrastructure.DTO;
@@ -26,7 +27,14 @@ namespace FlatScraper.Infrastructure.Services
 			return _mapper.Map<IEnumerable<AdDto>>(ad);
 		}
 
-		public async Task<AdDto> GetAsync(Guid id)
+	    public async Task<PagedResult<AdDto>> BrowseAsync()
+	    {
+	        var ad = await _adRepository.BrowseAsync();
+
+	        return _mapper.Map<PagedResult<AdDto>>(ad);
+	    }
+
+	    public async Task<AdDto> GetAsync(Guid id)
 		{
 			var ad = await _adRepository.GetAsync(id);
 

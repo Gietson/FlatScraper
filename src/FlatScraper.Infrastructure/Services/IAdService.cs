@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FlatScraper.Common.Mongo;
 using FlatScraper.Infrastructure.DTO;
 
 namespace FlatScraper.Infrastructure.Services
@@ -9,6 +10,7 @@ namespace FlatScraper.Infrastructure.Services
 	{
 		Task<AdDto> GetAsync(Guid id);
 		Task<IEnumerable<AdDto>> GetAllAsync();
+	    Task<PagedResult<AdDto>> BrowseAsync();
 		Task AddAsync(AdDto adDto);
 	}
 }
