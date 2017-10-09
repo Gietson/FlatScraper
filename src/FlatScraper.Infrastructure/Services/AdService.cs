@@ -6,6 +6,7 @@ using FlatScraper.Common.Mongo;
 using FlatScraper.Core.Domain;
 using FlatScraper.Core.Repositories;
 using FlatScraper.Infrastructure.DTO;
+using Microsoft.AspNetCore.Http;
 
 namespace FlatScraper.Infrastructure.Services
 {
@@ -27,9 +28,9 @@ namespace FlatScraper.Infrastructure.Services
 			return _mapper.Map<IEnumerable<AdDto>>(ad);
 		}
 
-	    public async Task<PagedResult<AdDto>> BrowseAsync()
+	    public async Task<PagedResult<AdDto>> BrowseAsync(PagedQueryBase query)
 	    {
-	        var ad = await _adRepository.BrowseAsync();
+	        var ad = await _adRepository.BrowseAsync(query);
 
 	        return _mapper.Map<PagedResult<AdDto>>(ad);
 	    }

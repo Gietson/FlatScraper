@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace FlatScraper.Common.Mongo
 {
-    public abstract class PagedQueryBase
+    public class PagedQueryBase
     {
         public int Page { get; set; }
-        public int Results { get; set; }
+        public int ResultsPerPage { get; set; }
         public string OrderBy { get; set; }
         public string SortOrder { get; set; }
     }

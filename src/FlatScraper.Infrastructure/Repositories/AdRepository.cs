@@ -26,10 +26,10 @@ namespace FlatScraper.Infrastructure.Repositories
 	    public async Task<IEnumerable<Ad>> GetAllAsync()
 	        => await Ad.AsQueryable().ToListAsync();
 
-        public async Task<PagedResult<Ad>> BrowseAsync()
+        public async Task<PagedResult<Ad>> BrowseAsync(PagedQueryBase query)
             => await Ad.AsQueryable()
                         .OrderByDescending(x=>x.CreateAt)
-                        .PaginateAsync();
+                        .PaginateAsync(query);
 
 	    public async Task AddAsync(Ad page)
 			=> await Ad.InsertOneAsync(page);

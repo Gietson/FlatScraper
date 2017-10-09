@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FlatScraper.Common.Mongo;
 using FlatScraper.Infrastructure.DTO;
 using FlatScraper.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -21,9 +22,20 @@ namespace FlatScraper.API.Controllers
 		{
 			try
 			{
-				var ads = await _adService.BrowseAsync();
+			    HttpContext.Request.Headers.TryGetValue("Pagination", out var pagin);
+			    var tempQuery =  pagin.ToString().Split(',');
+			    int page = 1;
+			    int resultsPerPage = 10;
+                if (tempQuery != null && tempQuery.Length > 1)
+			    {
+			        Int32.TryParse(tempQuery[0], out page);
+			        Int32.TryParse(tempQuery[1], out resultsPerPage);
+			    }
+			    PagedQueryBase query = new PagedQueryBase() {Page = page, ResultsPerPage = resultsPerPage};
 
-				return Json(ads);
+                var ads = await _adService.BrowseAsync(query);
+
+                return Json(ads);
 			}
 			catch (Exception ex)
 			{

@@ -37,7 +37,10 @@ namespace FlatScraper.API
 			services.AddMvc()
 				.AddJsonOptions(opts => { opts.SerializerSettings.Formatting = Formatting.Indented; });
 
-			var builder = new ContainerBuilder();
+		    services.AddWebEncoders();
+		    services.AddCors();
+
+            var builder = new ContainerBuilder();
 			builder.Populate(services);
 			builder.RegisterModule(new ContainerModule(Configuration));
 			ApplicationContainer = builder.Build();
@@ -51,8 +54,12 @@ namespace FlatScraper.API
 			ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
 		{
 			app.UseSerilog(loggerFactory);
+		    app.UseCors(builder => builder.AllowAnyHeader()
+		        .AllowAnyMethod()
+		        .AllowAnyOrigin()
+		        .AllowCredentials());
 
-			MongoConfigurator.Initialize();
+            MongoConfigurator.Initialize();
 
 			var generalSettings = app.ApplicationServices.GetService<GeneralSettings>();
 			if (generalSettings.SeedData)
