@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FlatScraper.Common.Mongo;
 using FlatScraper.Core.Domain;
 using FlatScraper.Core.Repositories;
+using FlatScraper.Infrastructure.Mongo;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
@@ -28,7 +29,8 @@ namespace FlatScraper.Infrastructure.Repositories
 
         public async Task<PagedResult<Ad>> BrowseAsync(PagedQueryBase query)
             => await Ad.AsQueryable()
-                        .OrderByDescending(x=>x.CreateAt)
+                        .FilterAds(query)
+                        .OrderBy(x => x.CreateAt)
                         .PaginateAsync(query);
 
 	    public async Task AddAsync(Ad page)

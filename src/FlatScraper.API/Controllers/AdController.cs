@@ -20,27 +20,32 @@ namespace FlatScraper.API.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Get()
 		{
-			try
-			{
-			    HttpContext.Request.Headers.TryGetValue("Pagination", out var pagin);
-			    var tempQuery =  pagin.ToString().Split(',');
-			    int page = 1;
-			    int resultsPerPage = 10;
-                if (tempQuery != null && tempQuery.Length > 1)
-			    {
-			        Int32.TryParse(tempQuery[0], out page);
-			        Int32.TryParse(tempQuery[1], out resultsPerPage);
-			    }
-			    PagedQueryBase query = new PagedQueryBase() {Page = page, ResultsPerPage = resultsPerPage};
+		    try
+		    {
+		        string pageString = HttpContext.Request.Headers["X-Pagination-Page"];
+		        string resultPerPageString = HttpContext.Request.Headers["X-Pagination-ResultPerPage"];
 
-                var ads = await _adService.BrowseAsync(query);
+		        Int32.TryParse(pageString, out int page);
+		        Int32.TryParse(resultPerPageString, out int resultsPerPage);
+		        PagedQueryBase query = new PagedQueryBase()
+		        {
+		            Page = page,
+		            ResultsPerPage = resultsPerPage,
+		            Filter = new FilterQuery()
+		            {
+		                City = "Warszawa",
+		                //District = "Mokotów", PriceFrom = 5000
+		            }
+		        };
 
-                return Json(ads);
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex.Message);
-			}
+		        var ads = await _adService.BrowseAsync(query);
+
+		        return Json(ads);
+		    }
+		    catch (Exception ex)
+		    {
+		        return BadRequest(ex.Message);
+		    }
 		}
 
 		[HttpGet("{id}")]

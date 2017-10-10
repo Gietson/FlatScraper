@@ -12,5 +12,7 @@ namespace FlatScraper.Common.Mongo
         public int ResultsPerPage { get; set; }
         public string OrderBy { get; set; }
         public string SortOrder { get; set; }
+
+        public FilterQuery Filter { get; set; }
     }
 }

@@ -9,7 +9,6 @@ namespace FlatScraper.Common.Mongo
         public IEnumerable<T> Items { get; }
 
         public bool IsEmpty => Items == null || !Items.Any();
-        public bool IsNotEmpty => !IsEmpty;
 
         protected PagedResult()
         {
