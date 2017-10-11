@@ -10,5 +10,6 @@ namespace FlatScraper.Common.Mongo
         public string District { get; set; }
         public int SizeFrom { get; set; }
         public int SizeTo { get; set; }
+        public bool? Agency { get; set; }
     }
 }

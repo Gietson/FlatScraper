@@ -18,7 +18,7 @@ namespace FlatScraper.API.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Get()
+		public async Task<IActionResult> Get(FilterQuery filter)
 		{
 		    try
 		    {
@@ -31,12 +31,8 @@ namespace FlatScraper.API.Controllers
 		        {
 		            Page = page,
 		            ResultsPerPage = resultsPerPage,
-		            Filter = new FilterQuery()
-		            {
-		                City = "Warszawa",
-		                //District = "Mokotów", PriceFrom = 5000
-		            }
-		        };
+		            Filter = filter
+                };
 
 		        var ads = await _adService.BrowseAsync(query);
 

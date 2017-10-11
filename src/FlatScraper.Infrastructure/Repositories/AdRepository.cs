@@ -30,7 +30,7 @@ namespace FlatScraper.Infrastructure.Repositories
         public async Task<PagedResult<Ad>> BrowseAsync(PagedQueryBase query)
             => await Ad.AsQueryable()
                         .FilterAds(query)
-                        .OrderBy(x => x.CreateAt)
+                        .OrderByDescending(x => x.AdDetails.CreateAt)
                         .PaginateAsync(query);
 
 	    public async Task AddAsync(Ad page)
