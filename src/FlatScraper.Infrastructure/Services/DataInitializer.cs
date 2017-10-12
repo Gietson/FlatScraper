@@ -56,8 +56,9 @@ namespace FlatScraper.Infrastructure.Services
 				ScanPageDto page = new ScanPageDto()
 				{
 					Active = true,
-					Page = "Gumtree",
-					UrlAddress =
+					Host = "Gumtree",
+                    HostUrl = "https://www.gumtree.pl",
+                    UrlAddress =
 						"https://www.gumtree.pl/s-mieszkania-i-domy-sprzedam-i-kupie/warszawa/v1c9073l3200008p1"
 				};
 				await _scanPageService.AddAsync(page);
@@ -65,16 +66,18 @@ namespace FlatScraper.Infrastructure.Services
 				ScanPageDto pageOlx = new ScanPageDto()
 				{
 					Active = true,
-					Page = "Olx",
-					UrlAddress = "https://www.olx.pl/nieruchomosci/mieszkania/sprzedaz/warszawa/"
+					Host = "Olx",
+                    HostUrl = "https://www.olx.pl",
+                    UrlAddress = "https://www.olx.pl/nieruchomosci/mieszkania/sprzedaz/warszawa/"
 				};
 				await _scanPageService.AddAsync(pageOlx);
 
 				ScanPageDto pageOtodom = new ScanPageDto()
 				{
 					Active = false,
-					Page = "Otodom",
-					UrlAddress = "https://www.otodom.pl/sprzedaz/mieszkanie/warszawa/"
+					Host = "Otodom",
+                    HostUrl = "https://www.otodom.pl",
+                    UrlAddress = "https://www.otodom.pl/sprzedaz/mieszkanie/warszawa/"
 				};
 				await _scanPageService.AddAsync(pageOtodom);
 			}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FlatScraper.Common.Extensions;
 using FlatScraper.Core.Domain;
+using FlatScraper.Infrastructure.DTO;
 using FlatScraper.Infrastructure.Extensions;
 using HtmlAgilityPack;
 using Serilog;
@@ -13,17 +14,16 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 	{
 		private static readonly ILogger Logger = Log.Logger;
 
-		public List<Ad> ParseHomePage(HtmlDocument doc)
+		public List<Ad> ParseHomePage(HtmlDocument doc, ScanPageDto scanPage)
 		{
 			List<Ad> adsList = new List<Ad>();
 			HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("//div[@class='container']");
-			string host = "https://www.gumtree.pl";
 			foreach (HtmlNode ad in docs)
 			{
 				HtmlNode nod = ad.SelectSingleNode("div[@class='title']/a");
 
 				string title = nod.InnerText.Trim();
-				string url = host + nod.Attributes["href"].Value;
+				string url = scanPage.HostUrl + nod.Attributes["href"].Value;
 				string idAds = url.Split('/').Last();
 
 				HtmlNode priceTemp =
@@ -31,7 +31,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 						"div[@class='info']/div[@class='price']/span[@class='value']/span[@class='amount']");
 				decimal price = ScrapExtensions.ConvertStringToDecimal(priceTemp?.InnerText);
 
-				Ad ads = Ad.Create(Guid.NewGuid(), idAds, title, url, price, host);
+				Ad ads = Ad.Create(Guid.NewGuid(), idAds, title, url, price, scanPage.Host, scanPage.HostUrl);
 
 				adsList.Add(ads);
 			}

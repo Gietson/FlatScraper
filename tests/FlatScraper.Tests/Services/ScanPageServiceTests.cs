@@ -30,7 +30,8 @@ namespace FlatScraper.Tests.Services
 				UrlAddress =
 					"https://www.gumtree.pl/s-mieszkania-i-domy-sprzedam-i-kupie/warszawa/page-2/v1c9073l3200008p2",
 				Active = true,
-				Page = "Gumtree"
+				Host = "Gumtree",
+                HostUrl = "https://www.gumtree.pl"
 			};
 
 			// Act

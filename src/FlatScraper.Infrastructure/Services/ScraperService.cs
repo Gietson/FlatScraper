@@ -40,11 +40,11 @@ namespace FlatScraper.Infrastructure.Services
 	            Type scrapClass = scraperTypes
 	                .FirstOrDefault(x => x.Name.ToLower()
 	                    .Replace("Scraper", "")
-	                    .Contains(scanPage.Page.ToLower()));
+	                    .Contains(scanPage.Host.ToLower()));
 	            if (scrapClass == null)
 	            {
 	                throw new Exception(
-	                    $"Invalid scan page, UrlAddress='{scanPage.UrlAddress}', Page='{scanPage.Page}'.");
+	                    $"Invalid scan page, UrlAddress='{scanPage.UrlAddress}', Page='{scanPage.Host}'.");
 	            }
 
 	            _scraper = Activator.CreateInstance(scrapClass) as IScraper;
@@ -56,7 +56,7 @@ namespace FlatScraper.Infrastructure.Services
 	                    $"Problem with scrap page = '{scanPage.UrlAddress}', scrapClass='{scrapClass.Name}'.");
 	            }
 
-	            List<Ad> ads = _scraper.ParseHomePage(scrapedDoc);
+	            List<Ad> ads = _scraper.ParseHomePage(scrapedDoc, scanPage);
 
 	            foreach (Ad ad in ads)
 	            {

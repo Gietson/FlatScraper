@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using FlatScraper.Common.Extensions;
 using FlatScraper.Core.Domain;
+using FlatScraper.Infrastructure.DTO;
 using FlatScraper.Infrastructure.Extensions;
 using HtmlAgilityPack;
 using Serilog;
@@ -14,11 +15,10 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 	{
 		private static readonly ILogger Logger = Log.Logger;
 
-		public List<Ad> ParseHomePage(HtmlDocument doc)
+		public List<Ad> ParseHomePage(HtmlDocument doc, ScanPageDto scanPage)
 		{
 			List<Ad> adsList = new List<Ad>();
 			HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("//div[@class='row'] / div / article");
-			string host = "https://www.otodom.pl";
 			foreach (HtmlNode ad in docs)
 			{
 				var url = ad.SelectSingleNode("div[@class='offer-item-details'] / header / h3 / a").Attributes["href"]
@@ -34,7 +34,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
 				decimal price = ScrapExtensions.ConvertStringToDecimal(priceTemp);
 
-				Ad ads = Ad.Create(Guid.NewGuid(), idAds, title, url, price, host);
+				Ad ads = Ad.Create(Guid.NewGuid(), idAds, title, url, price, scanPage.Host, scanPage.HostUrl);
 
 				adsList.Add(ads);
 			}
@@ -164,8 +164,8 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
 				var agencyOfferTemp = doc.DocumentNode.SelectNodes("//h6[@class='box-contact-info-type']");
 				bool? priv = agencyOfferTemp?.Any(x => x?.InnerText?.Trim() == "Oferta prywatna");
-
-				agency = !priv.GetValueOrDefault(true) && agent.GetValueOrDefault(true);
+                
+				agency = !priv.GetValueOrDefault(false) && agent.GetValueOrDefault(true);
 
 				AdDetails adDetails = AdDetails.Create(
 					priceM2,

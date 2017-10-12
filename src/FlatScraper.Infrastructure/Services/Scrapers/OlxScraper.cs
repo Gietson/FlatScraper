@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using FlatScraper.Core.Domain;
+using FlatScraper.Infrastructure.DTO;
 using FlatScraper.Infrastructure.Extensions;
 using HtmlAgilityPack;
 using Serilog;
@@ -13,11 +14,10 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 	{
 		private static readonly ILogger Logger = Log.Logger;
 
-		public List<Ad> ParseHomePage(HtmlDocument doc)
+		public List<Ad> ParseHomePage(HtmlDocument doc, ScanPageDto scanPage)
 		{
 			List<Ad> adsList = new List<Ad>();
 			HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("// tbody / tr[@class='wrap'] / td");
-			string host = "https://www.olx.pl";
 
 			foreach (HtmlNode ad in docs)
 			{
@@ -33,7 +33,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
 				decimal price = ScrapExtensions.ConvertStringToDecimal(priceTemp?.InnerText);
 
-				Ad ads = Ad.Create(Guid.NewGuid(), idAds, title, url, price, host);
+				Ad ads = Ad.Create(Guid.NewGuid(), idAds, title, url, price, scanPage.Host, scanPage.HostUrl);
 
 				adsList.Add(ads);
 			}
@@ -59,9 +59,18 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
 			if (details == null)
 			{
-				Logger.Error("Docs is null. Perhaps url is Otodom: {@ad}", ad);
-				return null;
-			}
+			    if (ad.Url.Contains("otodom"))
+			    {
+			        Logger.Warning("Start scrap otodom: {@ad}.", ad);
+			        ad.SetHostUrl("https://www.otodom.pl");
+                    ad.SetHost("otodom");
+			        AdDetails result = new OtodomScraper().ParseDetailsPage(doc, ad);
+			        return result;
+			    }
+			    Logger.Error("Docs is null and url not contains otodom: {@ad}.", ad);
+
+                return null;
+            }
 
 			var locationTemp = details.SelectSingleNode("a").InnerText;
 			var location = locationTemp.Split(",");

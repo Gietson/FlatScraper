@@ -39,7 +39,7 @@ namespace FlatScraper.Infrastructure.Services
 
 		public async Task AddAsync(ScanPageDto page)
 		{
-			var scanPage = ScanPage.Create(Guid.NewGuid(), page.UrlAddress, page.Page, page.Active);
+			var scanPage = ScanPage.Create(Guid.NewGuid(), page.UrlAddress, page.Host, page.HostUrl, page.Active);
 			await _scanPageRepository.AddAsync(scanPage);
 		}
 

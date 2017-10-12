@@ -9,7 +9,8 @@ namespace FlatScraper.Core.Domain
 		public string Title { get; protected set; }
 		public string Url { get; protected set; }
 		public decimal Price { get; protected set; }
-		public string Page { get; protected set; }
+		public string Host { get; protected set; }
+	    public string HostUrl { get; protected set; }
 
 		public AdDetails AdDetails { get; set; }
 
@@ -20,15 +21,16 @@ namespace FlatScraper.Core.Domain
 		{
 		}
 
-		protected Ad(Guid id, string idAds, string title, string url, decimal price, string page)
+		protected Ad(Guid id, string idAds, string title, string url, decimal price, string host, string hostUrl)
 		{
 			Id = id;
 			SetIdAds(idAds);
 			SetTitle(title);
 			SetUrl(url);
 			SetPrice(price);
-			SetPage(page);
-			CreateAt = DateTime.UtcNow;
+			SetHost(host);
+		    SetHostUrl(hostUrl);
+            CreateAt = DateTime.UtcNow;
 		}
 
 		private void SetIdAds(string idAds)
@@ -72,22 +74,37 @@ namespace FlatScraper.Core.Domain
 			UpdatedAt = DateTime.UtcNow;
 		}
 
-		public void SetPage(string page)
+		public void SetHost(string host)
 		{
-			if (string.IsNullOrWhiteSpace(page))
+			if (string.IsNullOrWhiteSpace(host))
 			{
-				throw new ArgumentNullException("Page can not be empty.");
+				throw new ArgumentNullException("Host can not be empty.");
 			}
-			if (Page == page)
+			if (Host == host)
 			{
 				return;
 			}
 
-			Page = page.ToLowerInvariant();
+			Host = host.ToLowerInvariant();
 			UpdatedAt = DateTime.UtcNow;
 		}
 
-		public void SetTitle(string title)
+	    public void SetHostUrl(string hostUrl)
+	    {
+	        if (string.IsNullOrWhiteSpace(hostUrl))
+	        {
+	            throw new ArgumentNullException("HostUrl can not be empty.");
+	        }
+	        if (HostUrl == hostUrl)
+	        {
+	            return;
+	        }
+
+	        HostUrl = hostUrl.ToLowerInvariant();
+	        UpdatedAt = DateTime.UtcNow;
+	    }
+
+        public void SetTitle(string title)
 		{
 			if (string.IsNullOrWhiteSpace(title))
 			{
@@ -102,7 +119,7 @@ namespace FlatScraper.Core.Domain
 			UpdatedAt = DateTime.UtcNow;
 		}
 
-		public static Ad Create(Guid id, string idAds, string title, string url, decimal price, string page)
-			=> new Ad(id, idAds, title, url, price, page);
+		public static Ad Create(Guid id, string idAds, string title, string url, decimal price, string host, string hostUrl)
+			=> new Ad(id, idAds, title, url, price, host, hostUrl);
 	}
 }

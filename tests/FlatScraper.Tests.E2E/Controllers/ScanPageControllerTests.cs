@@ -16,14 +16,16 @@ namespace FlatScraper.Tests.E2E.Controllers
 		private readonly string newUrl;
 		private readonly string uri;
 		private readonly string urlAddress;
+	    private readonly string hostUrl;
 
-		public ScanPageControllerTests()
+        public ScanPageControllerTests()
 		{
 			urlAddress = "https://www.gumtree.pl/s-mieszkania-i-domy-sprzedam-i-kupie/warszawa/v1c9073l3200008p2";
 			newUrl = "www.test.com";
 			uri = "api/scanpage";
-		}
+		    hostUrl = "https://www.gumtree.pl/";
 
+		}
 
 		[Fact, TestPriority(1)]
 		public async Task add_new_scanpage()
@@ -31,7 +33,8 @@ namespace FlatScraper.Tests.E2E.Controllers
 			var page = new ScanPageDto()
 			{
 				UrlAddress = urlAddress,
-				Page = "Gumtree"
+				Host = "Gumtree",
+                HostUrl = hostUrl
 			};
 			var payload = GetPayload(page);
 			var response = await Client.PostAsync(uri, payload);
@@ -93,8 +96,9 @@ namespace FlatScraper.Tests.E2E.Controllers
 			var page = new ScanPageDto()
 			{
 				UrlAddress = "https://www.olx.pl/nieruchomosci/mieszkania/sprzedaz/warszawa/?page=2",
-				Page = "Olx"
-			};
+				Host = "Olx",
+                HostUrl = "https://www.olx.pl/"
+            };
 			var payload = GetPayload(page);
 			response = await Client.PostAsync(uri, payload);
 			response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
