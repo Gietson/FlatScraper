@@ -31,7 +31,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
 				HtmlNode priceTemp = nod.SelectSingleNode("td[3] / div / p / strong");
 
-				decimal price = ScrapExtensions.PreparePrice(priceTemp?.InnerText);
+				decimal price = ScrapExtensions.ConvertStringToDecimal(priceTemp?.InnerText);
 
 				Ad ads = Ad.Create(Guid.NewGuid(), idAds, title, url, price, host);
 
@@ -51,7 +51,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 			bool agency = false;
 			int numberOfRooms = 0;
 			int numberOfBathrooms = 0;
-			int size = 0;
+			float size = 0;
 			decimal priceM2 = 0;
 
 			HtmlNode details = doc.DocumentNode.SelectSingleNode(
@@ -95,10 +95,10 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 							agency = true;
 						break;
 					case "Cena za m2":
-						priceM2 = ScrapExtensions.PreparePrice(value);
+						priceM2 = ScrapExtensions.ConvertStringToDecimal(value);
 						break;
 					case "Poziom":
-						int poziom = ScrapExtensions.PrepareNumber(value);
+						int poziom = ScrapExtensions.ConvertStringToInt(value);
 						break;
 					case "Umeblowane":
 						/*bool umeblowanie = false;
@@ -116,10 +116,10 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 						typeOfProperty = value;
 						break;
 					case "Powierzchnia":
-						size = ScrapExtensions.PrepareNumber(value.Replace("m2", ""));
+						size = ScrapExtensions.ConvertStringToFloat(value.Replace("m2", ""));
 						break;
 					case "Liczba pokoi":
-						numberOfRooms = ScrapExtensions.PrepareNumber(value);
+						numberOfRooms = ScrapExtensions.ConvertStringToInt(value);
 						break;
 					case "Finanse":
 						break;

@@ -32,7 +32,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 					ad.SelectSingleNode("div[@class='offer-item-details'] / ul / li[@class='offer-item-price']")
 						.InnerText.Trim();
 
-				decimal price = ScrapExtensions.PreparePrice(priceTemp);
+				decimal price = ScrapExtensions.ConvertStringToDecimal(priceTemp);
 
 				Ad ads = Ad.Create(Guid.NewGuid(), idAds, title, url, price, host);
 
@@ -54,7 +54,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 				bool agency = false;
 				int numberOfRooms = 0;
 				int numberOfBathrooms = 0;
-				int size = 0;
+				float size = 0;
 				decimal priceM2 = 0;
 
 				HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("//ul[@class='main-list'] / li");
@@ -72,18 +72,18 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 					switch (nameParam)
 					{
 						case "Cena":
-							decimal price = ScrapExtensions.PreparePrice(valueParam);
+							decimal price = ScrapExtensions.ConvertStringToDecimal(valueParam);
 							break;
 						case "Piętro":
-							int pietro = ScrapExtensions.PrepareNumber(valueParam);
+							int pietro = ScrapExtensions.ConvertStringToInt(valueParam);
 							break;
 						case "Liczba pokoi":
-							numberOfRooms = ScrapExtensions.PrepareNumber(valueParam);
+							numberOfRooms = ScrapExtensions.ConvertStringToInt(valueParam);
 							break;
 						case "Powierzchnia":
 							Match result = Regex.Match(valueParam, @"\b[,); +]+.*$");
 							var sizeTemp = valueParam.Replace(result.Value, "");
-							size = ScrapExtensions.PrepareNumber(sizeTemp);
+							size = ScrapExtensions.ConvertStringToFloat(sizeTemp);
 							break;
 						default:
 							break;
@@ -115,13 +115,13 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 							string ogrzewanie = valueParam;
 							break;
 						case "Rok budowy":
-							int rokBudowy = ScrapExtensions.PrepareNumber(valueParam);
+							int rokBudowy = ScrapExtensions.ConvertStringToInt(valueParam);
 							break;
 						case "Stan wykończenia":
 							string stanWykonczenia = valueParam;
 							break;
 						case "Czynsz":
-							decimal czynsz = ScrapExtensions.PreparePrice(valueParam);
+							decimal czynsz = ScrapExtensions.ConvertStringToDecimal(valueParam);
 							break;
 						case "Forma własności":
 							string formaWlasnosci = valueParam;
@@ -139,7 +139,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 				// price m2
 				if (size != 0)
 				{
-					decimal tempPriceM2 = (ad.Price / size);
+					decimal tempPriceM2 = (ad.Price / (decimal)size);
 					priceM2 = decimal.Round(tempPriceM2, 2, MidpointRounding.AwayFromZero);
 				}
 				else

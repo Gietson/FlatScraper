@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -18,15 +19,18 @@ namespace FlatScraper.Infrastructure.Extensions
 			return htmlDoc;
 		}
 
-		public static decimal PreparePrice(string price)
+		public static decimal ConvertStringToDecimal(string value)
 		{
-			if (string.IsNullOrEmpty(price))
+			if (string.IsNullOrEmpty(value))
 				return 0;
 
-			Regex digitsOnly = new Regex(@"[^\d]");
-			string p = digitsOnly.Replace(price, "");
+		    value = value.Replace(".", ",");
+		    Regex digitsOnly = new Regex(@"[^-?\d+\,]");
+		    string p = digitsOnly.Replace(value, "");
 
-			return decimal.TryParse(p, out decimal tempPrice) ? tempPrice : 0;
+            decimal result = decimal.TryParse(p, out decimal tempPrice) ? tempPrice : 0;
+
+		    return result;
 		}
 
 		public static IEnumerable<Type> GetScraperTypes()
@@ -40,15 +44,29 @@ namespace FlatScraper.Infrastructure.Extensions
 			return scraperTypes;
 		}
 
-		public static int PrepareNumber(string number)
+		public static float ConvertStringToFloat(string value)
 		{
-			if (number.Empty())
+			if (value.Empty())
 				return 0;
 
-			Regex digitsOnly = new Regex(@"[^\d]");
-			string p = digitsOnly.Replace(number, "");
+		    value = value.Replace(".", ",");
+		    Regex digitsOnly = new Regex(@"[^-?\d+\,]");
+		    string p = digitsOnly.Replace(value, "");
 
-			return Int32.TryParse(p, out int tempNumber) ? tempNumber : 0;
+
+            float result = float.TryParse(p, out float tempNumber) ? tempNumber : 0;
+		    return result;
 		}
+
+	    public static int ConvertStringToInt(string value)
+	    {
+	        if (value.Empty())
+	            return 0;
+
+	        decimal resultDecimal = ConvertStringToDecimal(value);
+	        int result = (int)Math.Round(resultDecimal, MidpointRounding.AwayFromZero);
+
+            return result;
+	    }
 	}
 }
