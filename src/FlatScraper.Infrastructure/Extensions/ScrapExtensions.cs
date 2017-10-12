@@ -12,6 +12,9 @@ namespace FlatScraper.Infrastructure.Extensions
 {
 	public static class ScrapExtensions
 	{
+	    private static readonly CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
+	    private static readonly NumberStyles style = NumberStyles.Any;
+
 		public static HtmlDocument ScrapUrl(string url)
 		{
 			HtmlWeb web = new HtmlWeb();
@@ -24,11 +27,11 @@ namespace FlatScraper.Infrastructure.Extensions
 			if (string.IsNullOrEmpty(value))
 				return 0;
 
-		    value = value.Replace(".", ",");
-		    Regex digitsOnly = new Regex(@"[^-?\d+\,]");
+		    value = value.Replace(",", ".");
+		    Regex digitsOnly = new Regex(@"[^-?\d+\.]");
 		    string p = digitsOnly.Replace(value, "");
 
-            decimal result = decimal.TryParse(p, out decimal tempPrice) ? tempPrice : 0;
+            decimal result = decimal.TryParse(p, style, culture, out decimal tempPrice) ? tempPrice : 0;
 
 		    return result;
 		}
@@ -49,12 +52,12 @@ namespace FlatScraper.Infrastructure.Extensions
 			if (value.Empty())
 				return 0;
 
-		    value = value.Replace(".", ",");
-		    Regex digitsOnly = new Regex(@"[^-?\d+\,]");
+		    value = value.Replace(",", ".");
+		    Regex digitsOnly = new Regex(@"[^-?\d+\.]");
 		    string p = digitsOnly.Replace(value, "");
 
 
-            float result = float.TryParse(p, out float tempNumber) ? tempNumber : 0;
+            float result = float.TryParse(p, style, culture, out float tempNumber) ? tempNumber : 0;
 		    return result;
 		}
 
