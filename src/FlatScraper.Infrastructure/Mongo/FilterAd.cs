@@ -14,11 +14,13 @@ namespace FlatScraper.Infrastructure.Mongo
         {
             if (!string.IsNullOrEmpty(filter.City))
             {
-                collection = collection.Where(x => x.AdDetails.City.ToLower().Trim().Contains(filter.City.ToLower().Trim()));
+                collection = collection.Where(x =>
+                    x.AdDetails.City.ToLower().Trim().Contains(filter.City.ToLower().Trim()));
             }
             if (!string.IsNullOrEmpty(filter.District))
             {
-                collection = collection.Where(x => x.AdDetails.District.ToLower().Trim().Contains(filter.District.ToLower().Trim()));
+                collection = collection.Where(x =>
+                    x.AdDetails.District.ToLower().Trim().Contains(filter.District.ToLower().Trim()));
             }
             if (filter.PriceFrom > 0)
             {

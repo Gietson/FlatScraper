@@ -2,8 +2,8 @@
 
 namespace FlatScraper.Infrastructure.Services
 {
-	public interface IDataInitializer : IService
-	{
-		Task SeedAsync();
-	}
+    public interface IDataInitializer : IService
+    {
+        Task SeedAsync();
+    }
 }

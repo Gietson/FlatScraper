@@ -6,11 +6,11 @@ using FlatScraper.Infrastructure.DTO;
 
 namespace FlatScraper.Infrastructure.Services
 {
-	public interface IAdService : IService
-	{
-		Task<AdDto> GetAsync(Guid id);
-		Task<IEnumerable<AdDto>> GetAllAsync();
-	    Task<PagedResult<AdDto>> BrowseAsync(PagedQueryBase query);
-		Task AddAsync(AdDto adDto);
-	}
+    public interface IAdService : IService
+    {
+        Task<AdDto> GetAsync(Guid id);
+        Task<IEnumerable<AdDto>> GetAllAsync();
+        Task<PagedResult<AdDto>> BrowseAsync(PagedQueryBase query);
+        Task AddAsync(AdDto adDto);
+    }
 }

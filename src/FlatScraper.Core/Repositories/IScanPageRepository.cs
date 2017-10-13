@@ -5,12 +5,12 @@ using FlatScraper.Core.Domain;
 
 namespace FlatScraper.Core.Repositories
 {
-	public interface IScanPageRepository : IRepository
-	{
-		Task<ScanPage> GetAsync(Guid id);
-		Task<IEnumerable<ScanPage>> GetAllAsync();
-		Task AddAsync(ScanPage page);
-		Task UpdateAsync(ScanPage scan);
-		Task RemoveAsync(ScanPage page);
-	}
+    public interface IScanPageRepository : IRepository
+    {
+        Task<ScanPage> GetAsync(Guid id);
+        Task<IEnumerable<ScanPage>> GetAllAsync();
+        Task AddAsync(ScanPage page);
+        Task UpdateAsync(ScanPage scan);
+        Task RemoveAsync(ScanPage page);
+    }
 }

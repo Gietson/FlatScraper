@@ -1,19 +1,19 @@
-﻿using FlatScraper.Core.Repositories;
+﻿using System;
+using System.Linq;
+using FlatScraper.Core.Repositories;
 using FlatScraper.Infrastructure.Services;
 using FluentScheduler;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using System;
-using System.Linq;
 
 namespace FlatScraper.Cron.Controllers
 {
     [Route("")]
     public class HomeController : Controller
     {
-        private readonly IScanPageService _scanPageService;
-        private readonly IAdRepository _adRepository;
         private static readonly ILogger Logger = Log.Logger;
+        private readonly IAdRepository _adRepository;
+        private readonly IScanPageService _scanPageService;
 
         public HomeController(IScanPageService scanPageService, IAdRepository adRepository)
         {
@@ -88,7 +88,6 @@ namespace FlatScraper.Cron.Controllers
                 {
                     schedule.Disable();
                 }
-                
             }
             catch (Exception ex)
             {

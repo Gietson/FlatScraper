@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Authentication;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using FlatScraper.Core.Domain;
@@ -13,9 +10,9 @@ namespace FlatScraper.Infrastructure.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IUserRepository _userRepository;
         private readonly IEncrypter _encrypter;
         private readonly IMapper _mapper;
+        private readonly IUserRepository _userRepository;
 
         public AuthService(IUserRepository userRepository, IEncrypter encrypter, IMapper mapper)
         {
@@ -26,7 +23,7 @@ namespace FlatScraper.Infrastructure.Services
 
         public async Task LoginAsync(LoginUserDto newUser)
         {
-            if(newUser?.Password == null || newUser.Email == null)
+            if (newUser?.Password == null || newUser.Email == null)
             {
                 throw new AuthenticationException("Invalid credentials");
             }

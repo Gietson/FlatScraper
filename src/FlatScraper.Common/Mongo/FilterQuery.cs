@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FlatScraper.Common.Mongo
+﻿namespace FlatScraper.Common.Mongo
 {
     public class FilterQuery
     {

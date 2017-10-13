@@ -1,11 +1,11 @@
-﻿using FlatScraper.Common.Extensions;
-using FlatScraper.Infrastructure.DTO;
-using FlatScraper.Infrastructure.Settings;
-using Microsoft.IdentityModel.Tokens;
-using System;
+﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using FlatScraper.Common.Extensions;
+using FlatScraper.Infrastructure.DTO;
+using FlatScraper.Infrastructure.Settings;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FlatScraper.Infrastructure.Services
 {

@@ -6,31 +6,31 @@ using Serilog;
 
 namespace FlatScraper.API.Controllers
 {
-	[Route("api/[controller]")]
-	public class ScrapController : Controller
-	{
-		private static readonly ILogger Logger = Log.Logger;
-		private readonly IScraperService _scraperService;
+    [Route("api/[controller]")]
+    public class ScrapController : Controller
+    {
+        private static readonly ILogger Logger = Log.Logger;
+        private readonly IScraperService _scraperService;
 
-		public ScrapController(IScraperService scraperService)
-		{
-			_scraperService = scraperService;
-		}
+        public ScrapController(IScraperService scraperService)
+        {
+            _scraperService = scraperService;
+        }
 
-		[HttpGet]
-		public async Task<IActionResult> Get()
-		{
-			try
-			{
-				await _scraperService.ScrapAsync();
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+                await _scraperService.ScrapAsync();
 
-				return Ok();
-			}
-			catch (Exception ex)
-			{
-				Logger.Error("ScrapController error: {@ex}", ex);
-				return BadRequest(ex);
-			}
-		}
-	}
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("ScrapController error: {@ex}", ex);
+                return BadRequest(ex);
+            }
+        }
+    }
 }

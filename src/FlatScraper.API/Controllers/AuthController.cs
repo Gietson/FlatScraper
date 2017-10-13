@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using FlatScraper.Infrastructure.DTO;
 using FlatScraper.Infrastructure.Services;
@@ -13,10 +10,10 @@ namespace FlatScraper.API.Controllers
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
-        private readonly IAuthService _authService;
-        private readonly IUserService _userService;
-        private readonly IJwtHandler _jwtHandler;
         private static readonly ILogger Logger = Log.Logger;
+        private readonly IAuthService _authService;
+        private readonly IJwtHandler _jwtHandler;
+        private readonly IUserService _userService;
 
         public AuthController(IAuthService authService, IUserService userService, IJwtHandler jwtHandler)
         {
@@ -52,7 +49,7 @@ namespace FlatScraper.API.Controllers
                 UserDto userAuth = await _userService.GetAsync(user.Email);
                 JwtDto token = _jwtHandler.CreateToken(userAuth.Id, userAuth.Role);
 
-                return Ok(new { token = token.Token, user = userAuth });
+                return Ok(new {token = token.Token, user = userAuth});
             }
             catch (Exception ex)
             {

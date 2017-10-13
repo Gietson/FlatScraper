@@ -1,17 +1,17 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using FlatScraper.Common.Logging;
+using FlatScraper.Core.Repositories;
 using FlatScraper.Infrastructure.IoC;
 using FlatScraper.Infrastructure.Mongo;
+using FlatScraper.Infrastructure.Services;
+using FluentScheduler;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
-using FlatScraper.Core.Repositories;
-using FlatScraper.Infrastructure.Services;
-using FluentScheduler;
 
 namespace FlatScraper.Cron
 {
@@ -40,7 +40,7 @@ namespace FlatScraper.Cron
             builder.Populate(services);
             builder.RegisterModule(new ContainerModule(Configuration));
             ApplicationContainer = builder.Build();
-            
+
             return new AutofacServiceProvider(ApplicationContainer);
         }
 

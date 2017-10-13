@@ -1,12 +1,10 @@
 ﻿using FlatScraper.Infrastructure.Extensions;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace FlatScraper.Tests.Services
 {
     public class ScrapExtensionsTests
     {
-
         [Theory]
         [InlineData("100  zł", 100)]
         [InlineData("100.5 zł", 100.5)]

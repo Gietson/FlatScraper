@@ -1,7 +1,7 @@
 ﻿namespace FlatScraper.Infrastructure.DTO
 {
-	public class InsertAdDto
-	{
-		public string Url { get; set; }
-	}
+    public class InsertAdDto
+    {
+        public string Url { get; set; }
+    }
 }

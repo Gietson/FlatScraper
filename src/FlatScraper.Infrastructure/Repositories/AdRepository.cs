@@ -10,36 +10,36 @@ using MongoDB.Driver.Linq;
 
 namespace FlatScraper.Infrastructure.Repositories
 {
-	public class AdRepository : IAdRepository, IMongoRepository
-	{
-		private readonly IMongoDatabase _database;
+    public class AdRepository : IAdRepository, IMongoRepository
+    {
+        private readonly IMongoDatabase _database;
 
-		private IMongoCollection<Ad> Ad => _database.GetCollection<Ad>("Ad");
+        private IMongoCollection<Ad> Ad => _database.GetCollection<Ad>("Ad");
 
-		public AdRepository(IMongoDatabase database)
-		{
-			_database = database;
-		}
+        public AdRepository(IMongoDatabase database)
+        {
+            _database = database;
+        }
 
-		public async Task<Ad> GetAsync(Guid id)
-			=> await Ad.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
+        public async Task<Ad> GetAsync(Guid id)
+            => await Ad.AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
 
-	    public async Task<IEnumerable<Ad>> GetAllAsync()
-	        => await Ad.AsQueryable().ToListAsync();
+        public async Task<IEnumerable<Ad>> GetAllAsync()
+            => await Ad.AsQueryable().ToListAsync();
 
         public async Task<PagedResult<Ad>> BrowseAsync(PagedQueryBase query)
             => await Ad.AsQueryable()
-                        .FilterAds(query)
-                        .OrderByDescending(x => x.AdDetails.CreateAt)
-                        .PaginateAsync(query);
+                .FilterAds(query)
+                .OrderByDescending(x => x.AdDetails.CreateAt)
+                .PaginateAsync(query);
 
-	    public async Task AddAsync(Ad page)
-			=> await Ad.InsertOneAsync(page);
+        public async Task AddAsync(Ad page)
+            => await Ad.InsertOneAsync(page);
 
-		public async Task UpdateAsync(Ad scan)
-			=> await Ad.ReplaceOneAsync(x => x.Id == scan.Id, scan);
+        public async Task UpdateAsync(Ad scan)
+            => await Ad.ReplaceOneAsync(x => x.Id == scan.Id, scan);
 
-		public async Task RemoveAsync(Guid id)
-			=> await Ad.DeleteOneAsync(x => x.Id == id);
-	}
+        public async Task RemoveAsync(Guid id)
+            => await Ad.DeleteOneAsync(x => x.Id == id);
+    }
 }
