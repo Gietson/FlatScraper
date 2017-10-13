@@ -42,15 +42,15 @@ namespace FlatScraper.Tests.E2E.Controllers
 		{
 			var newUser = new CreateUserDto
 			{
-				Email = "test@email.com",
+				Email = "test123@email.com",
 				Username = "test",
 				Password = "secret",
 				Role = "user"
 			};
 			var payload = GetPayload(newUser);
-			var response = await Client.PostAsync("api/users", payload);
+			var response = await Client.PostAsync("api/auth/register", payload);
 			response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.Created);
-			response.Headers.Location.ToString().ShouldBeEquivalentTo($"api/users/{newUser.Email}");
+			response.Headers.Location.ToString().ShouldBeEquivalentTo($"api/auth/register/{newUser.Email}");
 
 			var user = await GetUserAsync(newUser.Email);
 			user.Email.ShouldBeEquivalentTo(newUser.Email);

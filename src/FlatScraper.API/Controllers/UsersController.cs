@@ -54,21 +54,6 @@ namespace FlatScraper.API.Controllers
 			}
 		}
 
-		[HttpPost]
-		public async Task<IActionResult> Post([FromBody] CreateUserDto user)
-		{
-			try
-			{
-				await _userService.RegisterAsync(Guid.NewGuid(), user.Email, user.Username, user.Password, user.Role);
-
-				return Created($"api/users/{user.Email}", null);
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex.Message);
-			}
-		}
-
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> Delete(Guid id)
 		{

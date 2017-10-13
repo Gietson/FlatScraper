@@ -69,6 +69,7 @@ namespace FlatScraper.Infrastructure.Services
 	                    await _adRepository.AddAsync(ad);
 	                }
 	            }
+                Logger.Information($"Complited page='{scanPage.UrlAddress}', scraped '{ads.Count}' pages.");
 	        }
 	        Logger.Information("End ScrapAsync");
 

@@ -21,7 +21,9 @@ namespace FlatScraper.Infrastructure.IoC.Modules
 				.As<IEncrypter>()
 				.SingleInstance();
 
-			//builder.RegisterType<GumtreeScraper>().As<IScraper>().SingleInstance();
-		}
+		    builder.RegisterType<JwtHandler>()
+		        .As<IJwtHandler>()
+		        .SingleInstance();
+        }
 	}
 }

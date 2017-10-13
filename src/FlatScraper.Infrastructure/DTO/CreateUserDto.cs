@@ -1,10 +1,16 @@
-﻿namespace FlatScraper.Infrastructure.DTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FlatScraper.Infrastructure.DTO
 {
 	public class CreateUserDto
 	{
+	    [Required]
+	    [RegularExpression(@"^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$")]
 		public string Email { get; set; }
-		public string Password { get; set; }
-		public string Username { get; set; }
-		public string Role { get; set; }
+	    [Required]
+        public string Password { get; set; }
+	    [Required]
+        public string Username { get; set; }
+        public string Role { get; set; }
 	}
 }

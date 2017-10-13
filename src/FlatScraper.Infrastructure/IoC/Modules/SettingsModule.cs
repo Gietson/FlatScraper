@@ -21,6 +21,8 @@ namespace FlatScraper.Infrastructure.IoC.Modules
 				.SingleInstance();
 			builder.RegisterInstance(_configuration.GetSettings<MongoSettings>())
 				.SingleInstance();
+		    builder.RegisterInstance(_configuration.GetSettings<JwtSettings>())
+		        .SingleInstance();
 		}
 	}
 }

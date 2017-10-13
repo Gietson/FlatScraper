@@ -12,6 +12,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FlatScraper.API
 {
@@ -30,34 +33,50 @@ namespace FlatScraper.API
 		}
 
 		// This method gets called by the runtime. Use this method to add services to the container.
-		public IServiceProvider ConfigureServices(IServiceCollection services)
-		{
-			services.AddSerilog(Configuration);
+	    public IServiceProvider ConfigureServices(IServiceCollection services)
+	    {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+	            .AddJwtBearer(cfg =>
+	            {
+	                cfg.RequireHttpsMetadata = false;
+	                cfg.SaveToken = true;
+	                cfg.TokenValidationParameters = new TokenValidationParameters()
+	                {
+	                    ValidIssuer = Configuration["jwt:issuer"],
+	                    ValidAudience = Configuration["jwt:validateIssuer"],
+	                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["jwt:key"]))
+	                };
+	            });
 
-			services.AddMvc()
-				.AddJsonOptions(opts => { opts.SerializerSettings.Formatting = Formatting.Indented; });
+	        services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));
+	        services.AddSerilog(Configuration);
 
-		    services.AddWebEncoders();
-		    services.AddCors();
+	        services.AddMvc()
+	            .AddJsonOptions(opts => { opts.SerializerSettings.Formatting = Formatting.Indented; });
 
-            var builder = new ContainerBuilder();
-			builder.Populate(services);
-			builder.RegisterModule(new ContainerModule(Configuration));
-			ApplicationContainer = builder.Build();
+	        services.AddWebEncoders();
+	        services.AddCors();
 
-			return new AutofacServiceProvider(ApplicationContainer);
-		}
+	        var builder = new ContainerBuilder();
+	        builder.Populate(services);
+	        builder.RegisterModule(new ContainerModule(Configuration));
+	        ApplicationContainer = builder.Build();
 
+	        return new AutofacServiceProvider(ApplicationContainer);
+	    }
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+	    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env,
 			ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
 		{
-			app.UseSerilog(loggerFactory);
+		    app.UseAuthentication();
+
+            app.UseSerilog(loggerFactory);
 		    app.UseCors(builder => builder.AllowAnyHeader()
 		        .AllowAnyMethod()
 		        .AllowAnyOrigin()
 		        .AllowCredentials());
+
 
             MongoConfigurator.Initialize();
 

@@ -10,17 +10,19 @@ namespace FlatScraper.Infrastructure.Services
 	{
 		private static readonly ILogger Logger = Log.Logger;
 		private readonly IAdService _adService;
-		private readonly IScanPageService _scanPageService;
+	    private readonly IAuthService _authService;
+	    private readonly IScanPageService _scanPageService;
 		private readonly IScraperService _scraperService;
 		private readonly IUserService _userService;
 
 		public DataInitializer(IUserService userService, IScanPageService scanPageService,
-			IScraperService scraperService, IAdService adService)
+			IScraperService scraperService, IAdService adService, IAuthService authService)
 		{
 			_userService = userService;
 			_scanPageService = scanPageService;
 			_scraperService = scraperService;
 			_adService = adService;
+		    _authService = authService;
 		}
 
 		public async Task SeedAsync()
@@ -31,19 +33,19 @@ namespace FlatScraper.Infrastructure.Services
 				Logger.Debug("Initializing users..");
 				for (int i = 0; i <= 10; i++)
 				{
-					Guid userId = Guid.NewGuid();
-					string username = $"user{i}";
+				    string username = $"user{i}";
+                    Logger.Debug($"Adding user: '{username}'.");
+                    CreateUserDto newUser = new CreateUserDto {Email = $"user{i}@test.com" , Password = "password", Username = username, Role = "user"};
 
-					Logger.Debug($"Adding user: '{username}'.");
-					await _userService.RegisterAsync(userId, $"user{i}@test.com",
-						username, "password", "user");
+					await _authService.RegisterAsync(newUser);
 				}
 				for (int i = 0; i <= 3; i++)
 				{
-					var userId = Guid.NewGuid();
 					string username = $"admin{i}";
 					Logger.Debug($"Adding admin: '{username}'.");
-					await _userService.RegisterAsync(userId, $"admin{i}@test.com", username, "secret", "admin");
+				    CreateUserDto newUser = new CreateUserDto { Email = $"admin{i}@test.com", Password = "secret", Username = username, Role = "admin"};
+
+                    await _authService.RegisterAsync(newUser);
 				}
 			}
 			else
