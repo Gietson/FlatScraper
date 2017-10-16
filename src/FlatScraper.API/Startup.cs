@@ -33,7 +33,7 @@ namespace FlatScraper.API
 		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
 			services.AddSerilog(Configuration);
-
+			services.AddCors();
 			services.AddMvc()
 				.AddJsonOptions(opts => { opts.SerializerSettings.Formatting = Formatting.Indented; });
 
@@ -51,7 +51,10 @@ namespace FlatScraper.API
 			ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
 		{
 			app.UseSerilog(loggerFactory);
-
+			app.UseCors(builder => builder.AllowAnyHeader()
+				.AllowAnyMethod()
+				.AllowAnyOrigin()
+				.AllowCredentials());
 			MongoConfigurator.Initialize();
 
 			var generalSettings = app.ApplicationServices.GetService<GeneralSettings>();

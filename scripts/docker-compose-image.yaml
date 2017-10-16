@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+ api:
+  image: lolo267/flatscraper-api
+  ports:
+   - '5000:5000'
+  environment:
+  - ASPNETCORE_ENVIRONMENT=docker
+ cron:
+  image: lolo267/flatscraper-cron
+  ports:
+   - '5050:5050'
+  environment:
+  - ASPNETCORE_ENVIRONMENT=docker
+ web:
+  image: lolo267/flatscraper.web
+  ports:
+  - '4200:4200'
+  - '49153:49153'
+  environment:
+  - NODE_ENV=prod
+  volumes:
+   - .:/usr/src/app
+  command: npm start
+
+
