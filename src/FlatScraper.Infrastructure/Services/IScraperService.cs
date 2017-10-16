@@ -2,8 +2,8 @@
 
 namespace FlatScraper.Infrastructure.Services
 {
-	public interface IScraperService : IService
-	{
-		Task ScrapAsync();
-	}
+    public interface IScraperService : IService
+    {
+        Task ScrapAsync();
+    }
 }

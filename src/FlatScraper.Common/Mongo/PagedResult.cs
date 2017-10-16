@@ -9,7 +9,8 @@ namespace FlatScraper.Common.Mongo
         public IEnumerable<T> Items { get; }
 
         public bool IsEmpty => Items == null || !Items.Any();
-        public bool IsNotEmpty => !IsEmpty;
+
+        public static PagedResult<T> Empty => new PagedResult<T>();
 
         protected PagedResult()
         {
@@ -23,8 +24,6 @@ namespace FlatScraper.Common.Mongo
         {
             Items = items;
         }
-
-        public static PagedResult<T> Empty => new PagedResult<T>();
 
         public static PagedResult<T> Create(IEnumerable<T> items,
             int currentPage, int resultsPerPage,

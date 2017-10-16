@@ -2,7 +2,7 @@
 
 namespace FlatScraper.Infrastructure.DTO
 {
-    public class CreateUserDto
+    public class LoginUserDto
     {
         [Required]
         [RegularExpression(
@@ -11,10 +11,5 @@ namespace FlatScraper.Infrastructure.DTO
 
         [Required]
         public string Password { get; set; }
-
-        [Required]
-        public string Username { get; set; }
-
-        public string Role { get; set; }
     }
 }

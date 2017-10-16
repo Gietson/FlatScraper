@@ -7,13 +7,19 @@ namespace FlatScraper.Common.Mongo
 {
     public static class Pagination
     {
-        public static async Task<PagedResult<T>> PaginateAsync<T>(this IMongoQueryable<T> collection, PagedQueryBase query)
-        => await collection.PaginateAsync(query.Page, query.Results);
+        public static async Task<PagedResult<T>> PaginateAsync<T>(this IMongoQueryable<T> collection,
+            PagedQueryBase query)
+            => await collection.PaginateAsync(query.Filter, query.Page, query.ResultsPerPage);
 
 
+<<<<<<< HEAD
         public static async Task<PagedResult<T>> PaginateAsync<T>(this IMongoQueryable<T> collection, 
 			int page = 1,
             int resultsPerPage = 10)
+=======
+        public static async Task<PagedResult<T>> PaginateAsync<T>(this IMongoQueryable<T> collection,
+            FilterQuery filter, int page = 1, int resultsPerPage = 10)
+>>>>>>> 8c7cb3d9055028e201162ce2c1124d1f49627a72
         {
             if (page <= 0)
                 page = 1;
@@ -32,8 +38,9 @@ namespace FlatScraper.Common.Mongo
             return PagedResult<T>.Create(data, page, resultsPerPage, totalPages, totalResults);
         }
 
+
         public static IMongoQueryable<T> Limit<T>(this IMongoQueryable<T> collection, PagedQueryBase query)
-            => collection.Limit(query.Page, query.Results);
+            => collection.Limit(query.Page, query.ResultsPerPage);
 
         public static IMongoQueryable<T> Limit<T>(this IMongoQueryable<T> collection,
             int page = 1, int resultsPerPage = 10)
@@ -50,6 +57,5 @@ namespace FlatScraper.Common.Mongo
 
             return data;
         }
-
     }
 }
