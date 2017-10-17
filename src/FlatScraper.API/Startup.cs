@@ -32,15 +32,6 @@ namespace FlatScraper.API
             Configuration = builder.Build();
         }
 
-<<<<<<< HEAD
-		// This method gets called by the runtime. Use this method to add services to the container.
-		public IServiceProvider ConfigureServices(IServiceCollection services)
-		{
-			services.AddSerilog(Configuration);
-			services.AddCors();
-			services.AddMvc()
-				.AddJsonOptions(opts => { opts.SerializerSettings.Formatting = Formatting.Indented; });
-=======
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
@@ -59,7 +50,6 @@ namespace FlatScraper.API
 
             services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));
             services.AddSerilog(Configuration);
->>>>>>> 8c7cb3d9055028e201162ce2c1124d1f49627a72
 
             services.AddMvc()
                 .AddJsonOptions(opts => { opts.SerializerSettings.Formatting = Formatting.Indented; });
@@ -72,18 +62,6 @@ namespace FlatScraper.API
             builder.RegisterModule(new ContainerModule(Configuration));
             ApplicationContainer = builder.Build();
 
-<<<<<<< HEAD
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env,
-			ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
-		{
-			app.UseSerilog(loggerFactory);
-			app.UseCors(builder => builder.AllowAnyHeader()
-				.AllowAnyMethod()
-				.AllowAnyOrigin()
-				.AllowCredentials());
-			MongoConfigurator.Initialize();
-=======
             return new AutofacServiceProvider(ApplicationContainer);
         }
 
@@ -92,7 +70,6 @@ namespace FlatScraper.API
             ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
             app.UseAuthentication();
->>>>>>> 8c7cb3d9055028e201162ce2c1124d1f49627a72
 
             app.UseSerilog(loggerFactory);
             app.UseCors(builder => builder.AllowAnyHeader()

@@ -11,15 +11,8 @@ namespace FlatScraper.Common.Mongo
             PagedQueryBase query)
             => await collection.PaginateAsync(query.Filter, query.Page, query.ResultsPerPage);
 
-
-<<<<<<< HEAD
-        public static async Task<PagedResult<T>> PaginateAsync<T>(this IMongoQueryable<T> collection, 
-			int page = 1,
-            int resultsPerPage = 10)
-=======
         public static async Task<PagedResult<T>> PaginateAsync<T>(this IMongoQueryable<T> collection,
             FilterQuery filter, int page = 1, int resultsPerPage = 10)
->>>>>>> 8c7cb3d9055028e201162ce2c1124d1f49627a72
         {
             if (page <= 0)
                 page = 1;
