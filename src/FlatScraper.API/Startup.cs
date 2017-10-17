@@ -35,6 +35,11 @@ namespace FlatScraper.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+
+            services.AddMvc()
+                .AddJsonOptions(opts => { opts.SerializerSettings.Formatting = Formatting.Indented; });
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(cfg =>
                 {
@@ -51,11 +56,7 @@ namespace FlatScraper.API
             services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));
             services.AddSerilog(Configuration);
 
-            services.AddMvc()
-                .AddJsonOptions(opts => { opts.SerializerSettings.Formatting = Formatting.Indented; });
-
             services.AddWebEncoders();
-            services.AddCors();
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
@@ -69,14 +70,14 @@ namespace FlatScraper.API
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,
             ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
-            app.UseAuthentication();
-
             app.UseSerilog(loggerFactory);
-            app.UseCors(builder => builder.AllowAnyHeader()
+            app.UseCors(builder => builder
+                .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowAnyOrigin()
                 .AllowCredentials());
 
+            app.UseAuthentication();
 
             MongoConfigurator.Initialize();
 
