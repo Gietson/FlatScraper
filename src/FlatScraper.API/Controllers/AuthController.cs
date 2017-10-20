@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FlatScraper.API.Filters;
 using FlatScraper.Infrastructure.DTO;
 using FlatScraper.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Serilog;
 
 namespace FlatScraper.API.Controllers
 {
+    [ValidateModel]
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
