@@ -134,7 +134,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
                 // location
                 var location = doc.DocumentNode.SelectNodes("//address / p[@class='address-links'] / a");
                 city = location[1].InnerText.Trim();
-                district = location[2].InnerText.Trim();
+                district = location.Count < 3 ? "-" : location[2].InnerText?.Trim();
 
                 // price m2
                 if (size != 0)

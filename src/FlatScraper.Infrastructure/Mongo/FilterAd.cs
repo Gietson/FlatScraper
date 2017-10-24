@@ -30,6 +30,14 @@ namespace FlatScraper.Infrastructure.Mongo
             {
                 collection = collection.Where(x => x.Price <= filter.PriceTo);
             }
+            if (filter.PriceM2From > 0)
+            {
+                collection = collection.Where(x => x.AdDetails.PriceM2 >= filter.PriceM2From);
+            }
+            if (filter.PriceM2To > 0)
+            {
+                collection = collection.Where(x => x.AdDetails.PriceM2 <= filter.PriceM2To);
+            }
             if (filter.SizeFrom > 0)
             {
                 collection = collection.Where(x => x.AdDetails.Size >= filter.SizeFrom);
