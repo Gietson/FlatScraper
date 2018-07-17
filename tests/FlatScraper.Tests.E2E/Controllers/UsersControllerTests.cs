@@ -34,7 +34,7 @@ namespace FlatScraper.Tests.E2E.Controllers
         {
             string email = "user1000@email.com";
             var response = await Client.GetAsync($"api/users/{email}");
-            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.NotFound);
+            response.StatusCode.Should().BeEquivalentTo(HttpStatusCode.NotFound);
         }
 
         [Fact, TestPriority(1)]
@@ -49,17 +49,17 @@ namespace FlatScraper.Tests.E2E.Controllers
             };
             var payload = GetPayload(newUser);
             var response = await Client.PostAsync("api/auth/register", payload);
-            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.Created);
-            response.Headers.Location.ToString().ShouldBeEquivalentTo($"api/auth/register/{newUser.Email}");
+            response.StatusCode.Should().BeEquivalentTo(HttpStatusCode.Created);
+            response.Headers.Location.ToString().Should().BeEquivalentTo($"api/auth/register/{newUser.Email}");
 
             var user = await GetUserAsync(newUser.Email);
-            user.Email.ShouldBeEquivalentTo(newUser.Email);
+            user.Email.Should().BeEquivalentTo(newUser.Email);
 
             var responseDelete = await Client.DeleteAsync($"api/users/{user.Id}");
-            responseDelete.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
+            responseDelete.StatusCode.Should().BeEquivalentTo(HttpStatusCode.OK);
 
             var userAfterDelete = await GetUserAsync(newUser.Email);
-            userAfterDelete.ShouldBeEquivalentTo(null);
+            userAfterDelete.Should().Be(null);
         }
     }
 }

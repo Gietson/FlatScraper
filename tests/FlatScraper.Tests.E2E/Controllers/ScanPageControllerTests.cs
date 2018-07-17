@@ -37,13 +37,13 @@ namespace FlatScraper.Tests.E2E.Controllers
             };
             var payload = GetPayload(page);
             var response = await Client.PostAsync(uri, payload);
-            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
+            response.StatusCode.Should().BeEquivalentTo(HttpStatusCode.OK);
 
             var pages = await GetAllAsync<ScanPageDto>(uri);
             Assert.NotEmpty(pages);
 
             ScanPageDto myPage = pages.FirstOrDefault(x => x.UrlAddress == urlAddress);
-            Assert.NotEqual(myPage, null);
+            myPage.Should().NotBe(null);
 
             //update
             myPage.Active = false;
@@ -51,23 +51,23 @@ namespace FlatScraper.Tests.E2E.Controllers
 
             payload = GetPayload(myPage);
             response = await Client.PutAsync(uri, payload);
-            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
+            response.StatusCode.Should().BeEquivalentTo(HttpStatusCode.OK);
 
             // get by id
             response = await Client.GetAsync($"{uri}/{myPage.Id}");
             var responseString = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<ScanPageDto>(responseString);
-            result.UrlAddress.ShouldBeEquivalentTo(newUrl);
+            result.UrlAddress.Should().BeEquivalentTo(newUrl);
 
             // delete
             response = await Client.DeleteAsync($"{uri}/{result.Id}");
-            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
+            response.StatusCode.Should().BeEquivalentTo(HttpStatusCode.OK);
 
             // get not found
             var responseNotFound = await Client.GetAsync($"{uri}/{myPage.Id}");
             var responseStringNotFound = await response.Content.ReadAsStringAsync();
             var resultNotFound = JsonConvert.DeserializeObject<ScanPageDto>(responseStringNotFound);
-            resultNotFound.ShouldBeEquivalentTo(null);
+            resultNotFound.Should().BeNull();
         }
 
         /*
@@ -100,14 +100,14 @@ namespace FlatScraper.Tests.E2E.Controllers
             };
             var payload = GetPayload(page);
             response = await Client.PostAsync(uri, payload);
-            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
+            response.StatusCode.Should().BeEquivalentTo(HttpStatusCode.OK);
 
             var pages = await GetAllAsync<ScanPageDto>(uri);
             Assert.NotEmpty(pages);
 
             Guid id = pages.FirstOrDefault().Id;
             response = await Client.DeleteAsync($"{uri}/{id}");
-            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
+            response.StatusCode.Should().BeEquivalentTo(HttpStatusCode.OK);
         }
     }
 }

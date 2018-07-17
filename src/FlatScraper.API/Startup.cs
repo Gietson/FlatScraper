@@ -39,7 +39,7 @@ namespace FlatScraper.API
 
             services.AddMvc()
                 .AddJsonOptions(opts => { opts.SerializerSettings.Formatting = Formatting.Indented; });
-
+            var res = Configuration["jwt:key"];
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(cfg =>
                 {
@@ -88,7 +88,7 @@ namespace FlatScraper.API
                 dataInitializer.SeedAsync();
             }
 
-            app.UseExceptionHandler();
+            app.UseExceptionHandler("/error");
             app.UseMvc();
             appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
         }
