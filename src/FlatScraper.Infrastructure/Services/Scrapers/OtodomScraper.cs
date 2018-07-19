@@ -56,12 +56,22 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
                 int numberOfBathrooms = 0;
                 float size = 0;
                 decimal priceM2 = 0;
+                List<string> images = new List<string>();
 
                 HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("//ul[@class='main-list'] / li");
                 if (docs == null)
                 {
                     Logger.Error("Docs is null. Perhaps problem with scrap url: {@ad}", ad);
                     return null;
+                }
+
+                // images
+                var imagesTemp = doc.DocumentNode.SelectNodes("//figure[@itemprop='associatedMedia'] / a / img");
+
+                foreach (var img in imagesTemp)
+                {
+                    string res = img?.Attributes["src"]?.Value;
+                    images.Add(res);
                 }
 
                 foreach (HtmlNode docParameter in docs)
@@ -155,6 +165,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
                     tempUser = doc.DocumentNode.SelectSingleNode(
                         "//div[@class='box-person'] / a / span[@itemprop='name']");
                 }
+
                 string username = tempUser?.InnerText?.Trim();
                 username = username.Empty() ? "-" : username;
 
@@ -167,6 +178,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
 
                 agency = !priv.GetValueOrDefault(false) && agent.GetValueOrDefault(true);
 
+
                 AdDetails adDetails = AdDetails.Create(
                     priceM2,
                     district,
@@ -177,7 +189,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
                     numberOfBathrooms,
                     size,
                     username,
-                    new List<string>(),
+                    images,
                     DateTime.UtcNow);
 
                 return adDetails;

@@ -5,7 +5,7 @@ namespace FlatScraper.Infrastructure.DTO
 {
     public class AdDetailsDto
     {
-        private IEnumerable<string> Photos { get; set; }
+        public List<string> Photos { get; set; }
 
         public decimal PriceM2 { get; protected set; }
         public string District { get; protected set; }

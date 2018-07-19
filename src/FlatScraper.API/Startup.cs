@@ -2,6 +2,7 @@
 using System.Text;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using FlatScraper.API.Middleware;
 using FlatScraper.Common.Logging;
 using FlatScraper.Infrastructure.IoC;
 using FlatScraper.Infrastructure.Mongo;
@@ -70,6 +71,11 @@ namespace FlatScraper.API
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,
             ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
+            /*if (env.IsDevelopment())
+                app.UseDeveloperExceptionPage();
+            else*/
+            app.UseMiddleware<ExceptionHandler>();
+
             app.UseSerilog(loggerFactory);
             app.UseCors(builder => builder
                 .AllowAnyHeader()
@@ -88,7 +94,7 @@ namespace FlatScraper.API
                 dataInitializer.SeedAsync();
             }
 
-            app.UseExceptionHandler("/error");
+            //app.UseExceptionHandler("/error");
             app.UseMvc();
             appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
         }

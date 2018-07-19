@@ -18,14 +18,14 @@ namespace FlatScraper.Core.Domain
         public DateTime UpdatedAt { get; protected set; }
         public DateTime CreateAt { get; protected set; }
 
-        public IEnumerable<string> Photos { get; protected set; }
+        public List<string> Photos { get; protected set; }
 
         protected AdDetails()
         {
         }
 
         protected AdDetails(decimal priceM2, string district, string city, bool agency, string propertyType,
-            int numberOfRooms, int numberOfBathrooms, float size, string userName, IEnumerable<string> photos,
+            int numberOfRooms, int numberOfBathrooms, float size, string userName, List<string> photos,
             DateTime createAt)
         {
             SetPriceM2(priceM2);
@@ -47,7 +47,7 @@ namespace FlatScraper.Core.Domain
         }
 
 
-        private void SetPhotos(IEnumerable<string> photos)
+        private void SetPhotos(List<string> photos)
         {
             Photos = photos;
             UpdatedAt = DateTime.UtcNow;

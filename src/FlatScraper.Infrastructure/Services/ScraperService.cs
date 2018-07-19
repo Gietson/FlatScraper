@@ -17,7 +17,7 @@ namespace FlatScraper.Infrastructure.Services
         private static readonly ILogger Logger = Log.Logger;
         private readonly IAdRepository _adRepository;
         private readonly IScanPageService _scanPageService;
-        private IScraper _scraper;
+        private IScraper scraperInstance;
 
         public ScraperService(IScanPageService scanPageService, IAdRepository adRepository)
         {
@@ -29,11 +29,10 @@ namespace FlatScraper.Infrastructure.Services
         {
             Logger.Information("Start ScrapAsync");
             IEnumerable<Type> scraperTypes = ScrapExtensions.GetScraperTypes();
+            IEnumerable<ScanPageDto> scanPages = _scanPageService.GetAllAsync().Result.Where(x => x.Active).ToList();
+            IEnumerable<Ad> adsDb = await _adRepository.GetAllAsync();
 
-            var scanPages = await _scanPageService.GetAllAsync();
-            var adsDb = await _adRepository.GetAllAsync();
-
-            foreach (ScanPageDto scanPage in scanPages.Where(x => x.Active == true))
+            foreach (ScanPageDto scanPage in scanPages)
             {
                 Logger.Information($"Start scrap page, url = '{scanPage.UrlAddress}'");
 
@@ -47,7 +46,7 @@ namespace FlatScraper.Infrastructure.Services
                         $"Invalid scan page, UrlAddress='{scanPage.UrlAddress}', Page='{scanPage.Host}'.");
                 }
 
-                _scraper = Activator.CreateInstance(scrapClass) as IScraper;
+                scraperInstance = Activator.CreateInstance(scrapClass) as IScraper;
 
                 HtmlDocument scrapedDoc = ScrapExtensions.ScrapUrl(scanPage.UrlAddress);
                 if (scrapedDoc == null)
@@ -56,7 +55,7 @@ namespace FlatScraper.Infrastructure.Services
                         $"Problem with scrap page = '{scanPage.UrlAddress}', scrapClass='{scrapClass.Name}'.");
                 }
 
-                List<Ad> ads = _scraper.ParseHomePage(scrapedDoc, scanPage);
+                List<Ad> ads = scraperInstance.ParseHomePage(scrapedDoc, scanPage);
 
                 foreach (Ad ad in ads)
                 {
@@ -64,7 +63,7 @@ namespace FlatScraper.Infrastructure.Services
                     if (!isInDb)
                     {
                         HtmlDocument scrapedSubPage = ScrapExtensions.ScrapUrl(ad.Url);
-                        ad.AdDetails = _scraper.ParseDetailsPage(scrapedSubPage, ad);
+                        ad.AdDetails = scraperInstance.ParseDetailsPage(scrapedSubPage, ad);
 
                         await _adRepository.AddAsync(ad);
                     }
