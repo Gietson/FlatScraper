@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using Autofac;
-using FlatScraper.Common.Authentication;
 using FlatScraper.Infrastructure.Services;
 
 namespace FlatScraper.Infrastructure.IoC.Modules
