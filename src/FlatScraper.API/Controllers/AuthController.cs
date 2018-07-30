@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FlatScraper.API.Filters;
+using FlatScraper.Common.Authentication;
 using FlatScraper.Infrastructure.DTO;
 using FlatScraper.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -49,9 +50,10 @@ namespace FlatScraper.API.Controllers
                 await _authService.LoginAsync(user);
 
                 UserDto userAuth = await _userService.GetAsync(user.Email);
-                JwtDto token = _jwtHandler.CreateToken(userAuth.Id, userAuth.Role);
 
-                return Ok(new {token = token.Token, user = userAuth});
+                var token = _jwtHandler.CreateToken(userAuth.Id, userAuth.Role);
+
+                return Ok(new {token = token, user = userAuth});
             }
             catch (Exception ex)
             {

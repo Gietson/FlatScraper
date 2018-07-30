@@ -3,6 +3,7 @@ using System.Text;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using FlatScraper.API.Middleware;
+using FlatScraper.Common.Authentication;
 using FlatScraper.Common.Logging;
 using FlatScraper.Infrastructure.IoC;
 using FlatScraper.Infrastructure.Mongo;
@@ -40,19 +41,7 @@ namespace FlatScraper.API
 
             services.AddMvc()
                 .AddJsonOptions(opts => { opts.SerializerSettings.Formatting = Formatting.Indented; });
-            var res = Configuration["jwt:key"];
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(cfg =>
-                {
-                    cfg.RequireHttpsMetadata = false;
-                    cfg.SaveToken = true;
-                    cfg.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidIssuer = Configuration["jwt:issuer"],
-                        ValidAudience = Configuration["jwt:validateIssuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["jwt:key"]))
-                    };
-                });
+            services.AddJwt();
 
             services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));
             services.AddSerilog(Configuration);
