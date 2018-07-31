@@ -61,11 +61,11 @@ namespace FlatScraper.Cron
             var scanPageService = app.ApplicationServices.GetService<IScanPageService>();
             var adRepository = app.ApplicationServices.GetService<IAdRepository>();
 
-            /*var scrap = JobManager.GetSchedule("Scrap");
+            var scrap = JobManager.GetSchedule("Scrap");
             if (scrap == null)
             {
                 JobManager.Initialize(new ScrapRegistry(scanPageService, adRepository));
-            }*/
+            }
         }
     }
 }
