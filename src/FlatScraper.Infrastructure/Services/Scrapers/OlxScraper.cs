@@ -17,7 +17,7 @@ namespace FlatScraper.Infrastructure.Services.Scrapers
         public List<Ad> ParseHomePage(HtmlDocument doc, ScanPageDto scanPage)
         {
             List<Ad> adsList = new List<Ad>();
-            HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("// tbody / tr[@class='wrap'] / td");
+            HtmlNodeCollection docs = doc.DocumentNode.SelectNodes("// tbody / tr[@class='wrap'] / td / div");
 
             foreach (HtmlNode ad in docs)
             {
